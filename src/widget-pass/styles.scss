@@ -1,0 +1,877 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+* {
+  font-family: "Open Sans", sans-serif;
+}
+
+.levels-wrapper {
+  background: #27244f;
+  position: relative;
+  border-radius: 6px;
+  width: 100%;
+  margin: 0 auto;
+
+  .levels-content-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    border-radius: 6px;
+    background: linear-gradient(
+        -218deg,
+        #27244f66 0%,
+        rgba(51, 102, 255, 0) 33.46%
+      ),
+      linear-gradient(218deg, #27244f66 0%, rgba(51, 102, 255, 0) 33.46%),
+      linear-gradient(46deg, #27244f66 0%, rgba(51, 102, 255, 0) 33.46%),
+      linear-gradient(-46deg, #27244f66 0%, rgba(51, 102, 255, 0) 33.46%);
+  }
+
+  .levels-container {
+    width: 100%;
+    height: clamp(500px, 95vh, 900px);
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+
+    &.dragging {
+      cursor: grabbing;
+    }
+
+    .levels-content {
+      width: 100%;
+      height: 1141px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      flex-direction: column;
+      position: relative;
+
+      .levels-main-background {
+        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/image.webp");
+        width: 100%;
+        height: 1141px;
+        background-position: bottom;
+        background-size: COVER;
+        background-repeat: no-repeat;
+        user-select: none;
+        position: relative;
+
+        .levels-map-road {
+          position: absolute;
+          z-index: 1;
+          // background-image: url('https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/levels-map-road.webp');
+          width: 100%;
+          height: 1141px;
+          background-position: bottom;
+          background-size: contain;
+          background-repeat: no-repeat;
+          pointer-events: none;
+          user-select: none;
+        }
+
+        .level-items-container {
+          position: absolute;
+          width: 100%;
+          height: 1141px;
+          top: 0;
+          left: 0;
+
+          .level-item {
+            position: absolute;
+            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            &.disabled {
+              pointer-events: none; /* impede clique quando bloqueado */
+              cursor: default;
+
+              .level-name {
+                opacity: 0.7;
+              }
+            }
+
+            .level-image {
+              width: 200px;
+              height: 200px;
+              background-position: center;
+              background-size: contain;
+              background-repeat: no-repeat;
+              position: relative;
+              z-index: 0;
+              cursor: pointer;
+              transition: transform 1s ease;
+
+              //   &:hover {
+              //     transform: scale(1.1);
+              //   }
+            }
+
+            .ghost-animation {
+              position: absolute;
+              bottom: 170px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 140px;
+              height: 140px;
+              z-index: 2;
+              pointer-events: none;
+            }
+
+            .lock-icon {
+              background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Maphttps://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/lock.webp");
+              height: 27px;
+              width: 27px;
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: contain;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              pointer-events: none;
+            }
+
+            .level-name {
+              padding: 4px 8px;
+              border-radius: 4px;
+              background: #27244f;
+              border: 1px solid #e4760f;
+              font-weight: 600;
+              font-size: 12px;
+              text-align: center;
+              color: #fff;
+              position: absolute;
+              bottom: -25px;
+              z-index: 5;
+              display: none;
+            }
+
+            &.level-0 {
+              bottom: 285px;
+              right: 187px;
+              z-index: 1;
+            }
+
+            &.level-1 {
+              bottom: 462px;
+              left: 190px;
+            }
+
+            &.level-2 {
+              bottom: 664px;
+              right: 187px;
+            }
+
+            &.level-3 {
+              top: 145px;
+              left: 207px;
+            }
+
+            &.level-4 {
+              top: 352px;
+              right: 58px;
+            }
+
+            &.level-5 {
+              top: 105px;
+              left: 150px;
+            }
+
+            @media screen and (max-width: 768px) {
+              .level-image {
+                width: 150px;
+                height: 150px;
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+                position: relative;
+                z-index: 0;
+                cursor: pointer;
+                transition: transform 1s ease;
+
+                //   &:hover {
+                //     transform: scale(1.1);
+                //   }
+              }
+
+              .ghost-animation {
+                bottom: 130px;
+                width: 120px;
+                height: 120px;
+              }
+
+              &.level-0 {
+                bottom: 240px;
+                right: 8px;
+                z-index: 1;
+              }
+
+              &.level-1 {
+                bottom: 390px;
+                left: 0px;
+              }
+
+              &.level-2 {
+                bottom: 568px;
+                right: 0px;
+              }
+
+              &.level-3 {
+                top: 322px;
+                left: 14px;
+              }
+
+              &.level-4 {
+                top: 352px;
+                right: 58px;
+              }
+
+              &.level-5 {
+                top: 105px;
+                left: 150px;
+              }
+            }
+
+            @media screen and (max-width: 400px) {
+              .level-image {
+                width: 150px;
+                height: 150px;
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+                position: relative;
+                z-index: 0;
+                cursor: pointer;
+                transition: transform 1s ease;
+
+                //   &:hover {
+                //     transform: scale(1.1);
+                //   }
+              }
+
+              .ghost-animation {
+                bottom: 120px;
+                width: 110px;
+                height: 110px;
+              }
+
+              &.level-0 {
+                bottom: 240px;
+                right: 0px;
+                z-index: 1;
+              }
+
+              &.level-1 {
+                bottom: 390px;
+                left: -10px;
+              }
+
+              &.level-2 {
+                bottom: 568px;
+                right: -20px;
+              }
+
+              &.level-3 {
+                top: 322px;
+                left: -4px;
+              }
+
+              &.level-4 {
+                top: 352px;
+                right: 58px;
+              }
+
+              &.level-5 {
+                top: 105px;
+                left: 150px;
+              }
+            }
+          }
+        }
+      }
+
+      .animation-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 140px;
+        height: 86px;
+        position: absolute;
+        pointer-events: none;
+
+        &.fish {
+          pointer-events: unset;
+          cursor: pointer;
+          z-index: 105;
+        }
+      }
+    }
+  }
+
+  .level-card-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+    visibility: hidden;
+
+    &.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .level-card {
+      background: #27244f;
+      width: 360px;
+      height: auto;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e4760f;
+      text-align: center;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .level-card-close {
+      position: absolute;
+      width: 44px; /* área maior para toque/click */
+      height: 44px; /* área maior para toque/click */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      top: 8px;
+      right: 8px;
+      cursor: pointer;
+      border-radius: 9999px;
+      background: transparent;
+      z-index: 2;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.12);
+        transform: scale(0.98);
+      }
+
+      &:focus-visible {
+        outline: 2px solid #e4760f;
+        outline-offset: 2px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .level-card-close-btn {
+        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/close.webp");
+        width: 20px; /* ícone maior para melhor visibilidade */
+        height: 20px; /* ícone maior para melhor visibilidade */
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+        transition: transform 0.25s ease-out;
+
+        &:hover {
+          transform: rotate(180deg) scale(1.05);
+        }
+      }
+    }
+
+    .level-card-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+
+      .level-card-level {
+        font-weight: 600;
+        font-size: 12px;
+        color: #fefefe99;
+      }
+
+      .level-card-name {
+        font-weight: 700;
+        font-size: 14px;
+        color: #fff;
+      }
+
+      .level-card-image-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .level-card-image {
+          width: 72px;
+          height: 72px;
+          position: relative;
+
+          &.disabled {
+            filter: grayscale(1) brightness(0.65);
+          }
+        }
+
+        .lock-icon {
+          background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/lock.webp");
+          width: 20px;
+          height: 20px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      .level-card-progress {
+        background: linear-gradient(#403b7d33, #564fa033);
+        border: 2px solid #ffffff40;
+        width: 100%;
+        height: 11px;
+        border-radius: 4px;
+
+        & > div {
+          width: 80%;
+          height: 7px;
+          border-radius: 4px;
+          background: linear-gradient(#efc143, #e3700a);
+        }
+      }
+
+      .level-card-description {
+        font-weight: 400;
+        font-size: 12px;
+        text-align: center;
+        color: #fefefe99;
+      }
+
+      .level-card-perks {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 12px;
+        gap: 7px;
+
+        .level-card-perks-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+
+          .perks-item-name {
+            color: #fefefe66;
+            font-size: 12px;
+            font-weight: 400;
+
+            &.unlocked {
+              color: #fff;
+            }
+          }
+
+          .perks-item-value {
+            .perks-item-value-icon {
+              height: 14px;
+              width: 14px;
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: contain;
+
+              &.lock {
+                background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/lock.webp");
+              }
+
+              &.check {
+                background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/check-icon.webp");
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .level-card-current-level {
+      position: absolute;
+      bottom: -21px;
+      right: 50%;
+      transform: translateX(50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 4px;
+      background: linear-gradient(180deg, #e3700a, #efc143);
+      color: #fff;
+      border-radius: 0px 0px 4px 4px;
+      width: 83px;
+      z-index: 1000;
+      font-weight: 600;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+}
+
+.levels-scroll-buttons {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  z-index: 101;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 40px;
+
+  .button-container {
+    background: #ffffff0d;
+    border: 1px solid #ffffff33;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background: #ffffff66;
+    }
+
+    .button-nav {
+      width: 12px;
+      height: 12px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.up {
+        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/navigation-arrow.webp");
+      }
+
+      &.down {
+        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/navigation-arrow.webp");
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.levels-hint-message {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  bottom: 0;
+  right: 0;
+  padding: 24px 20px;
+  pointer-events: none;
+  z-index: 101;
+
+  .hint-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 14px;
+
+    .hint-icon {
+      background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/hint-icon.webp");
+      width: 30px;
+      height: 30px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      animation: swipe-hand 2s linear infinite;
+      cursor: pointer;
+
+      @keyframes swipe-hand {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        20% {
+          transform: rotate(5deg);
+        }
+
+        50% {
+          transform: rotate(-20deg);
+        }
+
+        80% {
+          transform: rotate(20deg);
+        }
+
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+    }
+
+    .hint-message {
+      font-weight: 600;
+      font-size: 12px;
+      text-align: center;
+      color: #fff;
+    }
+  }
+}
+
+// Estilos modernos para o conteúdo de missões
+.missions-container {
+  width: 100%;
+  color: #fff;
+}
+
+.missions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.missions-header .title {
+  font-weight: 800;
+  font-size: 16px;
+  background: linear-gradient(90deg, #7b61ff 0%, #e4760f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.3px;
+}
+
+.missions-header .view-all-btn {
+  font-size: 12px;
+  color: #b9a9ff;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.missions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 420px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.mission {
+  background: linear-gradient(180deg, #312c62 0%, #201c45 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.mission:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+.mission.active {
+  border-color: rgba(228, 118, 15, 0.6);
+}
+
+.mission-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mission-left .image {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mission-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.mission-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mission-info .name {
+  display: inline-block;
+  font-weight: 800;
+  font-size: 19px;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.status {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.status.in-progress {
+  background: rgba(123, 97, 255, 0.2);
+  color: #d6d3f5;
+  border-color: rgba(123, 97, 255, 0.5);
+}
+.status.completed {
+  background: rgba(47, 197, 101, 0.18);
+  color: #9de7be;
+  border-color: rgba(47, 197, 101, 0.5);
+}
+.status.locked {
+  background: rgba(255, 87, 87, 0.18);
+  color: #ffbaba;
+  border-color: rgba(255, 87, 87, 0.5);
+}
+.status.requires-optin {
+  background: rgba(228, 118, 15, 0.18);
+  color: #ffc58e;
+  border-color: rgba(228, 118, 15, 0.5);
+}
+
+.reward {
+  font-size: 13px;
+  color: #d6d3f5;
+}
+.reward span {
+  color: #ffc58e;
+  font-weight: 800;
+}
+
+.progress-bar-block {
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px;
+  border-radius: 10px;
+}
+.progress-bar {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+.progress-bar .progress {
+  background: linear-gradient(90deg, #7b61ff 0%, #e4760f 100%);
+  height: 8px;
+  border-radius: 999px;
+}
+.progress-bar-text {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  color: #eaeaf5;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.progress-bar-text .label {
+  font-weight: 700;
+  color: #ffc58e;
+}
+
+.tasks {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #eaeaf5;
+  font-size: 13px;
+}
+.task.completed .task-name {
+  color: #b9b9d9;
+}
+
+.time {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.time .time-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffc58e;
+}
+.time .timer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.time .time-number {
+  background: #1f1c3f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-weight: 800;
+  font-size: 12px;
+}
+.time .time-delimiter {
+  opacity: 0.6;
+}
+
+.no-missions {
+  color: #eaeaf5;
+  font-size: 13px;
+  opacity: 0.8;
+  padding: 12px;
+}
+
+/* Override: ilhas bloqueadas totalmente cinzas */
+.level-item.disabled .level-image {
+  filter: grayscale(1);
+}

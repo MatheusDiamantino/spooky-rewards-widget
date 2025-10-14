@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + React</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- <button onclick="localStorage.clear(); document.cookie.split(';').forEach(function(c) { document.cookie = c.replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/'); }); location.reload();" style="position:fixed;top:10px;right:10px;z-index:9999;">Limpar localStorage/cookies</button> -->
+  <script type="module" src="index.jsx"></script>
+  <script>
+    if (window.location.hostname === "localhost") {
+      window._smartico_allow_localhost = true;
+    }
+
+    // defina o usuário ANTES do init
+    window._smartico_user_id = "REMOVIDO";
+    window._smartico_user_hash = "REMOVIDO";
+    window._smartico_env_info_current = { tournament_id: 556 };
+
+    (function (d, r, b, h, s) {
+      h = d.getElementsByTagName("head")[0];
+      s = d.createElement("script");
+      s.onload = b;
+      s.src = r;
+      h.appendChild(s);
+    })(document, "https://libs.smartico.ai/smartico.js", function () {
+      _smartico.init("REMOVIDO", {
+        brand_key: "REMOVIDO",
+        // (opcional) muitas integrações aceitam passar o user aqui também:
+        // user_id: window._smartico_user_id,
+        // user_hash: window._smartico_user_hash,
+      });
+    });
+  </script>
+
+</body>
+
+</html>
