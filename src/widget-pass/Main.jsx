@@ -8,6 +8,75 @@ import GhostAnimation from './animations/Ghost Green.json';
 import Missions from '../widget-mission/main.jsx';
 import { handleProtectedAction } from '../functions/smartico';
 
+// Componente wrapper para adicionar funcionalidade de clique às missões
+const ClickableMissions = ({ level, levelIndex, maxItems }) => {
+	useEffect(() => {
+		const addClickListeners = () => {
+			// Aguarda um pouco para garantir que as missões foram renderizadas
+			setTimeout(() => {
+				const missionElements = document.querySelectorAll('[data-mission-id], .mission-item, .mission-card, .mission');
+				
+				missionElements.forEach((element, index) => {
+					// Remove listeners anteriores para evitar duplicação
+					element.removeEventListener('click', handleMissionClick);
+					
+					// Adiciona o listener de clique
+					element.addEventListener('click', (e) => handleMissionClick(e, index));
+					
+					// Adiciona cursor pointer para indicar que é clicável
+					element.style.cursor = 'pointer';
+				});
+			}, 100);
+		};
+
+		const handleMissionClick = (e, missionIndex) => {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			// Encontra o ID da missão
+			let missionId = null;
+			const target = e.currentTarget;
+			
+			// Tenta diferentes formas de encontrar o ID da missão
+			if (target.dataset.missionId) {
+				missionId = target.dataset.missionId;
+			} else if (target.dataset.id) {
+				missionId = target.dataset.id;
+			} else {
+				// Se não encontrar o ID, usa o índice como fallback
+				missionId = missionIndex + 1;
+			}
+			
+			// Redireciona para o link da missão
+			if (window.smarticoDP) {
+				window.smarticoDP(`dp:gf_missions&id=${missionId}`);
+			} else {
+				console.log(`Redirecionando para: dp:gf_missions&id=${missionId}`);
+			}
+		};
+
+		// Adiciona os listeners inicialmente
+		addClickListeners();
+
+		// Observer para re-adicionar listeners quando o DOM muda
+		const observer = new MutationObserver(() => {
+			addClickListeners();
+		});
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true
+		});
+
+		return () => {
+			observer.disconnect();
+		};
+	}, [level, levelIndex, maxItems]);
+
+	// Renderiza o componente Missions original
+	return <Missions level={level} levelIndex={levelIndex} maxItems={maxItems} />;
+};
+
 export const calculatePointsProgress = (ach_points, required_points) => {
 	return required_points > 0 ? Math.min(parseInt(((ach_points * 100) / required_points).toFixed(0), 0), 100) : 100;
 };
@@ -25,12 +94,12 @@ const dataValueConfig = (dataValue) => {
 const SCROLL_OFFSET = 200;
 
 const fishPositions = [
-	
+
 	{ top: '280px', right: '60px', transform: 'rotateY(180deg)' },
 	{ top: '280px', left: '60px' },
 	{ top: '200px', left: '50px', transform: 'rotateY(180deg)' },
 	{ top: '135px', left: '135px', transform: 'rotateY(180deg)' },
-	
+
 ];
 
 const animations = [
@@ -46,17 +115,17 @@ const getRandomPosition = () => {
 
 // Helper para resolver a imagem da ilha por nível/índice
 const getLevelImageUrl = (level, disabled, index) => {
-    if (!level) return '';
-    // Conjunto de imagens ativas disponíveis (inclui as que faltavam)
-    const activeImages = [
-        'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/JOGUE E CONCORRA.webp',
-        'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/caldeirao.webp',
-        'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/bau-diario.webp',
-        'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/TORNEIOS.webp',
-    ];
-    const i = Number.isFinite(index) ? index % activeImages.length : 0;
-    const activeUrl = activeImages[i];
-    return activeUrl;
+	if (!level) return '';
+	// Conjunto de imagens ativas disponíveis (inclui as que faltavam)
+	const activeImages = [
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/JOGUE E CONCORRA.webp',
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/caldeirao.webp',
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/bau-diario.webp',
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/TORNEIOS.webp',
+	];
+	const i = Number.isFinite(index) ? index % activeImages.length : 0;
+	const activeUrl = activeImages[i];
+	return activeUrl;
 };
 
 const LevelMap = () => {
@@ -218,35 +287,29 @@ const modalConfigs = [
 		title: "Viagem para Disney por R$0,10",
 		subtitle: "",
 		content: {
-			logic: "a cada R$0,10 apostados, o usuário concorrerá a Giros Extras, PS5 envelopado com temática do Halloween, e Viagem para Disney.",
-			games: "Jogos Participantes: Slots PG",
-			period: "Período: 03:00 do dia 31.10 até 00:00 do dia 01.11",
+			logic: "A cada R$0,10 apostados nos slots PG, você pode ganhar Giros Extras, um PS5 temático de Halloween ou uma viagem para a Disney.",
+			period: "Das 03h do dia 31/10 até 00h do dia 01/11",
 			description: "Os bônus e prêmios que serão sorteados e distribuídos de forma randômica nesta ação são:",
 			prizes: [
 				"Big Bass Bonanza Halloween 3 - 2 Giros Extras",
 				"Frightening Frankie - 3 Giros Extras",
 				"Big Bass Bonanza Halloween 3 - 5 Giros Extras",
-				"PS5 - [TEREMOS 1 GANHADOR APENAS]",
-				"Bilhete Premiado valendo uma Viagem Disney - [TEREMOS 1 GANHADOR APENAS]"
+				"PS5",
+				"Bilhete Premiado valendo uma Viagem Disney"
 			],
 			distribution: []
 		}
 	},
 	{
-		title: "GIFT BOX - HALLOWEEN",
-		subtitle: "[KV DO PROJETO] 31.10",
+		title: "CALDEIRÃO - HALLOWEEN",
 		content: {
-			logic1: "O usuário terá acesso ao Caldeirão Assombrado ao depositar R$31",
-			limit1: "Limitado a uma tentativa por dia.",
-			period1: "Período: 03:00 às 00:00.",
 			distribution: []
 		}
 	},
 	{
 		title: "Presente de Arrepiar",
-		subtitle: "31.10",
 		content: {
-			logic: "De 03:00 às 00:00 do dia 31.10 o usuário terá acesso ao presente diário dentro da gamificação.",
+			logic: "De 03:00 às 23:59 do dia 31.10 o usuário terá acesso ao presente diário dentro da gamificação.",
 			distribution: []
 		}
 	},
@@ -278,79 +341,94 @@ export default LevelMap;
 
 // Bloco dinâmico de Torneio: busca e exibe o torneio ativo/mais próximo
 function TournamentDynamicBlock() {
-    const [loading, setLoading] = useState(true);
-    const [tournament, setTournament] = useState(null);
-    const smarticoApi = window?._smartico?.api;
-    const smarticoDP = window?._smartico?.dp;
+	const [loading, setLoading] = useState(true);
+	const [tournament, setTournament] = useState(null);
+	const smarticoApi = window?._smartico?.api;
+	const smarticoDP = window?._smartico?.dp;
 
-    useEffect(() => {
-        const load = async () => {
-            if (!smarticoApi) {
-                setLoading(false);
-                return;
-            }
-            const onUpdate = (list) => {
-                const arr = Array.isArray(list) ? list : [];
-                const active = arr.find((t) => t.is_in_progress);
-                if (active) {
-                    setTournament(active);
-                    return;
-                }
-                const upcoming = arr
-                    .filter((t) => t.is_upcoming)
-                    .sort((a, b) => new Date(a.start_time) - new Date(b.start_time))[0];
-                setTournament(upcoming || null);
-            };
-            const res = await smarticoApi.getTournamentsList({ onUpdate });
-            onUpdate(res);
-            setLoading(false);
-        };
-        load();
-    }, [smarticoApi]);
+	useEffect(() => {
+		const load = async () => {
+			if (!smarticoApi) {
+				setLoading(false);
+				return;
+			}
+			const onUpdate = (list) => {
+				const arr = Array.isArray(list) ? list : [];
+				const active = arr.find((t) => t.is_in_progress);
+				if (active) {
+					setTournament(active);
+					return;
+				}
+				const upcoming = arr
+					.filter((t) => t.is_upcoming)
+					.sort((a, b) => new Date(a.start_time) - new Date(b.start_time))[0];
+				setTournament(upcoming || null);
+			};
+			const res = await smarticoApi.getTournamentsList({ onUpdate });
+			onUpdate(res);
+			setLoading(false);
+		};
+		load();
+	}, [smarticoApi]);
 
-    if (loading) return null;
-    if (!tournament) {
-        return (
-            <div className="tournament-layout" role="region" aria-label="Torneio">
-                <div className="no-missions">Nenhum torneio ativo encontrado.</div>
-            </div>
-        );
-    }
+	if (loading) return null;
+	if (!tournament) {
+		return (
+			<div className="tournament-layout" role="region" aria-label="Torneio">
+				<div className="no-missions">Nenhum torneio ativo encontrado.</div>
+			</div>
+		);
+	}
 
-    const openTournament = () => {
-        if (smarticoDP) {
-            smarticoDP(`dp:gf_tournaments&id=${tournament.tournament_id}&standalone=true`);
-        }
-    };
+	const openTournament = () => {
+		if (smarticoDP) {
+			smarticoDP(`dp:gf_tournaments&id=${tournament.tournament_id}&standalone=true`);
+		}
+	};
 
-    return (
-        <div className="tournament-layout" role="region" aria-label="Torneio ativo">
-            <section className="left-pane">
-                <dl className="tournament-stats">
-                    <div className="stat">
-                        <dt>Status</dt>
-                        <dd>{tournament.is_in_progress ? 'in-progress' : tournament.is_upcoming ? 'upcoming' : 'finished'}</dd>
-                    </div>
-                    <div className="stat">
-                        <dt>Prêmios</dt>
-                        <dd>{tournament.prize_pool_short || '-'}</dd>
-                    </div>
-                    <div className="stat">
-                        <dt>Registro</dt>
-                        <dd>{tournament.registration_count}/{tournament.players_max_count}</dd>
-                    </div>
-                </dl>
-            </section>
-            <section className="right-pane">
-                <section className="prize-distribution" aria-label="Detalhes">
-                    <h3 dangerouslySetInnerHTML={{ __html: tournament.name }} />
-                    <div className="modal-actions">
-                        <button className="cta-btn" onClick={openTournament}>Participar do Torneio</button>
-                    </div>
-                </section>
-            </section>
-        </div>
-    );
+	return (
+		<div className="tournament-layout" role="region" aria-label="Torneio ativo">
+			{tournament.image && (
+				<section className="tournament-image">
+					<img 
+						src={tournament.image} 
+						alt={tournament.name || "Torneio"} 
+						className="tournament-banner"
+						onError={(e) => {
+							// Fallback para imagem padrão se a imagem da Smartico falhar
+							e.target.src = "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/sweet-rush-bonanza-tournament.webp";
+						}}
+					/>
+				</section>
+			)}
+			<div className="tournament-content">
+				<section className="left-pane">
+					<dl className="tournament-stats">
+						<div className="stat">
+							<dt>Status</dt>
+							<dd>{tournament.is_in_progress ? 'in-progress' : tournament.is_upcoming ? 'upcoming' : 'finished'}</dd>
+						</div>
+						<div className="stat">
+							<dt>Prêmios</dt>
+							<dd>{tournament.prize_pool_short || '-'}</dd>
+						</div>
+						<div className="stat">
+							<dt>Registro</dt>
+							<dd>{tournament.registration_count}/{tournament.players_max_count}</dd>
+						</div>
+					</dl>
+				</section>
+				<section className="right-pane">
+					<section className="prize-distribution" aria-label="Detalhes">
+						<h3 dangerouslySetInnerHTML={{ __html: tournament.name }} />
+						<div className="modal-actions">
+							<a href="dp:gf_tournaments" className="cta-btn">Participar do Torneio</a>
+						</div>
+					</section>
+				</section>
+			</div>
+		</div>
+	);
 }
 
 const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
@@ -358,10 +436,10 @@ const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
 		return null;
 	}
 
-    const ach_points = 150;
-    const pointsProgress = calculatePointsProgress(ach_points, level.required_points);
-    // Todos desbloqueados
-    const disabled = false;
+	const ach_points = 150;
+	const pointsProgress = calculatePointsProgress(ach_points, level.required_points);
+	// Todos desbloqueados
+	const disabled = false;
 
 	const handleClick = () => {
 		if (disabled) return; // bloqueado: não abre modal
@@ -369,7 +447,7 @@ const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
 		setShowCard(true);
 	};
 
-    const imageUrl = getLevelImageUrl(level, disabled, index);
+	const imageUrl = getLevelImageUrl(level, disabled, index);
 	if (!imageUrl) {
 		console.warn('Level image not found for level:', level?.id, level?.name, level?.custom_data);
 	}
@@ -383,17 +461,17 @@ const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
 				aria-disabled={disabled}
 				title={disabled ? 'Bloqueado' : level.name}
 			>
-                {index === 1 && (
-                    <div className="ghost-animation">
-                        <Player
-                            src={GhostAnimation}
-                            style={{ width: '100%', height: '100%' }}
-                            autoplay={true}
-                            loop={true}
-                            background="transparent"
-                        />
-                    </div>
-                )}
+				{index === 1 && (
+					<div className="ghost-animation">
+						<Player
+							src={GhostAnimation}
+							style={{ width: '100%', height: '100%' }}
+							autoplay={true}
+							loop={true}
+							background="transparent"
+						/>
+					</div>
+				)}
 				<div className="level-image" style={imageUrl ? { backgroundImage: `url(${encodeURI(imageUrl)})` } : {}} />
 				{disabled && <div className="lock-icon" />}
 				<div className="level-name">{level.name}</div>
@@ -413,14 +491,14 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 	// Gera classe específica para cada modal
 	const getModalClass = () => {
 		if (!modalConfig) return '';
-		
+
 		const titleMap = {
 			"Viagem para Disney por R$0,10": "disney-modal",
-			"GIFT BOX - HALLOWEEN": "giftbox-modal", 
+			"CALDEIRÃO - HALLOWEEN": "giftbox-modal",
 			"Presente de Arrepiar": "presente-modal",
 			"Torneio de Halloween": "torneio-modal"
 		};
-		
+
 		return titleMap[modalConfig.title] || '';
 	};
 
@@ -428,20 +506,20 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 		<div className={`level-card-wrapper ${showCard ? 'active' : ''} ${getModalClass()}`}>
 			<div className={`level-card ${getModalClass()}`}>
 				<div
-                  className="level-card-close"
-                  onClick={() => setShowCard(false)}
-                  role="button"
-                  aria-label="Fechar"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setShowCard(false);
-                    }
-                  }}
-                >
-                  <div className="level-card-close-btn" />
-                </div>
+					className="level-card-close"
+					onClick={() => setShowCard(false)}
+					role="button"
+					aria-label="Fechar"
+					tabIndex={0}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							e.preventDefault();
+							setShowCard(false);
+						}
+					}}
+				>
+					<div className="level-card-close-btn" />
+				</div>
 				<div className="level-card-content">
 					{modalConfig ? (
 						<div className="custom-modal-content">
@@ -449,82 +527,77 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 								<h2 className="modal-title">{modalConfig.title}</h2>
 								<p className="modal-subtitle">{modalConfig.subtitle}</p>
 							</div>
-						<div className="modal-body">
-                            {/* Torneio de Halloween */}
-                                {modalConfig.title === "Torneio de Halloween" && (
-                                    <TournamentDynamicBlock />
-                                )}
+							<div className="modal-body">
+								{/* Torneio de Halloween */}
+								{modalConfig.title === "Torneio de Halloween" && (
+									<TournamentDynamicBlock />
+								)}
 
 
-				{/* Presente de Arrepiar */}
-				{modalConfig.title === "Presente de Arrepiar" && (
-					<section className="present-layout" aria-label="Presente de Arrepiar">
-						<h3 className="present-title">Como funciona</h3>
-						<p className="present-desc">{modalConfig.content.logic}</p>
-						<div className="modal-actions">
-							{(() => {
-								const dp = level?.custom_data?.present_dp || `dp:gf_missions&id=${level?.id}&standalone=true`;
-								return (
-									<button className="cta-btn" onClick={() => handleProtectedAction(dp)}>
-										Abrir Presente Diário
-									</button>
-								);
-							})()}
-						</div>
-					</section>
-				)}
+								{/* Presente de Arrepiar */}
+								{modalConfig.title === "Presente de Arrepiar" && (
+									<section className="present-layout" aria-label="Presente de Arrepiar">
+										<h3 className="present-title">Como funciona</h3>
+										<p className="present-desc">{modalConfig.content.logic}</p>
+										<div className="modal-actions">
+											{(() => {
+												const dp = level?.custom_data?.present_dp || `dp:gf_missions&id=${level?.id}&standalone=true`;
+												return (
+													<button className="cta-btn" onClick={() => handleProtectedAction(dp)}>
+														Abrir Presente Diário
+													</button>
+												);
+											})()}
+										</div>
+									</section>
+								)}
 
-				{/* Gift Box Halloween */}
-				{modalConfig.title === "GIFT BOX - HALLOWEEN" && (
-					<section className="giftbox-layout" aria-label="Gift Box Halloween">
-						<dl className="giftbox-details">
-							<div className="row"><dt>Como funciona</dt><dd>{modalConfig.content.logic1}</dd></div>
-							<div className="row"><dt>Limite</dt><dd>{modalConfig.content.limit1}</dd></div>
-							<div className="row"><dt>Período</dt><dd>{modalConfig.content.period1}</dd></div>
-						</dl>
-						{/* Missões do Caldeirão: duas empilhadas */}
-						<Missions level={level} levelIndex={levelIndex} maxItems={2} />
-					</section>
-				)}
+								{/* Gift Box Halloween */}
+								{modalConfig.title === "CALDEIRÃO - HALLOWEEN" && (
+									<section className="giftbox-layout" aria-label="Gift Box Halloween">
+										{/* Missões do Caldeirão: duas empilhadas */}
+										<ClickableMissions level={level} levelIndex={levelIndex} maxItems={2} />
+									</section>
+								)}
 
-				{/* Viagem para Disney */}
-				{modalConfig.title === "Viagem para Disney por R$0,10" && (
-					<section className="disney-layout" aria-label="Viagem para Disney">
-						<section className="disney-details">
-							<dl className="details">
-								<div className="row"><dt>Lógica</dt><dd>{modalConfig.content.logic}</dd></div>
-								<div className="row"><dt>Jogos</dt><dd>{modalConfig.content.games}</dd></div>
-								<div className="row"><dt>Período</dt><dd>{modalConfig.content.period}</dd></div>
-								<div className="row span2"><dt>Descrição</dt><dd className="long">{modalConfig.content.description}</dd></div>
-							</dl>
-						</section>
-						<section className="prize-distribution extras" aria-label="Giros Extras">
-							<h3>Giros Extras</h3>
-							<ol className="extras-list">
-								{modalConfig.content.prizes.map((prize, index) => (
-									<li key={index} className="extra">{prize}</li>
-								))}
-							</ol>
-						</section>
-						<div className="modal-actions">
-							{(() => {
-								const actionKey = level?.custom_data?.action || 'JOGUE_E_CONCORRA';
-								return (
-									<button
-										className="cta-btn"
-										onClick={() => window?._smartico?.action && window._smartico.action(actionKey)}
-									>
-										Jogue e Concorra
-									</button>
-								);
-							})()}
-						</div>
-					</section>
-				)}
+								{/* Viagem para Disney */}
+								{modalConfig.title === "Viagem para Disney por R$0,10" && (
+									<section className="disney-layout" aria-label="Viagem para Disney">
+										<section className="disney-details">
+											<dl className="details">
+												<div className="row"><dt>Lógica</dt><dd>{modalConfig.content.logic}</dd></div>
+
+												<div className="row"><dt>Período</dt><dd>{modalConfig.content.period}</dd></div>
+												<div className="row"><dt>Descrição</dt><dd>{modalConfig.content.description}</dd></div>
+											</dl>
+										</section>
+										<section className="prize-distribution extras" aria-label="Giros Extras">
+											<h3>Giros Extras</h3>
+											<ol className="extras-list">
+												{modalConfig.content.prizes.map((prize, index) => (
+													<li key={index} className="extra">{prize}</li>
+												))}
+											</ol>
+										</section>
+										<div className="modal-actions">
+											{(() => {
+												const actionKey = level?.custom_data?.action || 'JOGUE_E_CONCORRA';
+												return (
+													<button
+														className="cta-btn"
+														onClick={() => (window.location.href = "https://casa.example.com")}
+													>
+														Jogue e Concorra
+													</button>
+												);
+											})()}
+										</div>
+									</section>
+								)}
 							</div>
 						</div>
 					) : (
-						<Missions level={level} levelIndex={levelIndex} />
+						<ClickableMissions level={level} levelIndex={levelIndex} />
 					)}
 				</div>
 			</div>
