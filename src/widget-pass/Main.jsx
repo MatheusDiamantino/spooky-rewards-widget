@@ -211,6 +211,69 @@ const LevelMap = () => {
 	);
 };
 
+// Configurações personalizadas para cada modal
+const modalConfigs = [
+	{
+		title: "Viagem para Disney por R$0,10",
+		subtitle: "",
+		content: {
+			logic: "a cada R$0,10 apostados, o usuário concorrerá a Giros Extras, PS5 envelopado com temática do Halloween, e Viagem para Disney.",
+			games: "Jogos Participantes: Slots PG",
+			period: "Período: 03:00 do dia 31.10 até 00:00 do dia 01.11",
+			description: "Os bônus e prêmios que serão sorteados e distribuídos de forma randômica nesta ação são:",
+			prizes: [
+				"Big Bass Bonanza Halloween 3 - 2 Giros Extras",
+				"Frightening Frankie - 3 Giros Extras",
+				"Big Bass Bonanza Halloween 3 - 5 Giros Extras",
+				"PS5 - [TEREMOS 1 GANHADOR APENAS]",
+				"Bilhete Premiado valendo uma Viagem Disney - [TEREMOS 1 GANHADOR APENAS]"
+			],
+			distribution: []
+		}
+	},
+	{
+		title: "GIFT BOX - HALLOWEEN",
+		subtitle: "[KV DO PROJETO] 31.10",
+		content: {
+			logic1: "O usuário terá acesso ao Caldeirão Assombrado ao depositar R$31",
+			limit1: "Limitado a uma tentativa por dia.",
+			period1: "Período: 03:00 às 00:00.",
+			distribution: []
+		}
+	},
+	{
+		title: "Presente de Arrepiar",
+		subtitle: "31.10",
+		content: {
+			logic: "De 03:00 às 00:00 do dia 31.10 o usuário terá acesso ao presente diário dentro da gamificação.",
+			distribution: []
+		}
+	},
+	{
+		title: "Torneio de Halloween",
+		subtitle: "TODOS OS JOGOS",
+		content: {
+			frequency: "03:00 às 00:00",
+			date: "31.10",
+			prize: "R$31.000 + GIROS GRÁTIS",
+			scoring: "A cada R$1 apostado nos jogos selecionados, ganha 1 ponto no torneio.",
+			distribution: [
+				{ position: "1º Lugar", prize: "R$10.000" },
+				{ position: "2º Lugar", prize: "R$7.000" },
+				{ position: "3º Lugar", prize: "R$5.000" },
+				{ position: "4º Lugar", prize: "R$3.500" },
+				{ position: "5º Lugar", prize: "R$1.500" },
+				{ position: "6º Lugar", prize: "R$800" },
+				{ position: "7º Lugar", prize: "R$600" },
+				{ position: "8º Lugar", prize: "R$400" },
+				{ position: "9º Lugar", prize: "R$200" },
+				{ position: "10º ao 30º Lugar", prize: "R$100" },
+				{ position: "31º ao 31.10º Lugar", prize: "20 Giros Extras Big Bass Halloween 3" }
+			]
+		}
+	}
+];
+
 export default LevelMap;
 
 const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
@@ -267,9 +330,26 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 		return null;
 	}
 
+	// Obtém a configuração do modal baseada no levelIndex
+	const modalConfig = modalConfigs[levelIndex] || null;
+
+	// Gera classe específica para cada modal
+	const getModalClass = () => {
+		if (!modalConfig) return '';
+		
+		const titleMap = {
+			"Viagem para Disney por R$0,10": "disney-modal",
+			"GIFT BOX - HALLOWEEN": "giftbox-modal", 
+			"Presente de Arrepiar": "presente-modal",
+			"Torneio de Halloween": "torneio-modal"
+		};
+		
+		return titleMap[modalConfig.title] || '';
+	};
+
 	return (
-		<div className={`level-card-wrapper ${showCard ? 'active' : ''}`}>
-			<div className={`level-card`}>
+		<div className={`level-card-wrapper ${showCard ? 'active' : ''} ${getModalClass()}`}>
+			<div className={`level-card ${getModalClass()}`}>
 				<div
                   className="level-card-close"
                   onClick={() => setShowCard(false)}
@@ -286,7 +366,102 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                   <div className="level-card-close-btn" />
                 </div>
 				<div className="level-card-content">
-					<Missions level={level} levelIndex={levelIndex} />
+					{modalConfig ? (
+						<div className="custom-modal-content">
+							<div className="modal-header">
+								<h2 className="modal-title">{modalConfig.title}</h2>
+								<p className="modal-subtitle">{modalConfig.subtitle}</p>
+							</div>
+							<div className="modal-body">
+								{/* Torneio de Halloween */}
+								{modalConfig.title === "Torneio de Halloween" && (
+									<>
+										<div className="modal-info">
+											<div className="info-item">
+												<strong>Frequência:</strong> {modalConfig.content.frequency}
+											</div>
+											<div className="info-item">
+												<strong>Data:</strong> {modalConfig.content.date}
+											</div>
+											<div className="info-item">
+												<strong>Premiação:</strong> {modalConfig.content.prize}
+											</div>
+											<div className="info-item">
+												<strong>Pontuação:</strong> {modalConfig.content.scoring}
+											</div>
+										</div>
+										{modalConfig.content.distribution && modalConfig.content.distribution.length > 0 && (
+											<div className="prize-distribution">
+												<h3>Distribuição de Prêmios:</h3>
+												<div className="distribution-list">
+													{modalConfig.content.distribution.map((item, index) => (
+														<div key={index} className="distribution-item">
+															<span className="position">{item.position}:</span>
+															<span className="prize">{item.prize}</span>
+														</div>
+													))}
+												</div>
+											</div>
+										)}
+									</>
+								)}
+
+								{/* Presente de Arrepiar */}
+								{modalConfig.title === "Presente de Arrepiar" && (
+									<div className="modal-info">
+										<div className="info-item">
+											<strong>Lógica:</strong> {modalConfig.content.logic}
+										</div>
+									</div>
+								)}
+
+								{/* Gift Box Halloween */}
+								{modalConfig.title === "GIFT BOX - HALLOWEEN" && (
+									<div className="modal-info">
+										<div className="info-item">
+											<strong>Lógica:</strong> {modalConfig.content.logic1}
+										</div>
+										<div className="info-item">
+											{modalConfig.content.limit1}
+										</div>
+										<div className="info-item">
+											{modalConfig.content.period1}
+										</div>
+									</div>
+								)}
+
+								{/* Viagem para Disney */}
+								{modalConfig.title === "Viagem para Disney por R$0,10" && (
+									<div className="modal-info">
+										<div className="info-item">
+											<strong>Lógica:</strong> {modalConfig.content.logic}
+										</div>
+										<div className="info-item">
+											<strong>{modalConfig.content.games}</strong>
+										</div>
+										<div className="info-item">
+											<strong>Período:</strong> {modalConfig.content.period}
+										</div>
+										<div className="info-item">
+											{modalConfig.content.description}
+										</div>
+										<div className="prize-distribution">
+											<h3>Giros Extras:</h3>
+											<div className="distribution-list">
+												{modalConfig.content.prizes.map((prize, index) => (
+													<div key={index} className="distribution-item">
+														<span className="prize">{prize}</span>
+													</div>
+												))}
+											</div>
+										</div>
+									</div>
+								)}
+							</div>
+						</div>
+					) : (
+						<Missions level={level} levelIndex={levelIndex} />
+					)}
 				</div>
 			</div>
 		</div>
