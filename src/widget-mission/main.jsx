@@ -168,7 +168,7 @@ const matchesLevel = (mission, level, levelIndex) => {
   return false;
 };
 
-const Missions = ({ level, levelIndex }) => {
+const Missions = ({ level, levelIndex, maxItems = 1 }) => {
   const [loading, setLoading] = useState(true);
   const [missions, setMissions] = useState([]);
   const [activeMission, setActiveMission] = useState(null);
@@ -210,11 +210,25 @@ const Missions = ({ level, levelIndex }) => {
     }, 0);
   };
 
-  // Seleciona exatamente 1 missão com base no nível/insígnia
+  // Seleciona missões com base no nível/insígnia, respeitando maxItems
   const pickSingleMission = (list) => {
     const arr = Array.isArray(list) ? list : [];
     const hints = getLevelHints(level, levelIndex);
     const byLevel = level ? arr.filter((m) => matchesLevel(m, level, levelIndex)) : arr;
+
+    // Ordenar por número conhecido quando possível para previsibilidade
+    const sortByNumber = (xs) =>
+      xs.slice().sort((a, b) => {
+        const na = getMissionNumber(a) ?? Number.MAX_SAFE_INTEGER;
+        const nb = getMissionNumber(b) ?? Number.MAX_SAFE_INTEGER;
+        return na - nb;
+      });
+
+    // Quando queremos mais de 1 missão, devolvemos as primeiras correspondentes
+    if (maxItems > 1) {
+      const src = byLevel.length ? sortByNumber(byLevel) : sortByNumber(arr);
+      return src.slice(0, maxItems);
+    }
 
     // Preferir missão cujo número bata com o índice da insígnia (index + 1)
     const preferNumber = typeof hints.index === 'number' ? hints.index + 1 : undefined;

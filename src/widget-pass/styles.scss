@@ -370,6 +370,18 @@
   overflow: hidden;
 }
 
+/* Dimensões padrão para modals não-torneio */
+.disney-modal .level-card,
+.giftbox-modal .level-card,
+.presente-modal .level-card {
+  max-width: 680px;
+  width: min(92vw, 680px);
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
 /* Efeito de brilho fantasmagórico */
 .disney-modal .level-card::before,
 .giftbox-modal .level-card::before,
@@ -595,6 +607,11 @@
 
 .torneio-modal .distribution-item {
   background: linear-gradient(90deg, #ff8f65, #ffb347);
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  margin: 4px 0;
+  line-height: 1.2;
 }
 
 /* Animação de entrada dos modais */
@@ -603,6 +620,240 @@
 .presente-modal .level-card,
 .torneio-modal .level-card {
   animation: spookyEntrance 0.5s ease-out;
+}
+
+/* Ajustes específicos para compactar o modal de Torneio */
+.torneio-modal .level-card-wrapper {
+  position: fixed;
+  inset: 0;
+  padding: 12px;
+  display: grid;
+  place-items: center;
+}
+.torneio-modal .level-card {
+  max-width: 720px;
+  width: min(92vw, 720px);
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding: 10px;
+  background: #1a1a2e; /* visual mais limpo */
+  border: 2px solid #ff6b35;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.torneio-modal .modal-title {
+  font-size: 1.2rem;
+}
+.torneio-modal .modal-subtitle {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+.torneio-modal .level-card::before,
+.torneio-modal .level-card::after {
+  content: none; /* remove brilhos/partículas para um look mais clean */
+  animation: none;
+}
+.torneio-modal .info-item::before {
+  content: none; /* desativa shimmer */
+  animation: none;
+}
+.torneio-modal .prize-distribution h3::before,
+.torneio-modal .prize-distribution h3::after {
+  content: none; /* remove emojis para ficar menos carregado */
+}
+.torneio-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+/* Novo layout de torneio: estatísticas à esquerda, ranking à direita */
+.torneio-modal .tournament-layout {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.1fr);
+  gap: 8px;
+  align-items: start;
+}
+.torneio-modal .left-pane,
+.torneio-modal .right-pane { min-width: 0; }
+
+.torneio-modal .tournament-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.torneio-modal .tournament-stats .stat {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  align-items: center;
+  background: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.35);
+  border-radius: 8px;
+  padding: 6px 8px;
+  min-height: 40px;
+}
+.torneio-modal .tournament-stats .stat.span2 { grid-column: 1 / -1; }
+.torneio-modal .tournament-stats dt {
+  color: #ffb37a;
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+.torneio-modal .tournament-stats dd {
+  margin: 0;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.8rem;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.torneio-modal .tournament-stats .stat.span2 dd.long {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.torneio-modal .stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.torneio-modal .stat-card {
+  background: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.35);
+  border-radius: 8px;
+  padding: 6px 8px;
+  min-height: 40px;
+}
+.torneio-modal .stat-card.long { min-height: 56px; }
+.torneio-modal .stat-card.span2 { grid-column: 1 / -1; }
+.torneio-modal .stat-label {
+  color: #ffb37a;
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+.torneio-modal .stat-value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  word-break: break-word;
+}
+.torneio-modal .prize-distribution h3 {
+  margin: 4px 0 8px 0;
+  font-size: 0.86rem;
+}
+.torneio-modal .prize-distribution .prize-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 22vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.torneio-modal .prize-list .prize-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  background: rgba(255, 107, 53, 0.12);
+  border: 1px solid rgba(255, 107, 53, 0.35);
+  border-radius: 10px;
+  padding: 6px 8px;
+  margin: 4px 0;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+.torneio-modal .prize-list .pos { color: #ffb37a; font-weight: 700; }
+.torneio-modal .prize-list .val { color: #fff; font-weight: 700; }
+.torneio-modal .prize-distribution .distribution-list {
+  max-height: 20vh; /* leaderboard ainda mais compacto */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Itens do ranking mais enxutos */
+.torneio-modal .distribution-item {
+  padding: 6px 8px;
+  margin: 4px 0;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+/* Header do modal mais contido */
+.torneio-modal .modal-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.torneio-modal .modal-header .modal-title {
+  font-size: clamp(1rem, 2.6vw, 1.15rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Scrollbar mais fino para lista de distribuição */
+.torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar {
+  width: 6px;
+}
+.torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar-thumb {
+  background: #ff8f65;
+  border-radius: 6px;
+}
+.torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.08);
+}
+@media (max-width: 768px) {
+  .torneio-modal .tournament-layout { grid-template-columns: 1fr; }
+  .torneio-modal .tournament-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .torneio-modal .tournament-stats .stat.span2 { grid-column: 1 / -1; }
+  .torneio-modal .level-card-wrapper { padding: 8px; }
+  .torneio-modal .level-card { max-height: 70vh; }
+  .torneio-modal .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .torneio-modal .prize-distribution .prize-list { max-height: 26vh; }
+}
+
+/* Usa viewport dinâmico quando suportado (mobile) */
+@supports (height: 1svh) {
+  .torneio-modal .level-card { max-height: 70svh; }
+}
+
+/* Usa viewport dinâmico para modals não-torneio (mobile) */
+@supports (height: 1svh) {
+  .disney-modal .level-card,
+  .giftbox-modal .level-card,
+  .presente-modal .level-card { max-height: 80svh; }
+}
+
+/* Limita o texto de pontuação para no máx. 2 linhas */
+.torneio-modal .stat-card.span2 .stat-value {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Itens da distribuição com visual simplificado */
+.torneio-modal .distribution-item {
+  background: linear-gradient(90deg, #ff864f, #ffb37a);
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  margin: 4px 0;
+  line-height: 1.25;
+  box-shadow: none;
+  display: grid;
+  grid-template-columns: 1fr auto; /* texto à esquerda, valor à direita */
+  align-items: center;
 }
 
 @keyframes spookyEntrance {
@@ -648,6 +899,192 @@
   100% { transform: translateY(-100px); }
 }
 
+/* Layouts próprios para Disney, Gift Box e Presente */
+.giftbox-modal {
+  .modal-body { display: block; }
+
+  .giftbox-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .giftbox-details {
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(156, 39, 176, 0.05);
+    border: 1px solid rgba(156, 39, 176, 0.2);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+  }
+
+  .giftbox-details .row {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  .giftbox-details dt {
+    font-size: 0.8rem;
+    color: #b888d4;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+
+  .giftbox-details dd {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #eee;
+    text-align: left;
+  }
+}
+
+.presente-modal {
+  .modal-body { display: block; }
+
+  .present-layout {
+    display: grid;
+    gap: 10px;
+  }
+
+  .present-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #8bc34a;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+
+  .present-desc {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(139,195,74,.12), rgba(139,195,74,.08));
+    border: 1px solid rgba(139,195,74,.25);
+    color: #e9f7dc;
+    font-size: 0.92rem;
+    line-height: 1.3;
+    text-align: left;
+  }
+}
+
+.disney-modal {
+  .modal-body { display: block; }
+
+  .disney-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: 12px;
+  }
+
+  .disney-details .details {
+    margin: 0;
+    padding: 4px 0;
+    border-radius: 0;
+    background: transparent;
+    border: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .disney-details .row {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+  .disney-details .row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; }
+
+  .disney-details dt {
+    font-size: 0.8rem;
+    color: #80c8ff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+
+  .disney-details dd { margin: 0; color: #eef6ff; font-size: 0.9rem; }
+  .disney-details dd { text-align: left; }
+  .disney-details dd.long {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+  }
+
+  .extras { display: grid; align-content: start; gap: 8px; }
+  .extras h3 { font-size: 0.95rem; margin: 0; color: #bfe5ff; }
+  /* Remove emojis para um título mais limpo */
+  .prize-distribution h3::before,
+  .prize-distribution h3::after { content: none; }
+
+  .extras-list {
+    list-style: decimal inside;
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid rgba(33,150,243,0.18);
+    max-height: 24vh;
+    overflow: auto;
+    scrollbar-gutter: stable both-edges;
+  }
+
+  .extras-list .extra { font-size: 0.9rem; padding: 4px 0; color: #e8f4ff; }
+}
+
+/* Melhorias de legibilidade e limpeza para Disney/Gift/Presente */
+.disney-modal .level-card,
+.giftbox-modal .level-card,
+.presente-modal .level-card {
+  text-align: left; /* evita centralização de parágrafos */
+  padding: 10px; /* menos espaço interno */
+  background: #1a1a2e; /* remove gradiente forte */
+  border: 2px solid #ff6b35; /* borda mais fina */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35); /* sombra mais sutil */
+}
+
+/* Remove brilhos e partículas para um visual mais clean */
+.disney-modal .level-card::before,
+.giftbox-modal .level-card::before,
+.presente-modal .level-card::before,
+.disney-modal .level-card::after,
+.giftbox-modal .level-card::after,
+.presente-modal .level-card::after {
+  content: none;
+  animation: none;
+}
+
+/* Modal-body mais contido e alinhado à esquerda */
+.disney-modal .modal-body,
+.giftbox-modal .modal-body,
+.presente-modal .modal-body {
+  padding: 12px;
+  text-align: left;
+}
+
+/* Modal-body do Disney mais clean (sem caixas internas pesadas) */
+.disney-modal .modal-body {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .giftbox-modal .giftbox-details { grid-template-columns: 1fr; }
+  .giftbox-modal .giftbox-details .row { grid-template-columns: 96px minmax(0,1fr); }
+  .disney-modal .disney-layout { grid-template-columns: 1fr; }
+  .disney-modal .extras-list { max-height: 28vh; }
+}
+
 /* Responsividade melhorada para dispositivos móveis */
 @media (max-width: 768px) {
   /* Garantir que o modal ocupe toda a tela disponível */
@@ -666,10 +1103,18 @@
 
   .disney-modal .level-card,
   .giftbox-modal .level-card,
-  .presente-modal .level-card,
-  .torneio-modal .level-card {
+  .presente-modal .level-card {
     max-width: 95%; /* Reduzido para dar mais espaço */
-    max-height: none; /* Remove limitação de altura */
+    max-height: 80vh; /* Limita para evitar overflow vertical */
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Torneio mantém limite de altura no mobile para não estourar a viewport */
+  .torneio-modal .level-card {
+    max-width: 95%;
+    max-height: 70vh;
     margin: 0 auto;
     position: relative;
     width: 100%;
@@ -1331,4 +1776,27 @@
 /* Override: ilhas bloqueadas totalmente cinzas */
 .level-item.disabled .level-image {
   filter: grayscale(1);
+}
+
+/* Ações em modais (CTAs) */
+.modal-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.modal-actions .cta-btn {
+  appearance: none;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #7b61ff 0%, #e4760f 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+.modal-actions .cta-btn:hover {
+  filter: brightness(1.05);
 }

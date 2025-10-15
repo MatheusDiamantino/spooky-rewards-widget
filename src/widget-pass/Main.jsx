@@ -6,6 +6,7 @@ import FishBoatOrange from './animations/Halloween Spider.json';
 import OneFish from './animations/Halloween Spooky Ghost Floating.json';
 import GhostAnimation from './animations/Ghost Green.json';
 import Missions from '../widget-mission/main.jsx';
+import { handleProtectedAction } from '../functions/smartico';
 
 export const calculatePointsProgress = (ach_points, required_points) => {
 	return required_points > 0 ? Math.min(parseInt(((ach_points * 100) / required_points).toFixed(0), 0), 100) : 100;
@@ -251,30 +252,106 @@ const modalConfigs = [
 	},
 	{
 		title: "Torneio de Halloween",
-		subtitle: "TODOS OS JOGOS",
 		content: {
-			frequency: "03:00 às 00:00",
-			date: "31.10",
-			prize: "R$31.000 + GIROS GRÁTIS",
-			scoring: "A cada R$1 apostado nos jogos selecionados, ganha 1 ponto no torneio.",
+			frequency: "03–00h",
+			date: "31/10",
+			prize: "R$31k + Giros",
+			scoring: "R$1 = 1 pt. Ranking por pontos.",
 			distribution: [
-				{ position: "1º Lugar", prize: "R$10.000" },
-				{ position: "2º Lugar", prize: "R$7.000" },
-				{ position: "3º Lugar", prize: "R$5.000" },
-				{ position: "4º Lugar", prize: "R$3.500" },
-				{ position: "5º Lugar", prize: "R$1.500" },
-				{ position: "6º Lugar", prize: "R$800" },
-				{ position: "7º Lugar", prize: "R$600" },
-				{ position: "8º Lugar", prize: "R$400" },
-				{ position: "9º Lugar", prize: "R$200" },
-				{ position: "10º ao 30º Lugar", prize: "R$100" },
-				{ position: "31º ao 31.10º Lugar", prize: "20 Giros Extras Big Bass Halloween 3" }
+				{ position: "1º", prize: "R$10k" },
+				{ position: "2º", prize: "R$7k" },
+				{ position: "3º", prize: "R$5k" },
+				{ position: "4º", prize: "R$3,5k" },
+				{ position: "5º", prize: "R$1,5k" },
+				{ position: "6º", prize: "R$800" },
+				{ position: "7º", prize: "R$600" },
+				{ position: "8º", prize: "R$400" },
+				{ position: "9º", prize: "R$200" },
+				{ position: "10–30º", prize: "R$100" },
+				{ position: "31º+", prize: "20 Giros Big Bass H3" }
 			]
 		}
 	}
 ];
 
 export default LevelMap;
+
+// Bloco dinâmico de Torneio: busca e exibe o torneio ativo/mais próximo
+function TournamentDynamicBlock() {
+    const [loading, setLoading] = useState(true);
+    const [tournament, setTournament] = useState(null);
+    const smarticoApi = window?._smartico?.api;
+    const smarticoDP = window?._smartico?.dp;
+
+    useEffect(() => {
+        const load = async () => {
+            if (!smarticoApi) {
+                setLoading(false);
+                return;
+            }
+            const onUpdate = (list) => {
+                const arr = Array.isArray(list) ? list : [];
+                const active = arr.find((t) => t.is_in_progress);
+                if (active) {
+                    setTournament(active);
+                    return;
+                }
+                const upcoming = arr
+                    .filter((t) => t.is_upcoming)
+                    .sort((a, b) => new Date(a.start_time) - new Date(b.start_time))[0];
+                setTournament(upcoming || null);
+            };
+            const res = await smarticoApi.getTournamentsList({ onUpdate });
+            onUpdate(res);
+            setLoading(false);
+        };
+        load();
+    }, [smarticoApi]);
+
+    if (loading) return null;
+    if (!tournament) {
+        return (
+            <div className="tournament-layout" role="region" aria-label="Torneio">
+                <div className="no-missions">Nenhum torneio ativo encontrado.</div>
+            </div>
+        );
+    }
+
+    const openTournament = () => {
+        if (smarticoDP) {
+            smarticoDP(`dp:gf_tournaments&id=${tournament.tournament_id}&standalone=true`);
+        }
+    };
+
+    return (
+        <div className="tournament-layout" role="region" aria-label="Torneio ativo">
+            <section className="left-pane">
+                <dl className="tournament-stats">
+                    <div className="stat">
+                        <dt>Status</dt>
+                        <dd>{tournament.is_in_progress ? 'in-progress' : tournament.is_upcoming ? 'upcoming' : 'finished'}</dd>
+                    </div>
+                    <div className="stat">
+                        <dt>Prêmios</dt>
+                        <dd>{tournament.prize_pool_short || '-'}</dd>
+                    </div>
+                    <div className="stat">
+                        <dt>Registro</dt>
+                        <dd>{tournament.registration_count}/{tournament.players_max_count}</dd>
+                    </div>
+                </dl>
+            </section>
+            <section className="right-pane">
+                <section className="prize-distribution" aria-label="Detalhes">
+                    <h3 dangerouslySetInnerHTML={{ __html: tournament.name }} />
+                    <div className="modal-actions">
+                        <button className="cta-btn" onClick={openTournament}>Participar do Torneio</button>
+                    </div>
+                </section>
+            </section>
+        </div>
+    );
+}
 
 const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
 	if (level === undefined) {
@@ -372,91 +449,78 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 								<h2 className="modal-title">{modalConfig.title}</h2>
 								<p className="modal-subtitle">{modalConfig.subtitle}</p>
 							</div>
-							<div className="modal-body">
-								{/* Torneio de Halloween */}
-								{modalConfig.title === "Torneio de Halloween" && (
-									<>
-										<div className="modal-info">
-											<div className="info-item">
-												<strong>Frequência:</strong> {modalConfig.content.frequency}
-											</div>
-											<div className="info-item">
-												<strong>Data:</strong> {modalConfig.content.date}
-											</div>
-											<div className="info-item">
-												<strong>Premiação:</strong> {modalConfig.content.prize}
-											</div>
-											<div className="info-item">
-												<strong>Pontuação:</strong> {modalConfig.content.scoring}
-											</div>
-										</div>
-										{modalConfig.content.distribution && modalConfig.content.distribution.length > 0 && (
-											<div className="prize-distribution">
-												<h3>Distribuição de Prêmios:</h3>
-												<div className="distribution-list">
-													{modalConfig.content.distribution.map((item, index) => (
-														<div key={index} className="distribution-item">
-															<span className="position">{item.position}:</span>
-															<span className="prize">{item.prize}</span>
-														</div>
-													))}
-												</div>
-											</div>
-										)}
-									</>
-								)}
+						<div className="modal-body">
+                            {/* Torneio de Halloween */}
+                                {modalConfig.title === "Torneio de Halloween" && (
+                                    <TournamentDynamicBlock />
+                                )}
 
-								{/* Presente de Arrepiar */}
-								{modalConfig.title === "Presente de Arrepiar" && (
-									<div className="modal-info">
-										<div className="info-item">
-											<strong>Lógica:</strong> {modalConfig.content.logic}
-										</div>
-									</div>
-								)}
 
-								{/* Gift Box Halloween */}
-								{modalConfig.title === "GIFT BOX - HALLOWEEN" && (
-									<div className="modal-info">
-										<div className="info-item">
-											<strong>Lógica:</strong> {modalConfig.content.logic1}
-										</div>
-										<div className="info-item">
-											{modalConfig.content.limit1}
-										</div>
-										<div className="info-item">
-											{modalConfig.content.period1}
-										</div>
-									</div>
-								)}
+				{/* Presente de Arrepiar */}
+				{modalConfig.title === "Presente de Arrepiar" && (
+					<section className="present-layout" aria-label="Presente de Arrepiar">
+						<h3 className="present-title">Como funciona</h3>
+						<p className="present-desc">{modalConfig.content.logic}</p>
+						<div className="modal-actions">
+							{(() => {
+								const dp = level?.custom_data?.present_dp || `dp:gf_missions&id=${level?.id}&standalone=true`;
+								return (
+									<button className="cta-btn" onClick={() => handleProtectedAction(dp)}>
+										Abrir Presente Diário
+									</button>
+								);
+							})()}
+						</div>
+					</section>
+				)}
 
-								{/* Viagem para Disney */}
-								{modalConfig.title === "Viagem para Disney por R$0,10" && (
-									<div className="modal-info">
-										<div className="info-item">
-											<strong>Lógica:</strong> {modalConfig.content.logic}
-										</div>
-										<div className="info-item">
-											<strong>{modalConfig.content.games}</strong>
-										</div>
-										<div className="info-item">
-											<strong>Período:</strong> {modalConfig.content.period}
-										</div>
-										<div className="info-item">
-											{modalConfig.content.description}
-										</div>
-										<div className="prize-distribution">
-											<h3>Giros Extras:</h3>
-											<div className="distribution-list">
-												{modalConfig.content.prizes.map((prize, index) => (
-													<div key={index} className="distribution-item">
-														<span className="prize">{prize}</span>
-													</div>
-												))}
-											</div>
-										</div>
-									</div>
-								)}
+				{/* Gift Box Halloween */}
+				{modalConfig.title === "GIFT BOX - HALLOWEEN" && (
+					<section className="giftbox-layout" aria-label="Gift Box Halloween">
+						<dl className="giftbox-details">
+							<div className="row"><dt>Como funciona</dt><dd>{modalConfig.content.logic1}</dd></div>
+							<div className="row"><dt>Limite</dt><dd>{modalConfig.content.limit1}</dd></div>
+							<div className="row"><dt>Período</dt><dd>{modalConfig.content.period1}</dd></div>
+						</dl>
+						{/* Missões do Caldeirão: duas empilhadas */}
+						<Missions level={level} levelIndex={levelIndex} maxItems={2} />
+					</section>
+				)}
+
+				{/* Viagem para Disney */}
+				{modalConfig.title === "Viagem para Disney por R$0,10" && (
+					<section className="disney-layout" aria-label="Viagem para Disney">
+						<section className="disney-details">
+							<dl className="details">
+								<div className="row"><dt>Lógica</dt><dd>{modalConfig.content.logic}</dd></div>
+								<div className="row"><dt>Jogos</dt><dd>{modalConfig.content.games}</dd></div>
+								<div className="row"><dt>Período</dt><dd>{modalConfig.content.period}</dd></div>
+								<div className="row span2"><dt>Descrição</dt><dd className="long">{modalConfig.content.description}</dd></div>
+							</dl>
+						</section>
+						<section className="prize-distribution extras" aria-label="Giros Extras">
+							<h3>Giros Extras</h3>
+							<ol className="extras-list">
+								{modalConfig.content.prizes.map((prize, index) => (
+									<li key={index} className="extra">{prize}</li>
+								))}
+							</ol>
+						</section>
+						<div className="modal-actions">
+							{(() => {
+								const actionKey = level?.custom_data?.action || 'JOGUE_E_CONCORRA';
+								return (
+									<button
+										className="cta-btn"
+										onClick={() => window?._smartico?.action && window._smartico.action(actionKey)}
+									>
+										Jogue e Concorra
+									</button>
+								);
+							})()}
+						</div>
+					</section>
+				)}
 							</div>
 						</div>
 					) : (
