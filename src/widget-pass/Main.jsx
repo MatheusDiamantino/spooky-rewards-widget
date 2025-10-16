@@ -267,6 +267,84 @@ const modalConfigs = [
 	}
 ];
 
+// Funções auxiliares para filtrar missões
+const toArray = (value) => Array.isArray(value) ? value : [value];
+
+const normalizeText = (text) => {
+	if (!text) return '';
+	return text.toString().toLowerCase().trim();
+};
+
+const getLevelHints = (level) => {
+	if (!level?.hints) return [];
+	return toArray(level.hints).map(hint => normalizeText(hint));
+};
+
+const matchesLevel = (mission, level) => {
+	if (!mission || !level) return false;
+	
+	const missionName = normalizeText(mission.name);
+	const levelHints = getLevelHints(level);
+	
+	return levelHints.some(hint => missionName.includes(hint));
+};
+
+// Componente para botões sobrepostos às missões
+const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
+	const [loading, setLoading] = useState(true);
+	const [missions, setMissions] = useState([]);
+	const smarticoApi = window?._smartico?.api;
+
+	useEffect(() => {
+		const fetchMissions = async () => {
+			try {
+				setLoading(true);
+				const missionsList = await smarticoApi.getMissionsList();
+				
+				if (missionsList && Array.isArray(missionsList)) {
+					const filteredMissions = missionsList
+						.filter(mission => matchesLevel(mission, level))
+						.slice(0, maxItems);
+					
+					setMissions(filteredMissions);
+				}
+			} catch (error) {
+				console.error('Erro ao buscar missões:', error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (level && smarticoApi) {
+			fetchMissions();
+		}
+	}, [level, levelIndex, maxItems]);
+
+	const handleMissionClick = (mission) => {
+		const a = document.getElementById('dl-missions');
+		if (a) a.click();
+	};
+
+	if (loading || !missions.length) {
+		return null;
+	}
+
+	return (
+		<div className="mission-overlay-buttons">
+			{missions.map((mission, index) => (
+				<button
+					key={mission.id}
+					className="mission-overlay-btn"
+					onClick={() => handleMissionClick(mission)}
+					aria-label={`Executar missão: ${mission.name}`}
+				>
+					{/* Botão transparente sobreposto */}
+				</button>
+			))}
+		</div>
+	);
+};
+
 export default LevelMap;
 
 // Bloco dinâmico de Torneio: busca e exibe o torneio ativo/mais próximo
@@ -468,8 +546,12 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 								{/* Gift Box Halloween */}
 								{modalConfig.title === "CALDEIRÃO - HALLOWEEN" && (
 									<section className="giftbox-layout" aria-label="Gift Box Halloween">
-										{/* Missões do Caldeirão: duas empilhadas */}
-										<Missions level={level} levelIndex={levelIndex} maxItems={2} />
+										<div className="missions-wrapper">
+											{/* Missões do Caldeirão: duas empilhadas */}
+											<Missions level={level} levelIndex={levelIndex} maxItems={2} />
+											{/* Botões sobrepostos clicáveis */}
+											<MissionOverlayButtons level={level} levelIndex={levelIndex} maxItems={2} />
+										</div>
 									</section>
 								)}
 

@@ -291,10 +291,13 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
         {missions.map((mission, index) => {
           const timeLeft = timeLeftForMissions[mission.id];
           return (
-            <div
+            <button
               ref={missionRefs.current[index]}
               className={`mission ${activeMission === mission.id ? "active" : ""}`}
-              onClick={() => handleExpand(mission.id)}
+              onClick={() => {
+                const a = document.getElementById('dl-missions');
+                if (a) a.click();
+              }}
               key={mission.id}
             >
               <div className="mission-block">
@@ -353,7 +356,7 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
                   </div>
                 </div>
               )}
-            </div>
+            </button>
           );
         })}
 
