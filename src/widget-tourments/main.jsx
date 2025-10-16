@@ -148,7 +148,7 @@ const Tournaments = () => {
         <div className="tournament-header-title">Torneios</div>
         <div
           className="view-all-button"
-          onClick={() => smarticoDP("dp:gf_tournaments&standalone=true")}
+          onClick={() => document.getElementById('dl-tournaments')?.click()}
         >
           Ver todos
         </div>
@@ -242,11 +242,7 @@ const Tournaments = () => {
                 </div>
                 <div
                   className={`join-button`}
-                  onClick={() =>
-                    smarticoDP(
-                      `dp:gf_tournaments&id=${tournament.tournament_id}&standalone=true`
-                    )
-                  }
+                  onClick={() => document.getElementById('dl-tournaments')?.click()}
                 >
                   <p>{tournament.is_user_registered ? "Registered" :"Registre-se"}</p>
                 </div>

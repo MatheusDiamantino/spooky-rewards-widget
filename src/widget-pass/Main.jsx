@@ -6,7 +6,6 @@ import FishBoatOrange from './animations/Halloween Spider.json';
 import OneFish from './animations/Halloween Spooky Ghost Floating.json';
 import GhostAnimation from './animations/Ghost Green.json';
 import Missions from '../widget-mission/main.jsx';
-import { handleProtectedAction } from '../functions/smartico';
 
 export const calculatePointsProgress = (ach_points, required_points) => {
 	return required_points > 0 ? Math.min(parseInt(((ach_points * 100) / required_points).toFixed(0), 0), 100) : 100;
@@ -311,11 +310,10 @@ function TournamentDynamicBlock() {
 		);
 	}
 
-	const openTournament = () => {
-		if (smarticoDP) {
-			smarticoDP(`dp:gf_tournaments&id=${tournament.tournament_id}&standalone=true`);
-		}
-	};
+    const openTournament = () => {
+        const a = document.getElementById('dl-tournaments');
+        if (a) a.click();
+    };
 
 	return (
 		<div className="tournament-layout" role="region" aria-label="Torneio ativo">
@@ -341,9 +339,9 @@ function TournamentDynamicBlock() {
 						<div className="stat-value">{tournament.registration_count || '14350'}/{tournament.players_max_count || '200000'}</div>
 					</div>
 				</div>
-				<div className="modal-actions">
-					<a href="dp:gf_tournaments" className="cta-btn">Participar do Torneio</a>
-				</div>
+                <div className="modal-actions">
+                    <button type="button" className="cta-btn" onClick={openTournament}>Participar do Torneio</button>
+                </div>
 			</div>
 		</div>
 	);
@@ -457,14 +455,12 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 										<h3 className="present-title">Como funciona</h3>
 										<p className="present-desc">{modalConfig.content.logic}</p>
 										<div className="modal-actions">
-											{(() => {
-												const dp = level?.custom_data?.present_dp || `dp:gf_missions&id=${level?.id}&standalone=true`;
-												return (
-													<button className="cta-btn" onClick={() => handleProtectedAction(dp)}>
-														Abrir Presente Diário
-													</button>
-												);
-											})()}
+                                            <button
+                                                className="cta-btn"
+                                                onClick={() => document.getElementById('dl-missions')?.click()}
+                                            >
+                                                Abrir Presente Diário
+                                            </button>
 										</div>
 									</section>
 								)}

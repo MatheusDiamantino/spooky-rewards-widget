@@ -285,14 +285,7 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
 
   return (
     <div className="missions-container">
-      {/* <div className="missions-header">
-        <div className="title">{`Missões (${missions.length})`}</div>
-        {smarticoDP && (
-          <div className="view-all-btn" onClick={() => smarticoDP("dp:gf_missions&standalone=true")}>
-            Ver todas
-          </div>
-        )}
-      </div> */}
+      
 
       <div className="missions-list" ref={missionsContainerRef}>
         {missions.map((mission, index) => {

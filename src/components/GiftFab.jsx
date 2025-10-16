@@ -1,7 +1,6 @@
 /* global */
 
 import { useEffect, useRef, useState } from "react";
-import { handleProtectedAction } from "../functions/smartico";
 import { startCountdownToMidnight } from "../functions/midnight";
 // import { runPromoTimers } from "../functions/promoTimers"; // <- não precisa mais
 import Main from "../widget-mission/main";
@@ -194,11 +193,13 @@ export default function GiftFab() {
           <div className="btn-label">NOTIFICAÇÕES</div>
           <div
             className="round-btn"
-            data-smartico="dp:gf_missions"
-            onClick={() => handleProtectedAction("dp:gf_missions")}
+            onClick={() => document.getElementById('dl-missions')?.click()}
             tabIndex={0}
             onKeyDown={e => {
-              if (e.key === "Enter" || e.key === " ") handleProtectedAction("dp:gf_missions");
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                document.getElementById('dl-missions')?.click();
+              }
             }}
           >
             <img
