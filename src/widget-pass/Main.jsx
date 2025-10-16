@@ -8,75 +8,6 @@ import GhostAnimation from './animations/Ghost Green.json';
 import Missions from '../widget-mission/main.jsx';
 import { handleProtectedAction } from '../functions/smartico';
 
-// Componente wrapper para adicionar funcionalidade de clique às missões
-const ClickableMissions = ({ level, levelIndex, maxItems }) => {
-	useEffect(() => {
-		const addClickListeners = () => {
-			// Aguarda um pouco para garantir que as missões foram renderizadas
-			setTimeout(() => {
-				const missionElements = document.querySelectorAll('[data-mission-id], .mission-item, .mission-card, .mission');
-				
-				missionElements.forEach((element, index) => {
-					// Remove listeners anteriores para evitar duplicação
-					element.removeEventListener('click', handleMissionClick);
-					
-					// Adiciona o listener de clique
-					element.addEventListener('click', (e) => handleMissionClick(e, index));
-					
-					// Adiciona cursor pointer para indicar que é clicável
-					element.style.cursor = 'pointer';
-				});
-			}, 100);
-		};
-
-		const handleMissionClick = (e, missionIndex) => {
-			e.preventDefault();
-			e.stopPropagation();
-			
-			// Encontra o ID da missão
-			let missionId = null;
-			const target = e.currentTarget;
-			
-			// Tenta diferentes formas de encontrar o ID da missão
-			if (target.dataset.missionId) {
-				missionId = target.dataset.missionId;
-			} else if (target.dataset.id) {
-				missionId = target.dataset.id;
-			} else {
-				// Se não encontrar o ID, usa o índice como fallback
-				missionId = missionIndex + 1;
-			}
-			
-			// Redireciona para o link da missão
-			if (window.smarticoDP) {
-				window.smarticoDP(`dp:gf_missions&id=${missionId}`);
-			} else {
-				console.log(`Redirecionando para: dp:gf_missions&id=${missionId}`);
-			}
-		};
-
-		// Adiciona os listeners inicialmente
-		addClickListeners();
-
-		// Observer para re-adicionar listeners quando o DOM muda
-		const observer = new MutationObserver(() => {
-			addClickListeners();
-		});
-
-		observer.observe(document.body, {
-			childList: true,
-			subtree: true
-		});
-
-		return () => {
-			observer.disconnect();
-		};
-	}, [level, levelIndex, maxItems]);
-
-	// Renderiza o componente Missions original
-	return <Missions level={level} levelIndex={levelIndex} maxItems={maxItems} />;
-};
-
 export const calculatePointsProgress = (ach_points, required_points) => {
 	return required_points > 0 ? Math.min(parseInt(((ach_points * 100) / required_points).toFixed(0), 0), 100) : 100;
 };
@@ -284,12 +215,12 @@ const LevelMap = () => {
 // Configurações personalizadas para cada modal
 const modalConfigs = [
 	{
-		title: "Viagem para Disney por R$0,10",
+		title: "VIAGEM PARA DISNEY",
 		subtitle: "",
 		content: {
 			logic: "A cada R$0,10 apostados nos slots PG, você pode ganhar Giros Extras, um PS5 temático de Halloween ou uma viagem para a Disney.",
-			period: "Das 03h do dia 31/10 até 00h do dia 01/11",
-			description: "Os bônus e prêmios que serão sorteados e distribuídos de forma randômica nesta ação são:",
+			period: "Das 03h até 23h59 do dia 31/10",
+			description: "Os bônus e prêmios serão sorteados e distribuídos de forma aleatória nesta ação.",
 			prizes: [
 				"Big Bass Bonanza Halloween 3 - 2 Giros Extras",
 				"Frightening Frankie - 3 Giros Extras",
@@ -307,14 +238,14 @@ const modalConfigs = [
 		}
 	},
 	{
-		title: "Presente de Arrepiar",
+		title: "PRESENTE DE ARREPIAR",
 		content: {
 			logic: "De 03:00 às 23:59 do dia 31.10 o usuário terá acesso ao presente diário dentro da gamificação.",
 			distribution: []
 		}
 	},
 	{
-		title: "Torneio de Halloween",
+		title: "TORNEIO DE HALLOWEEN",
 		content: {
 			frequency: "03–00h",
 			date: "31/10",
@@ -388,44 +319,31 @@ function TournamentDynamicBlock() {
 
 	return (
 		<div className="tournament-layout" role="region" aria-label="Torneio ativo">
-			{tournament.image && (
-				<section className="tournament-image">
-					<img 
-						src={tournament.image} 
-						alt={tournament.name || "Torneio"} 
-						className="tournament-banner"
-						onError={(e) => {
-							// Fallback para imagem padrão se a imagem da Smartico falhar
-							e.target.src = "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/sweet-rush-bonanza-tournament.webp";
-						}}
-					/>
-				</section>
-			)}
-			<div className="tournament-content">
-				<section className="left-pane">
-					<dl className="tournament-stats">
-						<div className="stat">
-							<dt>Status</dt>
-							<dd>{tournament.is_in_progress ? 'in-progress' : tournament.is_upcoming ? 'upcoming' : 'finished'}</dd>
-						</div>
-						<div className="stat">
-							<dt>Prêmios</dt>
-							<dd>{tournament.prize_pool_short || '-'}</dd>
-						</div>
-						<div className="stat">
-							<dt>Registro</dt>
-							<dd>{tournament.registration_count}/{tournament.players_max_count}</dd>
-						</div>
-					</dl>
-				</section>
-				<section className="right-pane">
-					<section className="prize-distribution" aria-label="Detalhes">
-						<h3 dangerouslySetInnerHTML={{ __html: tournament.name }} />
-						<div className="modal-actions">
-							<a href="dp:gf_tournaments" className="cta-btn">Participar do Torneio</a>
-						</div>
-					</section>
-				</section>
+			<section className="tournament-image">
+				<img 
+					src="https://d3l7suk1kl9rwh.cloudfront.net/94d586fe197310fb1e0974-920x20029.webp" 
+					alt="Torneio de Halloween" 
+					className="tournament-banner"
+					// onError={(e) => {
+					// 	// Fallback para imagem padrão se a imagem falhar
+					// 	e.target.src = "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/sweet-rush-bonanza-tournament.webp";
+					// }}
+				/>
+			</section>
+			<div className="tournament-info">
+				<div className="tournament-stats-grid">
+					<div className="stat-card">
+						<div className="stat-label">Premiação</div>
+						<div className="stat-value">{tournament.prize_pool_short || 'R$30.000,00'}</div>
+					</div>
+					<div className="stat-card">
+						<div className="stat-label">Registro</div>
+						<div className="stat-value">{tournament.registration_count || '14350'}/{tournament.players_max_count || '200000'}</div>
+					</div>
+				</div>
+				<div className="modal-actions">
+					<a href="dp:gf_tournaments" className="cta-btn">Participar do Torneio</a>
+				</div>
 			</div>
 		</div>
 	);
@@ -493,10 +411,10 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 		if (!modalConfig) return '';
 
 		const titleMap = {
-			"Viagem para Disney por R$0,10": "disney-modal",
+			"VIAGEM PARA DISNEY": "disney-modal",
 			"CALDEIRÃO - HALLOWEEN": "giftbox-modal",
-			"Presente de Arrepiar": "presente-modal",
-			"Torneio de Halloween": "torneio-modal"
+			"PRESENTE DE ARREPIAR": "presente-modal",
+			"TORNEIO DE HALLOWEEN": "torneio-modal"
 		};
 
 		return titleMap[modalConfig.title] || '';
@@ -525,18 +443,17 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 						<div className="custom-modal-content">
 							<div className="modal-header">
 								<h2 className="modal-title">{modalConfig.title}</h2>
-								<p className="modal-subtitle">{modalConfig.subtitle}</p>
 							</div>
 							<div className="modal-body">
 								{/* Torneio de Halloween */}
-								{modalConfig.title === "Torneio de Halloween" && (
+								{modalConfig.title === "TORNEIO DE HALLOWEEN" && (
 									<TournamentDynamicBlock />
 								)}
 
 
 								{/* Presente de Arrepiar */}
-								{modalConfig.title === "Presente de Arrepiar" && (
-									<section className="present-layout" aria-label="Presente de Arrepiar">
+								{modalConfig.title === "PRESENTE DE ARREPIAR" && (
+									<section className="present-layout" aria-label="PRESENTE DE ARREPIAR">
 										<h3 className="present-title">Como funciona</h3>
 										<p className="present-desc">{modalConfig.content.logic}</p>
 										<div className="modal-actions">
@@ -556,13 +473,13 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 								{modalConfig.title === "CALDEIRÃO - HALLOWEEN" && (
 									<section className="giftbox-layout" aria-label="Gift Box Halloween">
 										{/* Missões do Caldeirão: duas empilhadas */}
-										<ClickableMissions level={level} levelIndex={levelIndex} maxItems={2} />
+										<Missions level={level} levelIndex={levelIndex} maxItems={2} />
 									</section>
 								)}
 
 								{/* Viagem para Disney */}
-								{modalConfig.title === "Viagem para Disney por R$0,10" && (
-									<section className="disney-layout" aria-label="Viagem para Disney">
+								{modalConfig.title === "VIAGEM PARA DISNEY" && (
+									<section className="disney-layout" aria-label="VIAGEM PARA DISNEY">
 										<section className="disney-details">
 											<dl className="details">
 												<div className="row"><dt>Lógica</dt><dd>{modalConfig.content.logic}</dd></div>
@@ -572,7 +489,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 											</dl>
 										</section>
 										<section className="prize-distribution extras" aria-label="Giros Extras">
-											<h3>Giros Extras</h3>
+											<h3>Premiação</h3>
 											<ol className="extras-list">
 												{modalConfig.content.prizes.map((prize, index) => (
 													<li key={index} className="extra">{prize}</li>
@@ -597,7 +514,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
 							</div>
 						</div>
 					) : (
-						<ClickableMissions level={level} levelIndex={levelIndex} />
+						<Missions level={level} levelIndex={levelIndex} />
 					)}
 				</div>
 			</div>
