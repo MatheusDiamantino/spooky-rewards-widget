@@ -48,10 +48,10 @@ const getLevelImageUrl = (level, disabled, index) => {
 	if (!level) return '';
 	// Conjunto de imagens ativas disponíveis (inclui as que faltavam)
 	const activeImages = [
-		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/JOGUE E CONCORRA.webp',
-		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/caldeirao.webp',
-		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/bau-diario.webp',
-		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/TORNEIOS.webp',
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/castelo2.0.webp',
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/caldeirao22.webp',
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/bau2.0.webp',
+		'https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/torneios2.0.webp',
 	];
 	const i = Number.isFinite(index) ? index % activeImages.length : 0;
 	const activeUrl = activeImages[i];
