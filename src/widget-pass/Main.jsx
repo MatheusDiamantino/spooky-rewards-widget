@@ -6,6 +6,8 @@ import FishBoatOrange from "./animations/Halloween Spider.json";
 import OneFish from "./animations/Halloween Spooky Ghost Floating.json";
 import GhostAnimation from "./animations/Ghost Green.json";
 import Missions from "../widget-mission/main.jsx";
+import Mickey from "./animations/Mickey.json";
+import DisneyHostar from "./animations/Disney Hostar.json";
 
 // Desativa todas as animações temporariamente
 const DISABLE_ANIMATIONS = false;
@@ -46,7 +48,7 @@ const animations = [
     src: FishBoatOrange,
     style: { bottom: "90%", right: "112px", transform: "rotateY(180deg)" },
   },
-  { key: "OneFish", src: OneFish, style: fishPositions[0] },
+  // { key: "OneFish", src: OneFish, style: fishPositions[0] },
 ];
 
 const getRandomPosition = () => {
@@ -62,7 +64,7 @@ const getLevelImageUrl = (level, disabled, index) => {
     "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/presentesdiarios3.0.webp",
     "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/teste6.png",
     "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/caldeirao3.0+(2).webp",
-    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/teste4.png",
+    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/teste8.webp",
   ];
   const i = Number.isFinite(index) ? index % activeImages.length : 0;
   const activeUrl = activeImages[i];
@@ -77,8 +79,104 @@ const LevelMap = () => {
   const [currentLevel, setCurrentLevel] = useState(null);
   const animationRef = useRef(null);
   const [fishPosition, setFishPosition] = useState(fishPositions[0]);
-
+  // Mickey easter egg + Hostar overlay
+  const [mickeyVisible, setMickeyVisible] = useState(false);
+  const [mickeyPosition, setMickeyPosition] = useState({
+    top: "24px",
+    left: "24px",
+  });
+  const [hostarActive, setHostarActive] = useState(false);
+  const [pendingDisneyLevel, setPendingDisneyLevel] = useState(null);
+  const [mickeyMessage, setMickeyMessage] = useState("Ei!");
+  const hostarTimerRef = useRef(null);
+  const bgAudioRef = useRef(null);
   const smarticoApi = window._smartico.api;
+
+  const mickeyMessages = [
+    "Ei!",
+    "Clique aqui",
+  ];
+
+  // Posições predefinidas para o Mickey surgir (cantos e áreas próximas às construções)
+  const mickeyPositions = [
+    { bottom: "220px", left: "22px" },
+    { bottom: "120px", right: "26px" },
+  ];
+
+  const getRandomMickeyPosition = () =>
+    mickeyPositions[Math.floor(Math.random() * mickeyPositions.length)];
+
+
+
+  // Ciclo de spawn do Mickey (aparece 2x, 5s cada e intervalo de 3s)
+  useEffect(() => {
+    let firstShowTO;
+    let firstHideTO;
+    let secondShowTO;
+    let secondHideTO;
+
+    const appear = () => {
+      setMickeyPosition(getRandomMickeyPosition());
+      const msg = mickeyMessages[Math.floor(Math.random() * mickeyMessages.length)];
+      setMickeyMessage(msg);
+      setMickeyVisible(true);
+    };
+
+    // 1ª aparição
+    firstShowTO = setTimeout(() => {
+      appear();
+      firstHideTO = setTimeout(() => {
+        setMickeyVisible(false);
+        // 2ª aparição 3s depois de sumir
+        secondShowTO = setTimeout(() => {
+          appear();
+          secondHideTO = setTimeout(() => {
+            setMickeyVisible(false);
+          }, 5000); // visível por 5s
+        }, 3000); // intervalo de 3s
+      }, 5000); // visível por 5s
+    }, 500); // pequeno delay inicial
+
+    return () => {
+      clearTimeout(firstShowTO);
+      clearTimeout(firstHideTO);
+      clearTimeout(secondShowTO);
+      clearTimeout(secondHideTO);
+    };
+  }, []);
+
+  // Finaliza Hostar: fecha overlay e abre modal Disney (com fallback de 3s)
+  const finalizeHostar = () => {
+    if (hostarTimerRef.current) {
+      clearTimeout(hostarTimerRef.current);
+      hostarTimerRef.current = null;
+    }
+    if (pendingDisneyLevel) {
+      setCurrentLevel(pendingDisneyLevel);
+      setShowCard(true);
+      setPendingDisneyLevel(null);
+    }
+    setHostarActive(false);
+  };
+
+  // Clique no Mickey: ativa Hostar, rola para o topo e só depois abre modal
+  const handleMickeyClick = () => {
+    setHostarActive(true);
+
+    if (levelContainerRef.current) {
+      levelContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    const sorted = [...levels].sort((a, b) => a.id - b.id).slice(0, 4);
+    const disneyLevel = sorted[3] || sorted[sorted.length - 1];
+    setPendingDisneyLevel(disneyLevel || null);
+
+    // Fallback: garante máximo de 3s
+    if (hostarTimerRef.current) clearTimeout(hostarTimerRef.current);
+    hostarTimerRef.current = setTimeout(finalizeHostar, 3000);
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -158,6 +256,16 @@ const LevelMap = () => {
     }
   };
 
+  // Limpeza do timer do Hostar ao desmontar
+  useEffect(() => {
+    return () => {
+      if (hostarTimerRef.current) {
+        clearTimeout(hostarTimerRef.current);
+        hostarTimerRef.current = null;
+      }
+    };
+  }, []);
+
   if (loading) {
     return null;
   }
@@ -224,10 +332,120 @@ const LevelMap = () => {
                   ></Player>
                 </div>
               ))}
+
+              {/* Mickey Easter Egg */}
+              {mickeyVisible && (
+                <div
+                  className="animation-container mickey"
+                  style={{
+                    ...mickeyPosition,
+                    pointerEvents: "auto",
+                    zIndex: 2,
+                    width: "110px",
+                    height: "110px",
+                  }}
+                  onClick={handleMickeyClick}
+                >
+                  {/* Balão de conversa */}
+                  <div
+                    className="mickey-bubble"
+                    style={{
+                      position: "absolute",
+                      bottom: "100%",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      background: "#fff",
+                      color: "#222",
+                      fontWeight: 700,
+                      borderRadius: "18px",
+                      padding: "8px 12px",
+                      marginBottom: "10px",
+                      maxWidth: "160px",
+                      lineHeight: "1.25",
+                      textAlign: "center",
+                      hyphens: "auto",
+                      fontSize: "12px",
+                      letterSpacing: "0.1px",
+                      border: "1px solid rgba(0,0,0,0.08)",
+                      boxShadow: "0 6px 16px rgba(0,0,0,0.18), inset 0 0 10px rgba(0,0,0,0.03)",
+                      textShadow: "none",
+                      backdropFilter: "blur(1px)",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    {(() => {
+                      const parts =
+                        String(mickeyMessage).split(/<br\s*\/>|\n/g);
+                      return parts.map((seg, i) => (
+                        <span key={i}>
+                          {seg}
+                          {i < parts.length - 1 && <br />}
+                        </span>
+                      ));
+                    })()}
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        bottom: "calc(100% - 4px)",
+                        width: 0,
+                        height: 0,
+                        borderLeft: "7px solid transparent",
+                        borderRight: "7px solid transparent",
+                        borderTop: "10px solid #fff",
+                        filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.18))",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  </div>
+
+                  <Player
+                    src={Mickey}
+                    style={{ width: "100%", height: "100%" }}
+                    autoplay={true}
+                    loop={true}
+                    background="transparent"
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
+
+      {/* Overlay do Hostar girando */}
+      {hostarActive && (
+        <div
+          className="hostar-overlay"
+          style={{
+            position: "fixed",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 2000,
+            pointerEvents: "none",
+          }}
+        >
+          <div className="hostar-spinner" style={{ pointerEvents: "none" }}>
+            <Player
+              src={DisneyHostar}
+              style={{ width: "220px", height: "220px" }}
+              autoplay={true}
+              loop={false}
+              background="transparent"
+              speed={1.5}
+              onEvent={(event) => {
+                if (event === "complete") {
+                  finalizeHostar();
+                }
+              }}
+            />
+          </div>
+        </div>
+      )}
+
       {showCard && currentLevel && (
         <LevelCardModal
           level={currentLevel}
@@ -236,6 +454,7 @@ const LevelMap = () => {
           levelIndex={levels.indexOf(currentLevel)}
         />
       )}
+
       <div className="levels-scroll-buttons">
         <div className="button-container" onClick={handleScrollUp}>
           <div className="button-nav up" />
@@ -248,7 +467,7 @@ const LevelMap = () => {
         <div className="hint-container">
           <div className="hint-icon" />
           <div className="hint-message">
-            Drag up and down to navigate the page
+            Arraste para cima e para baixo para navegar
           </div>
         </div>
       </div>
@@ -304,9 +523,11 @@ const modalConfigs = [
       description:
         "Os bônus e prêmios serão sorteados e distribuídos de forma aleatória nesta ação.",
       prizes: [
-        "Big Bass Bonanza Halloween 3 - 2 Giros Extras",
-        "Frightening Frankie - 3 Giros Extras",
-        "Big Bass Bonanza Halloween 3 - 5 Giros Extras",
+        "Wild Bandito - Giros Extras",
+        "Mr. Hallow-Win - Giros Extras",
+        "Big Bass Bonanza Halloween 3 - Giros Extras",
+        "Werewolf’s Hunt - Giros Extras",
+        "Mystic Potion - Giros Extras",
         "PS5",
         "Bilhete Premiado valendo uma Viagem Disney",
       ],
