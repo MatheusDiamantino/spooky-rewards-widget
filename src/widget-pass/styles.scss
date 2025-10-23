@@ -59,7 +59,7 @@
         background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/mapa2.0.webp");
         width: 100%;
         height: 1141px;
-        background-position: bottom;
+        background-position: TOP;
         background-size: COVER;
         background-repeat: no-repeat;
         user-select: none;
@@ -102,9 +102,10 @@
               }
             }
 
-            .level-image {
-              width: 200px;
-              height: 200px;
+            .level-image,
+            .level-image-btn {
+              width: 150px;
+              height: 150px;
               background-position: center;
               background-size: contain;
               background-repeat: no-repeat;
@@ -112,6 +113,10 @@
               z-index: 0;
               cursor: pointer;
               transition: transform 1s ease;
+              appearance: none;
+              border: 0;
+              padding: 0;
+              background-color: transparent;
 
               //   &:hover {
               //     transform: scale(1.1);
@@ -120,9 +125,9 @@
 
             .ghost-animation {
               position: absolute;
-              bottom: 170px;
+              bottom: 300px;
               left: 50%;
-              transform: translateX(-50%);
+              transform: translateX(55%);
               width: 140px;
               height: 140px;
               z-index: 2;
@@ -159,24 +164,23 @@
             }
 
             &.level-0 {
-              bottom: 285px;
-              right: 187px;
-              z-index: 1;
+              bottom: 169px;
+              right: 375px;
             }
 
             &.level-1 {
-              bottom: 462px;
-              left: 190px;
+              bottom: 289px;
+              left: 274px;
             }
 
             &.level-2 {
-              bottom: 664px;
-              right: 187px;
+              bottom: 468px;
+              right: 317px;
             }
 
             &.level-3 {
-              top: 145px;
-              left: 207px;
+              top: 171px;
+              left: 307px;
             }
 
             &.level-4 {
@@ -190,7 +194,8 @@
             }
 
             @media screen and (max-width: 768px) {
-              .level-image {
+              .level-image,
+              .level-image-btn {
                 width: 150px;
                 height: 150px;
                 background-position: center;
@@ -200,10 +205,25 @@
                 z-index: 0;
                 cursor: pointer;
                 transition: transform 1s ease;
+                appearance: none;
+                border: 0;
+                padding: 0;
+                background-color: transparent;
 
                 //   &:hover {
                 //     transform: scale(1.1);
                 //   }
+              }
+
+              .levels-main-background {
+                background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/mapa2.0.webp");
+                width: 100%;
+                height: 1141px;
+                background-position: bottom;
+                background-size: COVER;
+                background-repeat: no-repeat;
+                user-select: none;
+                position: relative;
               }
 
               .ghost-animation {
@@ -213,24 +233,23 @@
               }
 
               &.level-0 {
-                bottom: 240px;
-                right: 8px;
-                z-index: 1;
+                bottom: 299px;
+                right: 136px;
               }
 
               &.level-1 {
-                bottom: 390px;
-                left: 0px;
+                bottom: 418px;
+                left: 46px;
               }
 
               &.level-2 {
-                bottom: 568px;
-                right: 0px;
+                bottom: 569px;
+                right: 82px;
               }
 
               &.level-3 {
-                top: 322px;
-                left: 14px;
+                top: 135px;
+                left: 94px;
               }
 
               &.level-4 {
@@ -245,7 +264,8 @@
             }
 
             @media screen and (max-width: 400px) {
-              .level-image {
+              .level-image,
+              .level-image-btn {
                 width: 150px;
                 height: 150px;
                 background-position: center;
@@ -255,6 +275,10 @@
                 z-index: 0;
                 cursor: pointer;
                 transition: transform 1s ease;
+                appearance: none;
+                border: 0;
+                padding: 0;
+                background-color: transparent;
 
                 //   &:hover {
                 //     transform: scale(1.1);
@@ -262,40 +286,39 @@
               }
 
               .ghost-animation {
-                bottom: 120px;
+                bottom: 280px;
                 width: 110px;
                 height: 110px;
               }
 
               &.level-0 {
-                bottom: 240px;
-                right: 0px;
-                z-index: 1;
+                bottom: 296px;
+                right: 114px;
               }
 
               &.level-1 {
-                bottom: 390px;
-                left: -10px;
+                bottom: 418px;
+                left: 20px;
               }
 
               &.level-2 {
-                bottom: 568px;
-                right: -20px;
+                bottom: 556px;
+                right: 57px;
               }
 
               &.level-3 {
-                top: 322px;
-                left: -4px;
+                top: 135px;
+                left: 60px;
               }
 
               &.level-4 {
-                top: 352px;
-                right: 58px;
+                bottom: 900px;
+                right: 20px;
               }
 
               &.level-5 {
-                top: 105px;
-                left: 150px;
+                bottom: 1080px;
+                left: 20px;
               }
             }
           }
@@ -356,1182 +379,1308 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
     }
 
-/* Estilos temáticos de Halloween para todos os modais */
-
-/* Estilos base para todos os modais com tema Halloween */
-.disney-modal .level-card,
-.giftbox-modal .level-card,
-.presente-modal .level-card,
-.torneio-modal .level-card {
-  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-  border: 3px solid #ff6b35;
-  box-shadow: 0 0 30px rgba(255, 107, 53, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Dimensões padrão para modals não-torneio */
-.disney-modal .level-card,
-.giftbox-modal .level-card,
-.presente-modal .level-card {
-  max-width: 680px;
-  width: min(92vw, 680px);
-  max-height: 80vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-/* Efeito de brilho fantasmagórico */
-.disney-modal .level-card::before,
-.giftbox-modal .level-card::before,
-.presente-modal .level-card::before,
-.torneio-modal .level-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
-  animation: ghostlyGlow 3s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes ghostlyGlow {
-  0% { opacity: 0.3; transform: rotate(0deg); }
-  100% { opacity: 0.7; transform: rotate(360deg); }
-}
-
-/* Títulos com tema Halloween */
-.disney-modal .modal-title,
-.giftbox-modal .modal-title,
-.presente-modal .modal-title,
-.torneio-modal .modal-title {
-  color: #ff6b35;
-  text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.6), 0 0 20px rgba(255, 107, 53, 0.3);
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 2;
-}
-
-/* Subtítulos */
-.disney-modal .modal-subtitle,
-.giftbox-modal .modal-subtitle,
-.presente-modal .modal-subtitle,
-.torneio-modal .modal-subtitle {
-  color: #ffa726;
-  font-weight: 600;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 2;
-}
-
-/* Corpo do modal */
-.disney-modal .modal-body,
-.giftbox-modal .modal-body,
-.presente-modal .modal-body {
-  background: rgba(26, 26, 46, 0.9);
-  border-radius: 12px;
-  padding: 15px;
-  margin-top: 10px;
-  border: 2px solid #ff6b35;
-  box-shadow: inset 0 0 15px rgba(255, 107, 53, 0.2);
-  position: relative;
-  z-index: 2;
-}
-
-.torneio-modal .modal-body {
-  background: rgba(26, 26, 46, 0.9);
-  border-radius: 12px;
-  padding: 15px;
-  margin-top: 0px;
-  border: 2px solid #ff6b35;
-  box-shadow: inset 0 0 15px rgba(255, 107, 53, 0.2);
-  position: relative;
-  z-index: 2;
-}
-
-/* Itens de informação */
-.disney-modal .info-item,
-.giftbox-modal .info-item,
-.presente-modal .info-item,
-.torneio-modal .info-item {
-  background: linear-gradient(90deg, rgba(255, 107, 53, 0.2), rgba(255, 167, 38, 0.2));
-  color: #ffffff;
-  border-left: 4px solid #ff6b35;
-  padding: 8px 12px;
-  margin: 6px 0;
-  border-radius: 6px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  font-weight: 500;
-  backdrop-filter: blur(5px);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.9rem;
-}
-
-/* Efeito de brilho nos itens */
-.disney-modal .info-item::before,
-.giftbox-modal .info-item::before,
-.presente-modal .info-item::before,
-.torneio-modal .info-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* Seção de distribuição de prêmios */
-.disney-modal .prize-distribution h3,
-.giftbox-modal .prize-distribution h3,
-.presente-modal .prize-distribution h3,
-.torneio-modal .prize-distribution h3 {
-  color: #ff6b35;
-  text-align: center;
-  margin: 15px 0 12px 0;
-  font-size: 1.2rem;
-  margin-top:15px !important;
-  margin-bottom:10px !important;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-  position: relative;
-}
-
-/* Decoração para títulos de prêmios */
-.disney-modal .prize-distribution h3::before,
-.giftbox-modal .prize-distribution h3::before,
-.presente-modal .prize-distribution h3::before,
-.torneio-modal .prize-distribution h3::before {
-  content: '🎃';
-  margin-right: 10px;
-}
-
-.disney-modal .prize-distribution h3::after,
-.giftbox-modal .prize-distribution h3::after,
-.presente-modal .prize-distribution h3::after,
-.torneio-modal .prize-distribution h3::after {
-  content: '🎃';
-  margin-left: 10px;
-}
-
-/* Itens de distribuição */
-.disney-modal .distribution-item,
-.giftbox-modal .distribution-item,
-.presente-modal .distribution-item,
-.torneio-modal .distribution-item {
-  background: linear-gradient(90deg, #ff6b35, #ff8f65);
-  color: #1a1a2e;
-  padding: 8px 15px;
-  margin: 5px 0;
-  border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.disney-modal .distribution-item:hover,
-.giftbox-modal .distribution-item:hover,
-.presente-modal .distribution-item:hover,
-.torneio-modal .distribution-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-}
-
-/* Posições especiais */
-.disney-modal .distribution-item .position,
-.giftbox-modal .distribution-item .position,
-.presente-modal .distribution-item .position,
-.torneio-modal .distribution-item .position {
-  font-weight: bold;
-  color: #1a1a2e;
-}
-
-.disney-modal .distribution-item .prize,
-.giftbox-modal .distribution-item .prize,
-.presente-modal .distribution-item .prize,
-.torneio-modal .distribution-item .prize {
-  font-weight: bold;
-  color: #1a1a2e;
-}
-
-/* Estilos específicos para cada modal mantendo o tema Halloween */
-
-/* Modal Disney - Tons mais quentes */
-.disney-modal .info-item {
-  border-left-color: #ff8f65;
-}
-
-.disney-modal .distribution-item {
-  background: linear-gradient(90deg, #ff8f65, #ffb347);
-}
-
-/* Modal Gift Box - Tons roxos místicos */
-.giftbox-modal .info-item {
-  border-left-color: #9c27b0;
-  background: linear-gradient(90deg, rgba(156, 39, 176, 0.2), rgba(255, 107, 53, 0.2));
-}
-
-.giftbox-modal .distribution-item {
-  background: linear-gradient(90deg, #9c27b0, #ba68c8);
-  color: white;
-}
-
-.giftbox-modal .distribution-item .position,
-.giftbox-modal .distribution-item .prize {
-  color: white;
-}
-
-/* Modal Presente - Tons verdes assombrados */
-.presente-modal .info-item {
-  border-left-color: #4caf50;
-  background: linear-gradient(90deg, rgba(76, 175, 80, 0.2), rgba(255, 107, 53, 0.2));
-}
-
-.presente-modal .distribution-item {
-  background: linear-gradient(90deg, #4caf50, #81c784);
-}
-
-/* Modal Torneio - Usando mesma paleta do Disney (tons mais quentes) */
-.torneio-modal .info-item {
-  border-left-color: #ff8f65;
-  background: linear-gradient(90deg, rgba(255, 143, 101, 0.2), rgba(255, 107, 53, 0.2));
-}
-
-.torneio-modal .distribution-item {
-  background: linear-gradient(90deg, #ff8f65, #ffb347);
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  margin: 4px 0;
-  line-height: 1.2;
-}
-
-/* Animação de entrada dos modais */
-.disney-modal .level-card,
-.giftbox-modal .level-card,
-.presente-modal .level-card,
-.torneio-modal .level-card {
-  animation: spookyEntrance 0.5s ease-out;
-}
-
-/* Ajustes específicos para compactar o modal de Torneio */
-.torneio-modal .level-card-wrapper {
-  position: fixed;
-  inset: 0;
-  padding: 12px;
-  display: grid;
-  place-items: center;
-}
-.torneio-modal .level-card {
-  max-width: 720px;
-  width: min(92vw, 720px);
-  max-height: 70vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  padding: 10px;
-  background: #1a1a2e; /* visual mais limpo */
-  border: 2px solid #ff6b35;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
-.torneio-modal .modal-title {
-  font-size: 1.2rem;
-}
-.torneio-modal .modal-subtitle {
-  font-size: 0.95rem;
-  margin-bottom: 12px;
-}
-.torneio-modal .level-card::before,
-.torneio-modal .level-card::after {
-  content: none; /* remove brilhos/partículas para um look mais clean */
-  animation: none;
-}
-.torneio-modal .info-item::before {
-  content: none; /* desativa shimmer */
-  animation: none;
-}
-.torneio-modal .prize-distribution h3::before,
-.torneio-modal .prize-distribution h3::after {
-  content: none; /* remove emojis para ficar menos carregado */
-}
-.torneio-modal .modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 0px;
-}
-/* Layout de torneio: imagem ocupando 50% do modal, centralizada */
-.torneio-modal .tournament-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 0;
-}
-
-.torneio-modal .tournament-image {
-  width: 100%;
-  height: 100px;
-  border-radius: 8px 8px 0 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-}
-
-.torneio-modal .tournament-banner {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-.torneio-modal .tournament-info {
-  height: 25%;
-  padding: 0px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.torneio-modal .tournament-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.torneio-modal .stat-card {
-  background: rgba(255, 107, 53, 0.1);
-  border: 1px solid rgba(255, 107, 53, 0.3);
-  border-radius: 8px;
-  padding: 12px;
-  text-align: left;
-}
-
-.torneio-modal .stat-label {
-  color: #ffb37a;
-  font-weight: 600;
-  font-size: 0.85rem;
-  margin-bottom: 4px;
-}
-
-.torneio-modal .stat-value {
-  color: #fff;
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.torneio-modal .tournament-title {
-  color: #ff6b35;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.torneio-modal .modal-actions {
-  display: flex;
-  justify-content: center;
-}
-
-.torneio-modal .cta-btn {
-  appearance: none;
-  border: 0;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #7b61ff 0%, #e4760f 100%);
-  color: #fff;
-  font-weight: 800;
-  font-size: 14px;
-  padding: 10px 14px;
-  cursor: pointer;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
-  text-decoration: none;
-}
-
-.torneio-modal .cta-btn:hover {
-  filter: brightness(1.05);
-}
-
-/* Estilos para botões sobrepostos às missões */
-.missions-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.mission-overlay-buttons {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  pointer-events: none;
-}
-
-.mission-overlay-btn {
-  position: relative;
-  width: 100%;
-  height: 120px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  pointer-events: all;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    transform: scale(1.02);
-  }
-  
-  &:active {
-    transform: scale(0.98);
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  &:focus {
-    outline: 2px solid rgba(255, 255, 255, 0.3);
-    outline-offset: 2px;
-  }
-}
-
-.torneio-modal .left-pane,
-.torneio-modal .right-pane { min-width: 0; }
-
-.torneio-modal .tournament-stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-.torneio-modal .tournament-stats .stat {
-  display: grid;
-  grid-template-columns: 82px 1fr;
-  align-items: center;
-  background: rgba(255, 107, 53, 0.08);
-  border: 1px solid rgba(255, 107, 53, 0.35);
-  border-radius: 8px;
-  padding: 6px 8px;
-  min-height: 40px;
-}
-.torneio-modal .tournament-stats .stat.span2 { grid-column: 1 / -1; }
-.torneio-modal .tournament-stats dt {
-  color: #ffb37a;
-  font-weight: 700;
-  font-size: 0.7rem;
-  line-height: 1.2;
-}
-.torneio-modal .tournament-stats dd {
-  margin: 0;
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.8rem;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.torneio-modal .tournament-stats .stat.span2 dd.long {
-  white-space: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.torneio-modal .stat-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.torneio-modal .stat-card {
-  background: rgba(255, 107, 53, 0.08);
-  border: 1px solid rgba(255, 107, 53, 0.35);
-  border-radius: 8px;
-  padding: 6px 8px;
-  min-height: 40px;
-}
-.torneio-modal .stat-card.long { min-height: 56px; }
-.torneio-modal .stat-card.span2 { grid-column: 1 / -1; }
-.torneio-modal .stat-label {
-  color: #ffb37a;
-  font-weight: 700;
-  font-size: 0.7rem;
-  line-height: 1.2;
-}
-.torneio-modal .stat-value {
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.8rem;
-  line-height: 1.25;
-  word-break: break-word;
-}
-.torneio-modal .prize-distribution h3 {
-  margin: 4px 0 8px 0;
-  font-size: 0.86rem;
-}
-.torneio-modal .prize-distribution .prize-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 22vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.torneio-modal .prize-list .prize-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  background: rgba(255, 107, 53, 0.12);
-  border: 1px solid rgba(255, 107, 53, 0.35);
-  border-radius: 10px;
-  padding: 6px 8px;
-  margin: 4px 0;
-  font-size: 0.8rem;
-  line-height: 1.2;
-}
-.torneio-modal .prize-list .pos { color: #ffb37a; font-weight: 700; }
-.torneio-modal .prize-list .val { color: #fff; font-weight: 700; }
-.torneio-modal .prize-distribution .distribution-list {
-  max-height: 20vh; /* leaderboard ainda mais compacto */
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/* Itens do ranking mais enxutos */
-.torneio-modal .distribution-item {
-  padding: 6px 8px;
-  margin: 4px 0;
-  font-size: 0.8rem;
-  line-height: 1.2;
-}
-
-/* Header do modal mais contido */
-.torneio-modal .modal-header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.torneio-modal .modal-header .modal-title {
-  font-size: clamp(1rem, 2.6vw, 1.15rem);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-}
-/* Scrollbar mais fino para lista de distribuição */
-.torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar {
-  width: 6px;
-}
-.torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar-thumb {
-  background: #ff8f65;
-  border-radius: 6px;
-}
-.torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.08);
-}
-@media (max-width: 768px) {
-  .torneio-modal .tournament-layout { 
-    grid-template-columns: 1fr; 
-    gap: 8px;
-  }
-  .torneio-modal .tournament-content { 
-    grid-template-columns: 1fr; 
-  }
-  .torneio-modal .tournament-banner {
-    max-height: 100px;
-  }
-  .torneio-modal .tournament-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .torneio-modal .tournament-stats .stat.span2 { grid-column: 1 / -1; }
-  .torneio-modal .level-card-wrapper { padding: 8px; }
-  .torneio-modal .level-card { max-height: 70vh; }
-  .torneio-modal .modal-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-  .torneio-modal .prize-distribution .prize-list { max-height: 26vh; }
-}
-
-/* Usa viewport dinâmico quando suportado (mobile) */
-@supports (height: 1svh) {
-  .torneio-modal .level-card { max-height: 70svh; }
-}
-
-/* Usa viewport dinâmico para modals não-torneio (mobile) */
-@supports (height: 1svh) {
-  .disney-modal .level-card,
-  .giftbox-modal .level-card,
-  .presente-modal .level-card { max-height: 80svh; }
-}
-
-/* Limita o texto de pontuação para no máx. 2 linhas */
-.torneio-modal .stat-card.span2 .stat-value {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Itens da distribuição com visual simplificado */
-.torneio-modal .distribution-item {
-  background: linear-gradient(90deg, #ff864f, #ffb37a);
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 0.84rem;
-  margin: 4px 0;
-  line-height: 1.25;
-  box-shadow: none;
-  display: grid;
-  grid-template-columns: 1fr auto; /* texto à esquerda, valor à direita */
-  align-items: center;
-}
-
-@keyframes spookyEntrance {
-  0% {
-    opacity: 0;
-    transform: translateY(-30px) scale(0.9) rotateX(10deg);
-  }
-  50% {
-    opacity: 0.7;
-    transform: translateY(-10px) scale(1.02) rotateX(-5deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotateX(0deg);
-  }
-}
-
-/* Efeito de partículas fantasmagóricas */
-.disney-modal .level-card::after,
-.giftbox-modal .level-card::after,
-.presente-modal .level-card::after,
-.torneio-modal .level-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(2px 2px at 20px 30px, rgba(255, 107, 53, 0.3), transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(255, 167, 38, 0.3), transparent),
-    radial-gradient(1px 1px at 90px 40px, rgba(255, 107, 53, 0.3), transparent),
-    radial-gradient(1px 1px at 130px 80px, rgba(255, 167, 38, 0.3), transparent);
-  background-repeat: repeat;
-  background-size: 150px 100px;
-  animation: floatingParticles 10s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes floatingParticles {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-100px); }
-}
-
-/* Layouts próprios para Disney, Gift Box e Presente */
-.giftbox-modal {
-  .modal-body { display: block; }
-
-  .giftbox-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .giftbox-details {
-    margin: 0;
-    padding: 8px 10px;
-    border-radius: 8px;
-    background: rgba(156, 39, 176, 0.05);
-    border: 1px solid rgba(156, 39, 176, 0.2);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px 12px;
-  }
-
-  .giftbox-details .row {
-    display: grid;
-    grid-template-columns: 120px minmax(0, 1fr);
-    gap: 10px;
-    align-items: start;
-  }
-
-  .giftbox-details dt {
-    font-size: 0.8rem;
-    color: #b888d4;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .02em;
-    white-space: nowrap;
-  }
-
-  .giftbox-details dd {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #eee;
-    text-align: left;
-  }
-}
-
-.presente-modal {
-  .modal-body { display: block; }
-
-  .present-layout {
-    display: grid;
-    gap: 10px;
-  }
-
-  .present-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #8bc34a;
-    text-transform: uppercase;
-    letter-spacing: .03em;
-    text-align: center;
-  }
-
-  .present-desc {
-    margin: 0;
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: linear-gradient(180deg, rgba(139,195,74,.12), rgba(139,195,74,.08));
-    border: 1px solid rgba(139,195,74,.25);
-    color: #e9f7dc;
-    font-size: 0.92rem;
-    line-height: 1.3;
-    text-align: left;
-  }
-
-  .modal-actions {
-    justify-content: center;
-  }
-}
-
-.disney-modal {
-  .modal-body { display: block; }
-
-  .disney-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
-    gap: 12px;
-  }
-
-  .disney-details .details {
-    margin: 0;
-    padding: 4px 0;
-    border-radius: 0;
-    background: transparent;
-    border: 0;
-    display: grid;
-    gap: 8px;
-  }
-
-  .disney-details .row {
-    display: grid;
-    grid-template-columns: 120px minmax(0, 1fr);
-    gap: 10px;
-    align-items: start;
-  }
-  .disney-details .row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; }
-
-  .disney-details dt {
-    font-size: 0.8rem;
-    color: #80c8ff;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .02em;
-    white-space: nowrap;
-  }
-
-  .disney-details dd { margin: 0; color: #eef6ff; font-size: 0.9rem; }
-  .disney-details dd { text-align: left; }
-  .disney-details dd.long {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.3;
-  }
-
-  .extras { display: grid; align-content: start; gap: 8px; }
-  .extras h3 { font-size: 0.95rem; margin: 0; color: #bfe5ff; }
-  /* Remove emojis para um título mais limpo */
-  .prize-distribution h3::before,
-  .prize-distribution h3::after { content: none; }
-
-  .extras-list {
-    list-style: decimal inside;
-    margin: 0;
-    padding: 6px 8px;
-    border-radius: 6px;
-    background: transparent;
-    border: 1px solid rgba(33,150,243,0.18);
-    max-height: 11vh;
-    overflow: auto;
-    scrollbar-gutter: stable both-edges;
-  }
-
-  .extras-list .extra { font-size: 0.8rem; padding: 2px 0; color: #e8f4ff; }
-}
-
-/* Melhorias de legibilidade e limpeza para Disney/Gift/Presente */
-.disney-modal .level-card,
-.giftbox-modal .level-card,
-.presente-modal .level-card {
-  text-align: left; /* evita centralização de parágrafos */
-  padding: 10px; /* menos espaço interno */
-  background: #1a1a2e; /* remove gradiente forte */
-  border: 2px solid #ff6b35; /* borda mais fina */
-  box-shadow: 0 8px 24px rgba(0,0,0,0.35); /* sombra mais sutil */
-}
-
-/* Remove brilhos e partículas para um visual mais clean */
-.disney-modal .level-card::before,
-.giftbox-modal .level-card::before,
-.presente-modal .level-card::before,
-.disney-modal .level-card::after,
-.giftbox-modal .level-card::after,
-.presente-modal .level-card::after {
-  content: none;
-  animation: none;
-}
-
-/* Modal-body mais contido e alinhado à esquerda */
-.disney-modal .modal-body,
-.giftbox-modal .modal-body,
-.presente-modal .modal-body {
-  padding: 12px;
-  text-align: left;
-}
-
-/* Modal-body do Disney mais clean (sem caixas internas pesadas) */
-.disney-modal .modal-body {
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-}
-
-/* Estilos específicos para o modal Disney - Layout organizado */
-.disney-modal .disney-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding: 8px;
-}
-
-.disney-modal .disney-details {
-  background: rgba(26, 26, 46, 0.8);
-  border-radius: 8px;
-  padding: 24px;
-  border: 1px solid #ff8f65;
-}
-
-.disney-modal .details {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  margin: 0;
-}
-
-.disney-modal .details .row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 14px;
-  align-items: start;
-  padding: 12px 14px;
-  background: rgba(255, 143, 101, 0.1);
-  border-radius: 4px;
-  border-left: 3px solid #ff8f65;
-}
-
-.disney-modal .details .row.span2 {
-  grid-column: 1 / -1;
-}
-
-.disney-modal .details dt {
-  font-weight: 600;
-  color: #ff8f65;
-  font-size: 1rem;
-  margin: 0;
-  min-width: 80px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.disney-modal .details dd {
-  color: #ffffff;
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.disney-modal .details dd.long {
-  grid-column: 1 / -1;
-  margin-top: 4px;
-  padding-top: 4px;
-  border-top: 1px solid rgba(255, 143, 101, 0.2);
-}
-
-.disney-modal .modal-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 12px;
-}
-
-/* Responsividade para o modal Disney */
-@media (max-width: 768px) {
-  .disney-modal .disney-layout { 
-    grid-template-columns: 1fr; 
-    gap: 8px;
-    padding: 6px;
-  }
-  
-  .disney-modal .disney-details {
-    padding: 16px;
-  }
-  
-  .disney-modal .details .row {
-    padding: 8px 10px;
-  }
-  
-  .disney-modal .details dt {
-    font-size: 0.8rem;
-    min-width: 60px;
-  }
-  
-  .disney-modal .details dd {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .disney-modal .disney-layout {
-    gap: 2px;
-    padding: 0px;
-  }
-  
-  .disney-modal .disney-details {
-    padding: 12px;
-  }
-  
-  .disney-modal .details .row {
-    padding: 6px 8px;
-    gap: 8px;
-  }
-  
-  .disney-modal .details dt {
-    font-size: 0.7rem;
-    min-width: 50px;
-  }
-  
-  .disney-modal .details dd {
-    font-size: 0.7rem;
-  }
-  
-  .giftbox-modal .giftbox-details .row { grid-template-columns: 96px minmax(0,1fr); }
-  .disney-modal .disney-layout { grid-template-columns: 1fr; }
-}
-
-/* Responsividade melhorada para dispositivos móveis */
-@media (max-width: 768px) {
-  /* Garantir que o modal ocupe toda a tela disponível */
-  .disney-modal .level-card-wrapper,
-  .giftbox-modal .level-card-wrapper,
-  .presente-modal .level-card-wrapper,
-  .torneio-modal .level-card-wrapper {
-    padding: 15px 8px 8px 8px; /* Reduzido padding */
-    box-sizing: border-box;
-    display: flex;
-    align-items: flex-start; /* Alinha no topo */
-    justify-content: center;
-    min-height: 100vh;
-    overflow-y: auto;
-  }
-
-  .disney-modal .level-card,
-  .giftbox-modal .level-card,
-  .presente-modal .level-card {
-    max-width: 95%; /* Reduzido para dar mais espaço */
-    max-height: 80vh; /* Limita para evitar overflow vertical */
-    margin: 0 auto;
-    position: relative;
-    width: 100%;
-  }
-
-  /* Torneio mantém limite de altura no mobile para não estourar a viewport */
-  .torneio-modal .level-card {
-    max-width: 95%;
-    max-height: 70vh;
-    margin: 0 auto;
-    position: relative;
-    width: 100%;
-  }
-
-  /* Garantir que o botão X seja sempre visível */
-  .disney-modal .level-card-close,
-  .giftbox-modal .level-card-close,
-  .presente-modal .level-card-close,
-  .torneio-modal .level-card-close {
-    position: absolute !important;
-    top: 15px !important;
-    right: 15px !important;
-    z-index: 9999 !important;
-    width: 40px !important;
-    height: 40px !important;
-    background: rgba(255, 107, 53, 0.9) !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
-  }
-
-  .disney-modal .level-card-close-btn,
-  .giftbox-modal .level-card-close-btn,
-  .presente-modal .level-card-close-btn,
-  .torneio-modal .level-card-close-btn {
-    width: 20px !important;
-    height: 20px !important;
-    position: relative !important;
-  }
-
-  .disney-modal .level-card-close-btn::before,
-  .disney-modal .level-card-close-btn::after,
-  .giftbox-modal .level-card-close-btn::before,
-  .giftbox-modal .level-card-close-btn::after,
-  .presente-modal .level-card-close-btn::before,
-  .presente-modal .level-card-close-btn::after,
-  .torneio-modal .level-card-close-btn::before,
-  .torneio-modal .level-card-close-btn::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 2px;
-    background: white;
-    transform-origin: center;
-  }
-
-  .disney-modal .level-card-close-btn::before,
-  .giftbox-modal .level-card-close-btn::before,
-  .presente-modal .level-card-close-btn::before,
-  .torneio-modal .level-card-close-btn::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  .disney-modal .level-card-close-btn::after,
-  .giftbox-modal .level-card-close-btn::after,
-  .presente-modal .level-card-close-btn::after,
-  .torneio-modal .level-card-close-btn::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-
-  .disney-modal .modal-title,
-  .giftbox-modal .modal-title,
-  .presente-modal .modal-title,
-  .torneio-modal .modal-title {
-    font-size: 1.2rem;
-    padding: 10px 50px 10px 12px; /* Reduzido padding */
-    margin-top: 0;
-    margin-bottom: 8px;
-  }
-  
-  .disney-modal .modal-body,
-  .giftbox-modal .modal-body,
-  .presente-modal .modal-body,
-  .torneio-modal .modal-body {
-    padding: 12px; /* Reduzido padding */
-    margin-top: 8px; /* Reduzido para evitar corte */
-  }
-  
-  .disney-modal .info-item,
-  .giftbox-modal .info-item,
-  .presente-modal .info-item,
-  .torneio-modal .info-item {
-    padding: 6px 10px; /* Reduzido padding */
-    font-size: 0.85rem;
-  }
-  
-  .disney-modal .distribution-item,
-  .giftbox-modal .distribution-item,
-  .presente-modal .distribution-item,
-  .torneio-modal .distribution-item {
-    padding: 6px 12px; /* Reduzido padding */
-    font-size: 0.85rem;
-  }
-}
-
-/* Responsividade para telas muito pequenas */
-@media (max-width: 480px) {
-  .disney-modal .level-card-wrapper,
-  .giftbox-modal .level-card-wrapper,
-  .presente-modal .level-card-wrapper,
-  .torneio-modal .level-card-wrapper {
-    padding: 10px 5px 5px 5px; /* Padding ainda menor */
-  }
-
-  .disney-modal .level-card,
-  .giftbox-modal .level-card,
-  .presente-modal .level-card,
-  .torneio-modal .level-card {
-    max-height: none; /* Remove limitação de altura */
-    max-width: 98%; /* Quase toda a largura disponível */
-  }
-
-  .disney-modal .modal-title,
-  .giftbox-modal .modal-title,
-  .presente-modal .modal-title,
-  .torneio-modal .modal-title {
-    font-size: 1.1rem;
-    padding: 8px 45px 8px 10px; /* Padding ainda menor */
-  }
-
-  .disney-modal .info-item,
-  .giftbox-modal .info-item,
-  .presente-modal .info-item,
-  .torneio-modal .info-item {
-    font-size: 0.8rem;
-    padding: 5px 8px; /* Padding mínimo */
-  }
-
-  .disney-modal .distribution-item,
-  .giftbox-modal .distribution-item,
-  .presente-modal .distribution-item,
-  .torneio-modal .distribution-item {
-    font-size: 0.8rem;
-    padding: 5px 10px; /* Padding mínimo */
-  }
-}
+    /* Estilos temáticos de Halloween para todos os modais */
+
+    /* Estilos base para todos os modais com tema Halloween */
+    .disney-modal .level-card,
+    .giftbox-modal .level-card,
+    .presente-modal .level-card,
+    .torneio-modal .level-card {
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      border: 3px solid #ff6b35;
+      box-shadow: 0 0 30px rgba(255, 107, 53, 0.4),
+        inset 0 0 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dimensões padrão para modals não-torneio */
+    .disney-modal .level-card,
+    .giftbox-modal .level-card,
+    .presente-modal .level-card {
+      max-width: 680px;
+      width: min(92vw, 680px);
+      max-height: 80vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+
+    /* Efeito de brilho fantasmagórico */
+    .disney-modal .level-card::before,
+    .giftbox-modal .level-card::before,
+    .presente-modal .level-card::before,
+    .torneio-modal .level-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle,
+        rgba(255, 107, 53, 0.1) 0%,
+        transparent 70%
+      );
+      animation: ghostlyGlow 3s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes ghostlyGlow {
+      0% {
+        opacity: 0.3;
+        transform: rotate(0deg);
+      }
+      100% {
+        opacity: 0.7;
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Títulos com tema Halloween */
+    .disney-modal .modal-title,
+    .giftbox-modal .modal-title,
+    .presente-modal .modal-title,
+    .torneio-modal .modal-title {
+      color: #ff6b35;
+      text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.6),
+        0 0 20px rgba(255, 107, 53, 0.3);
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Subtítulos */
+    .disney-modal .modal-subtitle,
+    .giftbox-modal .modal-subtitle,
+    .presente-modal .modal-subtitle,
+    .torneio-modal .modal-subtitle {
+      color: #ffa726;
+      font-weight: 600;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Corpo do modal */
+    .disney-modal .modal-body,
+    .giftbox-modal .modal-body,
+    .presente-modal .modal-body {
+      background: rgba(26, 26, 46, 0.9);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 10px;
+      border: 2px solid #ff6b35;
+      box-shadow: inset 0 0 15px rgba(255, 107, 53, 0.2);
+      position: relative;
+      z-index: 2;
+    }
+
+    .torneio-modal .modal-body {
+      background: rgba(26, 26, 46, 0.9);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 0px;
+      border: 2px solid #ff6b35;
+      box-shadow: inset 0 0 15px rgba(255, 107, 53, 0.2);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Itens de informação */
+    .disney-modal .info-item,
+    .giftbox-modal .info-item,
+    .presente-modal .info-item,
+    .torneio-modal .info-item {
+      background: linear-gradient(
+        90deg,
+        rgba(255, 107, 53, 0.2),
+        rgba(255, 167, 38, 0.2)
+      );
+      color: #ffffff;
+      border-left: 4px solid #ff6b35;
+      padding: 8px 12px;
+      margin: 6px 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      font-weight: 500;
+      backdrop-filter: blur(5px);
+      position: relative;
+      overflow: hidden;
+      font-size: 0.9rem;
+    }
+
+    /* Efeito de brilho nos itens */
+    .disney-modal .info-item::before,
+    .giftbox-modal .info-item::before,
+    .presente-modal .info-item::before,
+    .torneio-modal .info-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    /* Seção de distribuição de prêmios */
+    .disney-modal .prize-distribution h3,
+    .giftbox-modal .prize-distribution h3,
+    .presente-modal .prize-distribution h3,
+    .torneio-modal .prize-distribution h3 {
+      color: #ff6b35;
+      text-align: center;
+      margin: 15px 0 12px 0;
+      font-size: 1.2rem;
+      margin-top: 15px !important;
+      margin-bottom: 10px !important;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    /* Decoração para títulos de prêmios */
+    .disney-modal .prize-distribution h3::before,
+    .giftbox-modal .prize-distribution h3::before,
+    .presente-modal .prize-distribution h3::before,
+    .torneio-modal .prize-distribution h3::before {
+      content: "🎃";
+      margin-right: 10px;
+    }
+
+    .disney-modal .prize-distribution h3::after,
+    .giftbox-modal .prize-distribution h3::after,
+    .presente-modal .prize-distribution h3::after,
+    .torneio-modal .prize-distribution h3::after {
+      content: "🎃";
+      margin-left: 10px;
+    }
+
+    /* Itens de distribuição */
+    .disney-modal .distribution-item,
+    .giftbox-modal .distribution-item,
+    .presente-modal .distribution-item,
+    .torneio-modal .distribution-item {
+      background: linear-gradient(90deg, #ff6b35, #ff8f65);
+      color: #1a1a2e;
+      padding: 8px 15px;
+      margin: 5px 0;
+      border-radius: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .disney-modal .distribution-item:hover,
+    .giftbox-modal .distribution-item:hover,
+    .presente-modal .distribution-item:hover,
+    .torneio-modal .distribution-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+    }
+
+    /* Posições especiais */
+    .disney-modal .distribution-item .position,
+    .giftbox-modal .distribution-item .position,
+    .presente-modal .distribution-item .position,
+    .torneio-modal .distribution-item .position {
+      font-weight: bold;
+      color: #1a1a2e;
+    }
+
+    .disney-modal .distribution-item .prize,
+    .giftbox-modal .distribution-item .prize,
+    .presente-modal .distribution-item .prize,
+    .torneio-modal .distribution-item .prize {
+      font-weight: bold;
+      color: #1a1a2e;
+    }
+
+    /* Estilos específicos para cada modal mantendo o tema Halloween */
+
+    /* Modal Disney - Tons mais quentes */
+    .disney-modal .info-item {
+      border-left-color: #ff8f65;
+    }
+
+    .disney-modal .distribution-item {
+      background: linear-gradient(90deg, #ff8f65, #ffb347);
+    }
+
+    /* Modal Gift Box - Tons roxos místicos */
+    .giftbox-modal .info-item {
+      border-left-color: #9c27b0;
+      background: linear-gradient(
+        90deg,
+        rgba(156, 39, 176, 0.2),
+        rgba(255, 107, 53, 0.2)
+      );
+    }
+
+    .giftbox-modal .distribution-item {
+      background: linear-gradient(90deg, #9c27b0, #ba68c8);
+      color: white;
+    }
+
+    .giftbox-modal .distribution-item .position,
+    .giftbox-modal .distribution-item .prize {
+      color: white;
+    }
+
+    /* Modal Presente - Tons verdes assombrados */
+    .presente-modal .info-item {
+      border-left-color: #4caf50;
+      background: linear-gradient(
+        90deg,
+        rgba(76, 175, 80, 0.2),
+        rgba(255, 107, 53, 0.2)
+      );
+    }
+
+    .presente-modal .distribution-item {
+      background: linear-gradient(90deg, #4caf50, #81c784);
+    }
+
+    /* Modal Torneio - Usando mesma paleta do Disney (tons mais quentes) */
+    .torneio-modal .info-item {
+      border-left-color: #ff8f65;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 143, 101, 0.2),
+        rgba(255, 107, 53, 0.2)
+      );
+    }
+
+    .torneio-modal .distribution-item {
+      background: linear-gradient(90deg, #ff8f65, #ffb347);
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin: 4px 0;
+      line-height: 1.2;
+    }
+
+    /* Animação de entrada dos modais */
+    .disney-modal .level-card,
+    .giftbox-modal .level-card,
+    .presente-modal .level-card,
+    .torneio-modal .level-card {
+      animation: spookyEntrance 0.5s ease-out;
+    }
+
+    /* Ajustes específicos para compactar o modal de Torneio */
+    .torneio-modal .level-card-wrapper {
+      position: fixed;
+      inset: 0;
+      padding: 12px;
+      display: grid;
+      place-items: center;
+    }
+    .torneio-modal .level-card {
+      max-width: 720px;
+      width: min(92vw, 720px);
+      max-height: 70vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      padding: 10px;
+      background: #1a1a2e; /* visual mais limpo */
+      border: 2px solid #ff6b35;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .torneio-modal .modal-title {
+      font-size: 1.2rem;
+    }
+    .torneio-modal .modal-subtitle {
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    .torneio-modal .level-card::before,
+    .torneio-modal .level-card::after {
+      content: none; /* remove brilhos/partículas para um look mais clean */
+      animation: none;
+    }
+    .torneio-modal .info-item::before {
+      content: none; /* desativa shimmer */
+      animation: none;
+    }
+    .torneio-modal .prize-distribution h3::before,
+    .torneio-modal .prize-distribution h3::after {
+      content: none; /* remove emojis para ficar menos carregado */
+    }
+    .torneio-modal .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 0px;
+    }
+    /* Layout de torneio: imagem ocupando 50% do modal, centralizada */
+    .torneio-modal .tournament-layout {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 0;
+    }
+
+    .torneio-modal .tournament-image {
+      width: 100%;
+      height: 100px;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+
+    .torneio-modal .tournament-banner {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .torneio-modal .tournament-info {
+      height: 25%;
+      padding: 0px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .torneio-modal .tournament-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .torneio-modal .stat-card {
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .torneio-modal .stat-label {
+      color: #ffb37a;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .torneio-modal .stat-value {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .torneio-modal .tournament-title {
+      color: #ff6b35;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .torneio-modal .modal-actions {
+      display: flex;
+      justify-content: center;
+    }
+
+    .torneio-modal .cta-btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #7b61ff 0%, #e4760f 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+      text-decoration: none;
+    }
+
+    .torneio-modal .cta-btn:hover {
+      filter: brightness(1.05);
+    }
+
+    /* Estilos para botões sobrepostos às missões */
+    .missions-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mission-overlay-buttons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    .mission-overlay-btn {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      pointer-events: all;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: scale(1.02);
+      }
+
+      &:active {
+        transform: scale(0.98);
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &:focus {
+        outline: 2px solid rgba(255, 255, 255, 0.3);
+        outline-offset: 2px;
+      }
+    }
+
+    .torneio-modal .left-pane,
+    .torneio-modal .right-pane {
+      min-width: 0;
+    }
+
+    .torneio-modal .tournament-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .torneio-modal .tournament-stats .stat {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      align-items: center;
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.35);
+      border-radius: 8px;
+      padding: 6px 8px;
+      min-height: 40px;
+    }
+    .torneio-modal .tournament-stats .stat.span2 {
+      grid-column: 1 / -1;
+    }
+    .torneio-modal .tournament-stats dt {
+      color: #ffb37a;
+      font-weight: 700;
+      font-size: 0.7rem;
+      line-height: 1.2;
+    }
+    .torneio-modal .tournament-stats dd {
+      margin: 0;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.8rem;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .torneio-modal .tournament-stats .stat.span2 dd.long {
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .torneio-modal .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .torneio-modal .stat-card {
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.35);
+      border-radius: 8px;
+      padding: 6px 8px;
+      min-height: 40px;
+    }
+    .torneio-modal .stat-card.long {
+      min-height: 56px;
+    }
+    .torneio-modal .stat-card.span2 {
+      grid-column: 1 / -1;
+    }
+    .torneio-modal .stat-label {
+      color: #ffb37a;
+      font-weight: 700;
+      font-size: 0.7rem;
+      line-height: 1.2;
+    }
+    .torneio-modal .stat-value {
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.8rem;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+    .torneio-modal .prize-distribution h3 {
+      margin: 4px 0 8px 0;
+      font-size: 0.86rem;
+    }
+    .torneio-modal .prize-distribution .prize-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 22vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .torneio-modal .prize-list .prize-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      background: rgba(255, 107, 53, 0.12);
+      border: 1px solid rgba(255, 107, 53, 0.35);
+      border-radius: 10px;
+      padding: 6px 8px;
+      margin: 4px 0;
+      font-size: 0.8rem;
+      line-height: 1.2;
+    }
+    .torneio-modal .prize-list .pos {
+      color: #ffb37a;
+      font-weight: 700;
+    }
+    .torneio-modal .prize-list .val {
+      color: #fff;
+      font-weight: 700;
+    }
+    .torneio-modal .prize-distribution .distribution-list {
+      max-height: 20vh; /* leaderboard ainda mais compacto */
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Itens do ranking mais enxutos */
+    .torneio-modal .distribution-item {
+      padding: 6px 8px;
+      margin: 4px 0;
+      font-size: 0.8rem;
+      line-height: 1.2;
+    }
+
+    /* Header do modal mais contido */
+    .torneio-modal .modal-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .torneio-modal .modal-header .modal-title {
+      font-size: clamp(1rem, 2.6vw, 1.15rem);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+    /* Scrollbar mais fino para lista de distribuição */
+    .torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .torneio-modal
+      .prize-distribution
+      .distribution-list::-webkit-scrollbar-thumb {
+      background: #ff8f65;
+      border-radius: 6px;
+    }
+    .torneio-modal
+      .prize-distribution
+      .distribution-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    @media (max-width: 768px) {
+      .torneio-modal .tournament-layout {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .torneio-modal .tournament-content {
+        grid-template-columns: 1fr;
+      }
+      .torneio-modal .tournament-banner {
+        max-height: 100px;
+      }
+      .torneio-modal .tournament-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .torneio-modal .tournament-stats .stat.span2 {
+        grid-column: 1 / -1;
+      }
+      .torneio-modal .level-card-wrapper {
+        padding: 8px;
+      }
+      .torneio-modal .level-card {
+        max-height: 70vh;
+      }
+      .torneio-modal .modal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .torneio-modal .prize-distribution .prize-list {
+        max-height: 26vh;
+      }
+    }
+
+    /* Usa viewport dinâmico quando suportado (mobile) */
+    @supports (height: 1svh) {
+      .torneio-modal .level-card {
+        max-height: 70svh;
+      }
+    }
+
+    /* Usa viewport dinâmico para modals não-torneio (mobile) */
+    @supports (height: 1svh) {
+      .disney-modal .level-card,
+      .giftbox-modal .level-card,
+      .presente-modal .level-card {
+        max-height: 80svh;
+      }
+    }
+
+    /* Limita o texto de pontuação para no máx. 2 linhas */
+    .torneio-modal .stat-card.span2 .stat-value {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Itens da distribuição com visual simplificado */
+    .torneio-modal .distribution-item {
+      background: linear-gradient(90deg, #ff864f, #ffb37a);
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      margin: 4px 0;
+      line-height: 1.25;
+      box-shadow: none;
+      display: grid;
+      grid-template-columns: 1fr auto; /* texto à esquerda, valor à direita */
+      align-items: center;
+    }
+
+    @keyframes spookyEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9) rotateX(10deg);
+      }
+      50% {
+        opacity: 0.7;
+        transform: translateY(-10px) scale(1.02) rotateX(-5deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+      }
+    }
+
+    /* Efeito de partículas fantasmagóricas */
+    .disney-modal .level-card::after,
+    .giftbox-modal .level-card::after,
+    .presente-modal .level-card::after,
+    .torneio-modal .level-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: radial-gradient(
+          2px 2px at 20px 30px,
+          rgba(255, 107, 53, 0.3),
+          transparent
+        ),
+        radial-gradient(
+          2px 2px at 40px 70px,
+          rgba(255, 167, 38, 0.3),
+          transparent
+        ),
+        radial-gradient(
+          1px 1px at 90px 40px,
+          rgba(255, 107, 53, 0.3),
+          transparent
+        ),
+        radial-gradient(
+          1px 1px at 130px 80px,
+          rgba(255, 167, 38, 0.3),
+          transparent
+        );
+      background-repeat: repeat;
+      background-size: 150px 100px;
+      animation: floatingParticles 10s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes floatingParticles {
+      0% {
+        transform: translateY(0px);
+      }
+      100% {
+        transform: translateY(-100px);
+      }
+    }
+
+    /* Layouts próprios para Disney, Gift Box e Presente */
+    .giftbox-modal {
+      .modal-body {
+        display: block;
+      }
+
+      .giftbox-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .giftbox-details {
+        margin: 0;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: rgba(156, 39, 176, 0.05);
+        border: 1px solid rgba(156, 39, 176, 0.2);
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 12px;
+      }
+
+      .giftbox-details .row {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 10px;
+        align-items: start;
+      }
+
+      .giftbox-details dt {
+        font-size: 0.8rem;
+        color: #b888d4;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .giftbox-details dd {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #eee;
+        text-align: left;
+      }
+    }
+
+    .presente-modal {
+      .modal-body {
+        display: block;
+      }
+
+      .present-layout {
+        display: grid;
+        gap: 10px;
+      }
+
+      .present-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #8bc34a;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        text-align: center;
+      }
+
+      .present-desc {
+        margin: 0;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: linear-gradient(
+          180deg,
+          rgba(139, 195, 74, 0.12),
+          rgba(139, 195, 74, 0.08)
+        );
+        border: 1px solid rgba(139, 195, 74, 0.25);
+        color: #e9f7dc;
+        font-size: 0.92rem;
+        line-height: 1.3;
+        text-align: left;
+      }
+
+      .modal-actions {
+        justify-content: center;
+      }
+    }
+
+    .disney-modal {
+      .modal-body {
+        display: block;
+      }
+
+      .disney-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 12px;
+      }
+
+      .disney-details .details {
+        margin: 0;
+        padding: 4px 0;
+        border-radius: 0;
+        background: transparent;
+        border: 0;
+        display: grid;
+        gap: 8px;
+      }
+
+      .disney-details .row {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 10px;
+        align-items: start;
+      }
+      .disney-details .row:not(:last-child) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 6px;
+      }
+
+      .disney-details dt {
+        font-size: 0.8rem;
+        color: #80c8ff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .disney-details dd {
+        margin: 0;
+        color: #eef6ff;
+        font-size: 0.9rem;
+      }
+      .disney-details dd {
+        text-align: left;
+      }
+      .disney-details dd.long {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.3;
+      }
+
+      .extras {
+        display: grid;
+        align-content: start;
+        gap: 8px;
+      }
+      .extras h3 {
+        font-size: 0.95rem;
+        margin: 0;
+        color: #bfe5ff;
+      }
+      /* Remove emojis para um título mais limpo */
+      .prize-distribution h3::before,
+      .prize-distribution h3::after {
+        content: none;
+      }
+
+      .extras-list {
+        list-style: decimal inside;
+        margin: 0;
+        padding: 6px 8px;
+        border-radius: 6px;
+        background: transparent;
+        border: 1px solid rgba(33, 150, 243, 0.18);
+        max-height: 11vh;
+        overflow: auto;
+        scrollbar-gutter: stable both-edges;
+      }
+
+      .extras-list .extra {
+        font-size: 0.8rem;
+        padding: 2px 0;
+        color: #e8f4ff;
+      }
+    }
+
+    /* Melhorias de legibilidade e limpeza para Disney/Gift/Presente */
+    .disney-modal .level-card,
+    .giftbox-modal .level-card,
+    .presente-modal .level-card {
+      text-align: left; /* evita centralização de parágrafos */
+      padding: 10px; /* menos espaço interno */
+      background: #1a1a2e; /* remove gradiente forte */
+      border: 2px solid #ff6b35; /* borda mais fina */
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); /* sombra mais sutil */
+    }
+
+    /* Remove brilhos e partículas para um visual mais clean */
+    .disney-modal .level-card::before,
+    .giftbox-modal .level-card::before,
+    .presente-modal .level-card::before,
+    .disney-modal .level-card::after,
+    .giftbox-modal .level-card::after,
+    .presente-modal .level-card::after {
+      content: none;
+      animation: none;
+    }
+
+    /* Modal-body mais contido e alinhado à esquerda */
+    .disney-modal .modal-body,
+    .giftbox-modal .modal-body,
+    .presente-modal .modal-body {
+      padding: 12px;
+      text-align: left;
+    }
+
+    /* Modal-body do Disney mais clean (sem caixas internas pesadas) */
+    .disney-modal .modal-body {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    /* Estilos específicos para o modal Disney - Layout organizado */
+    .disney-modal .disney-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 8px;
+    }
+
+    .disney-modal .disney-details {
+      background: rgba(26, 26, 46, 0.8);
+      border-radius: 8px;
+      padding: 24px;
+      border: 1px solid #ff8f65;
+    }
+
+    .disney-modal .details {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin: 0;
+    }
+
+    .disney-modal .details .row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 12px 14px;
+      background: rgba(255, 143, 101, 0.1);
+      border-radius: 4px;
+      border-left: 3px solid #ff8f65;
+    }
+
+    .disney-modal .details .row.span2 {
+      grid-column: 1 / -1;
+    }
+
+    .disney-modal .details dt {
+      font-weight: 600;
+      color: #ff8f65;
+      font-size: 1rem;
+      margin: 0;
+      min-width: 80px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .disney-modal .details dd {
+      color: #ffffff;
+      font-size: 1rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .disney-modal .details dd.long {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px solid rgba(255, 143, 101, 0.2);
+    }
+
+    .disney-modal .modal-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    /* Responsividade para o modal Disney */
+    @media (max-width: 768px) {
+      .disney-modal .disney-layout {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 6px;
+      }
+
+      .disney-modal .disney-details {
+        padding: 16px;
+      }
+
+      .disney-modal .details .row {
+        padding: 8px 10px;
+      }
+
+      .disney-modal .details dt {
+        font-size: 0.8rem;
+        min-width: 60px;
+      }
+
+      .disney-modal .details dd {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .disney-modal .disney-layout {
+        gap: 2px;
+        padding: 0px;
+      }
+
+      .disney-modal .disney-details {
+        padding: 12px;
+      }
+
+      .disney-modal .details .row {
+        padding: 6px 8px;
+        gap: 8px;
+      }
+
+      .disney-modal .details dt {
+        font-size: 0.7rem;
+        min-width: 50px;
+      }
+
+      .disney-modal .details dd {
+        font-size: 0.7rem;
+      }
+
+      .giftbox-modal .giftbox-details .row {
+        grid-template-columns: 96px minmax(0, 1fr);
+      }
+      .disney-modal .disney-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Responsividade melhorada para dispositivos móveis */
+    @media (max-width: 768px) {
+      /* Garantir que o modal ocupe toda a tela disponível */
+      .disney-modal .level-card-wrapper,
+      .giftbox-modal .level-card-wrapper,
+      .presente-modal .level-card-wrapper,
+      .torneio-modal .level-card-wrapper {
+        padding: 15px 8px 8px 8px; /* Reduzido padding */
+        box-sizing: border-box;
+        display: flex;
+        align-items: flex-start; /* Alinha no topo */
+        justify-content: center;
+        min-height: 100vh;
+        overflow-y: auto;
+      }
+
+      .disney-modal .level-card,
+      .giftbox-modal .level-card,
+      .presente-modal .level-card {
+        max-width: 95%; /* Reduzido para dar mais espaço */
+        max-height: 80vh; /* Limita para evitar overflow vertical */
+        margin: 0 auto;
+        position: relative;
+        width: 100%;
+      }
+
+      /* Torneio mantém limite de altura no mobile para não estourar a viewport */
+      .torneio-modal .level-card {
+        max-width: 95%;
+        max-height: 70vh;
+        margin: 0 auto;
+        position: relative;
+        width: 100%;
+      }
+
+      /* Garantir que o botão X seja sempre visível */
+      .disney-modal .level-card-close,
+      .giftbox-modal .level-card-close,
+      .presente-modal .level-card-close,
+      .torneio-modal .level-card-close {
+        position: absolute !important;
+        top: 15px !important;
+        right: 15px !important;
+        z-index: 9999 !important;
+        width: 40px !important;
+        height: 40px !important;
+        background: rgba(255, 107, 53, 0.9) !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      .disney-modal .level-card-close-btn,
+      .giftbox-modal .level-card-close-btn,
+      .presente-modal .level-card-close-btn,
+      .torneio-modal .level-card-close-btn {
+        width: 20px !important;
+        height: 20px !important;
+        position: relative !important;
+      }
+
+      .disney-modal .level-card-close-btn::before,
+      .disney-modal .level-card-close-btn::after,
+      .giftbox-modal .level-card-close-btn::before,
+      .giftbox-modal .level-card-close-btn::after,
+      .presente-modal .level-card-close-btn::before,
+      .presente-modal .level-card-close-btn::after,
+      .torneio-modal .level-card-close-btn::before,
+      .torneio-modal .level-card-close-btn::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 16px;
+        height: 2px;
+        background: white;
+        transform-origin: center;
+      }
+
+      .disney-modal .level-card-close-btn::before,
+      .giftbox-modal .level-card-close-btn::before,
+      .presente-modal .level-card-close-btn::before,
+      .torneio-modal .level-card-close-btn::before {
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+
+      .disney-modal .level-card-close-btn::after,
+      .giftbox-modal .level-card-close-btn::after,
+      .presente-modal .level-card-close-btn::after,
+      .torneio-modal .level-card-close-btn::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+      }
+
+      .disney-modal .modal-title,
+      .giftbox-modal .modal-title,
+      .presente-modal .modal-title,
+      .torneio-modal .modal-title {
+        font-size: 1.2rem;
+        padding: 10px 50px 10px 12px; /* Reduzido padding */
+        margin-top: 0;
+        margin-bottom: 8px;
+      }
+
+      .disney-modal .modal-body,
+      .giftbox-modal .modal-body,
+      .presente-modal .modal-body,
+      .torneio-modal .modal-body {
+        padding: 12px; /* Reduzido padding */
+        margin-top: 8px; /* Reduzido para evitar corte */
+      }
+
+      .disney-modal .info-item,
+      .giftbox-modal .info-item,
+      .presente-modal .info-item,
+      .torneio-modal .info-item {
+        padding: 6px 10px; /* Reduzido padding */
+        font-size: 0.85rem;
+      }
+
+      .disney-modal .distribution-item,
+      .giftbox-modal .distribution-item,
+      .presente-modal .distribution-item,
+      .torneio-modal .distribution-item {
+        padding: 6px 12px; /* Reduzido padding */
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Responsividade para telas muito pequenas */
+    @media (max-width: 480px) {
+      .disney-modal .level-card-wrapper,
+      .giftbox-modal .level-card-wrapper,
+      .presente-modal .level-card-wrapper,
+      .torneio-modal .level-card-wrapper {
+        padding: 10px 5px 5px 5px; /* Padding ainda menor */
+      }
+
+      .disney-modal .level-card,
+      .giftbox-modal .level-card,
+      .presente-modal .level-card,
+      .torneio-modal .level-card {
+        max-height: none; /* Remove limitação de altura */
+        max-width: 98%; /* Quase toda a largura disponível */
+      }
+
+      .disney-modal .modal-title,
+      .giftbox-modal .modal-title,
+      .presente-modal .modal-title,
+      .torneio-modal .modal-title {
+        font-size: 1.1rem;
+        padding: 8px 45px 8px 10px; /* Padding ainda menor */
+      }
+
+      .disney-modal .info-item,
+      .giftbox-modal .info-item,
+      .presente-modal .info-item,
+      .torneio-modal .info-item {
+        font-size: 0.8rem;
+        padding: 5px 8px; /* Padding mínimo */
+      }
+
+      .disney-modal .distribution-item,
+      .giftbox-modal .distribution-item,
+      .presente-modal .distribution-item,
+      .torneio-modal .distribution-item {
+        font-size: 0.8rem;
+        padding: 5px 10px; /* Padding mínimo */
+      }
+    }
 
     .level-card-close {
       position: absolute;
@@ -2079,4 +2228,11 @@
 }
 .modal-actions .cta-btn:hover {
   filter: brightness(1.05);
+}
+
+/* Desativar todas as animações e transições quando marcado */
+.disable-animations,
+.disable-animations * {
+  animation: none !important;
+  transition: none !important;
 }
