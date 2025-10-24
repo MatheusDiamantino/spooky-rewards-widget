@@ -1,29 +1,21 @@
 import React, { createRef, useEffect, useRef, useState } from "react";
 
-const missionStatus = (m) =>
-  m.is_locked
-    ? "Locked"
-    : m.is_completed
-    ? "Completed"
-    : m.is_opted_in
-    ? "In Progress"
-    : m.is_requires_optin
-    ? "Opt-in"
-    : "";
+const missionStatus = (m) => {
+  if (!m) return "";
+  if (m.is_locked) return "Bloqueada";
+  if (m.is_completed) return "Concluída";
+  if (m.is_in_progress || m.is_opted_in) return "Em andamento";
+  if (m.is_requires_optin) return "Requer opt-in";
+  return "Disponível";
+};
 
 const getStatusClassName = (m) => {
-  switch (missionStatus(m)) {
-    case "Locked":
-      return "locked";
-    case "Completed":
-      return "completed";
-    case "In Progress":
-      return "in-progress";
-    case "Opt-in":
-      return "requires-optin";
-    default:
-      return "";
-  }
+  if (!m) return "";
+  if (m.is_locked) return "locked";
+  if (m.is_completed) return "completed";
+  if (m.is_in_progress || m.is_opted_in) return "in-progress";
+  if (m.is_requires_optin) return "requires-optin";
+  return "available";
 };
 
 const ScrollItems = ({ className, children }) => {
