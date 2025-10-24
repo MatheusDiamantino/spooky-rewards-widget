@@ -62,7 +62,7 @@ const getLevelImageUrl = (level, disabled, index) => {
   // Conjunto de imagens ativas disponíveis (inclui as que faltavam)
   const activeImages = [
     "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/presentesdiarios3.0.webp",
-    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/teste6.png",
+    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/torneio.webp",
     "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/caldeirao3.0+(2).webp",
     "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/teste8.webp",
   ];
