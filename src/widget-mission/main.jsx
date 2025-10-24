@@ -300,7 +300,7 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
                 <div className="mission-right">
                   <div className="mission-info">
                     <div className="name" dangerouslySetInnerHTML={{ __html: mission.name }} />
-                    <div className={`status ${getStatusClassName(mission)}`}>{missionStatus(mission)}</div>
+                    {/* <div className={`status ${getStatusClassName(mission)}`}>{missionStatus(mission)}</div> */}
                   </div>
 
                   {mission.reward && (

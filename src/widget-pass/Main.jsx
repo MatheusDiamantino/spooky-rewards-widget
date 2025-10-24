@@ -93,8 +93,8 @@ const LevelMap = () => {
   const smarticoApi = window._smartico.api;
 
   const mickeyMessages = [
-    "Ei!",
-    "Clique aqui",
+    "Viagem para Disney\n com R$0,10",
+    "Ei, vai perder\n essa chance?",
   ];
 
   // Posições predefinidas para o Mickey surgir (cantos e áreas próximas às construções)
@@ -132,10 +132,10 @@ const LevelMap = () => {
           appear();
           secondHideTO = setTimeout(() => {
             setMickeyVisible(false);
-          }, 5000); // visível por 5s
-        }, 3000); // intervalo de 3s
-      }, 5000); // visível por 5s
-    }, 500); // pequeno delay inicial
+          }, 5000);
+        }, 3000); 
+      }, 5000); 
+    }, 500); 
 
     return () => {
       clearTimeout(firstShowTO);
@@ -360,40 +360,32 @@ const LevelMap = () => {
                       borderRadius: "18px",
                       padding: "8px 12px",
                       marginBottom: "10px",
-                      maxWidth: "160px",
-                      lineHeight: "1.25",
+                      lineHeight: "1.3",
                       textAlign: "center",
-                      hyphens: "auto",
                       fontSize: "12px",
+                      whiteSpace: "break-spaces",
+                      wordBreak: "normal",
                       letterSpacing: "0.1px",
                       border: "1px solid rgba(0,0,0,0.08)",
                       boxShadow: "0 6px 16px rgba(0,0,0,0.18), inset 0 0 10px rgba(0,0,0,0.03)",
                       textShadow: "none",
                       backdropFilter: "blur(1px)",
                       pointerEvents: "none",
+                      display: "inline-block",
                     }}
                   >
-                    {(() => {
-                      const parts =
-                        String(mickeyMessage).split(/<br\s*\/>|\n/g);
-                      return parts.map((seg, i) => (
-                        <span key={i}>
-                          {seg}
-                          {i < parts.length - 1 && <br />}
-                        </span>
-                      ));
-                    })()}
+                    {mickeyMessage}
                     <div
                       style={{
                         position: "absolute",
                         left: "50%",
                         transform: "translateX(-50%)",
-                        bottom: "calc(100% - 4px)",
+                        top: "100%",
                         width: 0,
                         height: 0,
                         borderLeft: "7px solid transparent",
                         borderRight: "7px solid transparent",
-                        borderTop: "10px solid #fff",
+                        borderBottom: "10px solid #fff",
                         filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.18))",
                         pointerEvents: "none",
                       }}
