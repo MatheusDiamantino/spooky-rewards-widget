@@ -806,7 +806,48 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
           {modalConfig ? (
             <div className="custom-modal-content">
               <div className="modal-header">
-                <h2 className="modal-title">{modalConfig.title}</h2>
+                {modalConfig.title === "VIAGEM PARA DISNEY" ? (
+                  <div className="disney-header">
+                    <img
+                      className="disney-header-img"
+                      src="https://casa.example.com/CRM/Banners+-+Promos/31.10/CRM_BANNER_HALLOWEEN.webp"
+                      alt="Banner da promoção"
+                      loading="lazy"
+                    />
+                    <div className="disney-header-overlay" />
+                    <div className="disney-header-copy">
+                      <h2 className="modal-title">{modalConfig.title}</h2>
+                      {modalConfig.subtitle && (
+                        <p className="modal-subtitle">{modalConfig.subtitle}</p>
+                      )}
+                      <div className="prize-carousel" aria-label="Prêmios em destaque">
+                        <div className="prize-track">
+                          <ul className="prize-list">
+                            <li className="prize giros bandito">Wild Bandito - Giros Extras</li>
+                            <li className="prize giros hallowwin">Mr. Hallow-Win - Giros Extras</li>
+                            <li className="prize giros bigbass">Big Bass Halloween 3 - Giros Extras</li>
+                            <li className="prize giros werewolf">Werewolf’s Hunt - Giros Extras</li>
+                            <li className="prize giros mystic">Mystic Potion - Giros Extras</li>
+                            <li className="prize major ps5">PS5</li>
+                            <li className="prize major trip">Bilhete Premiado valendo uma Viagem Disney</li>
+                          </ul>
+                          {/* clone para efeito contínuo */}
+                          <ul className="prize-list clone">
+                            <li className="prize giros bandito">Wild Bandito - Giros Extras</li>
+                            <li className="prize giros hallowwin">Mr. Hallow-Win - Giros Extras</li>
+                            <li className="prize giros bigbass">Big Bass Halloween 3 - Giros Extras</li>
+                            <li className="prize giros werewolf">Werewolf’s Hunt - Giros Extras</li>
+                            <li className="prize giros mystic">Mystic Potion - Giros Extras</li>
+                            <li className="prize major ps5">PS5</li>
+                            <li className="prize major trip">Bilhete Premiado valendo uma Viagem Disney</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <h2 className="modal-title">{modalConfig.title}</h2>
+                )}
               </div>
               <div className="modal-body">
                 {/* Torneio de Halloween */}
@@ -864,24 +905,6 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                     className="disney-layout"
                     aria-label="VIAGEM PARA DISNEY"
                   >
-                    <section
-                      className="prize-distribution extras"
-                      aria-label="Banner Halloween"
-                      style={{ margin: 0, padding: 0, width: '100%' }}
-                    >
-                      <img 
-                        src="https://casa.example.com/CRM/Banners+-+Promos/31.10/CRM_BANNER_HALLOWEEN.webp" 
-                        alt="Banner Halloween" 
-                        style={{ 
-                          width: '100%', 
-                          height: 'auto', 
-                          borderRadius: '8px', 
-                          paddingBottom: '10px',
-                          display: 'block',
-                          margin: 0
-                        }}
-                      />
-                    </section>
                     <section className="disney-details">
                       <dl className="details">
                         <div className="row">

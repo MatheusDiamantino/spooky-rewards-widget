@@ -398,9 +398,9 @@
     .disney-modal .level-card,
     .giftbox-modal .level-card,
     .presente-modal .level-card {
-      max-width: 680px;
-      width: min(92vw, 680px);
-      max-height: 80vh;
+      max-width: 560px;
+      width: min(92vw, 560px);
+      max-height: 70vh;
       overflow-y: auto;
       overflow-x: hidden;
       box-sizing: border-box;
@@ -1392,10 +1392,187 @@
       padding: 8px;
     }
 
+    /* Hero compacto para a Disney */
+    .disney-modal .disney-hero {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(26,26,46,0.9), rgba(15,52,96,0.85));
+      border: 1px solid rgba(255, 107, 53, 0.25);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+    }
+    /* Header com banner integrado para o Disney */
+    .disney-modal .modal-header { padding: 0; margin-bottom: 8px; }
+    .disney-modal .disney-header {
+      position: relative;
+      height: 180px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0f1a2e;
+      border: 2px solid #ff6b35;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+    }
+    .disney-modal .disney-header-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .disney-modal .disney-header-overlay {
+      position: absolute;
+      inset: 0;
+      /* Overlay de cima para baixo mais forte para garantir leitura do título */
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(15, 26, 46, 0.6) 40%,
+        rgba(15, 26, 46, 0.9) 100%
+      );
+    }
+    .disney-modal .disney-header-copy {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .disney-modal .disney-header .modal-title {
+      margin: 0;
+      text-align: left;
+      color: #ff6b35;
+      text-shadow: 1px 1px 6px rgba(255, 107, 53, 0.35);
+    }
+    .disney-modal .disney-header .modal-subtitle {
+      margin: 0;
+      text-align: left;
+      color: #e8f4ff;
+      opacity: 0.95;
+      font-size: 0.95rem;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    }
+    .disney-modal .disney-header .prize-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: inline-flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      align-items: center;
+      color: #e8f4ff;
+      font-size: 0.72rem;
+      line-height: 1.1;
+      opacity: 0.95;
+    }
+    .disney-modal .disney-header .prize-list li {
+      display: inline-flex;
+      align-items: center;
+      margin: 0;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(15, 26, 46, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      white-space: nowrap;
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+    .disney-modal .disney-header .prize-list li:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+    }
+
+    /* Giros: menos chamativos, cada um com uma cor própria sutil */
+    .disney-modal .disney-header .prize-list li.giros { font-weight: 600; text-shadow: 0 0 6px rgba(0, 0, 0, 0.3); }
+    .disney-modal .disney-header .prize-list li.giros.bandito { color: #a8e6ff; border-color: rgba(168, 230, 255, 0.25); }
+    .disney-modal .disney-header .prize-list li.giros.hallowwin { color: #d7b3ff; border-color: rgba(215, 179, 255, 0.25); }
+    .disney-modal .disney-header .prize-list li.giros.bigbass { color: #a6c7ff; border-color: rgba(166, 199, 255, 0.25); }
+    .disney-modal .disney-header .prize-list li.giros.werewolf { color: #b7c9ff; border-color: rgba(183, 201, 255, 0.2); }
+    .disney-modal .disney-header .prize-list li.giros.mystic { color: #ffb3e6; border-color: rgba(255, 179, 230, 0.25); }
+
+    /* Prêmios principais: cores mais chamativas e glow leve */
+    .disney-modal .disney-header .prize-list li.major { font-weight: 800; }
+    .disney-modal .disney-header .prize-list li.major.ps5 {
+      color: #ffffff;
+      background: rgba(255, 215, 0, 0.14);
+      border-color: rgba(255, 215, 0, 0.55);
+      box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.25) inset;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+    .disney-modal .disney-header .prize-list li.major.trip {
+      color: #eafffb;
+      background: rgba(0, 190, 170, 0.16);
+      border-color: rgba(0, 190, 170, 0.55);
+      box-shadow: 0 0 0 1px rgba(0, 190, 170, 0.25) inset;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+    .disney-modal .disney-header .prize-carousel {
+      margin-top: 4px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .disney-modal .disney-header .prize-track {
+      display: flex;
+      gap: 6px;
+      width: max-content;
+      animation: prizeMarquee 22s linear infinite;
+      will-change: transform;
+    }
+    @keyframes prizeMarquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .disney-modal .hero-graphic {
+      width: 30%;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      flex-shrink: 0;
+    }
+    .disney-modal .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .disney-modal .hero-copy { display: grid; gap: 4px; }
+    .disney-modal .hero-title {
+      margin: 0;
+      color: #ff6b35;
+      font-weight: 800;
+      font-size: 1rem;
+      text-shadow: 1px 1px 6px rgba(255, 107, 53, 0.35);
+    }
+    .disney-modal .hero-sub {
+      margin: 0;
+      color: #e8f4ff;
+      font-size: 0.85rem;
+      opacity: 0.85;
+      line-height: 1.35;
+    }
+
+    /* Banner Disney: visual limpo e sem cortes */
+    .disney-modal .disney-banner-wrap {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+    .disney-modal .disney-banner {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 4;
+      max-height: 150px;
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+    }
+
     .disney-modal .disney-details {
       background: rgba(108, 108, 168, 0);
       border-radius: 8px;
-      padding: 24px;
     }
 
     .disney-modal .details {
@@ -1408,11 +1585,13 @@
     .disney-modal .details .row {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 14px;
+      gap: 10px;
       align-items: start;
-      padding: 12px 14px;
-      background: rgba(250, 250, 250, 0.1);
-      border-radius: 4px;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-left: 3px solid #ff6b35;
+      border-radius: 10px;
     }
 
     .disney-modal .details .row.span2 {
@@ -1420,9 +1599,9 @@
     }
 
     .disney-modal .details dt {
-      font-weight: 600;
+      font-weight: 700;
       color: #ff8f65;
-      font-size: 1rem;
+      font-size: 0.95rem;
       margin: 0;
       min-width: 80px;
       text-transform: uppercase;
@@ -1430,8 +1609,8 @@
     }
 
     .disney-modal .details dd {
-      color: #ffffff;
-      font-size: 1rem;
+      color: #eef6ff;
+      font-size: 0.95rem;
       margin: 0;
       line-height: 1.5;
     }
@@ -1447,6 +1626,23 @@
       display: flex;
       justify-content: center;
       margin-top: 12px;
+    }
+
+    /* Wrapper do modal Disney ocupando a viewport para evitar cortes */
+    .disney-modal .level-card-wrapper {
+      position: fixed;
+      inset: 0;
+      padding: 12px;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Título mais sutil e compacto para o Disney */
+    .disney-modal .modal-title {
+      text-shadow: 1px 1px 6px rgba(255, 107, 53, 0.35),
+        0 0 12px rgba(255, 107, 53, 0.25);
+      font-size: 1.25rem;
+      margin-bottom: 6px;
     }
 
     /* Responsividade para o modal Disney */
@@ -1475,11 +1671,30 @@
       }
     }
 
+    /* Desktop: garantir que o banner não seja cortado e o modal comporte melhor */
+    @media (min-width: 992px) {
+      .disney-modal .level-card {
+        max-width: 640px;
+        width: min(92vw, 640px);
+        max-height: 78vh;
+      }
+      .disney-modal .disney-header { height: 260px; }
+      .disney-modal .hero-graphic { width: 160px; }
+      .disney-modal .hero-title { font-size: 1.1rem; }
+    }
+
     @media (max-width: 480px) {
       .disney-modal .disney-layout {
         gap: 2px;
         padding: 0px;
       }
+      .disney-modal .disney-header { height: 190px; }
+      .disney-modal .disney-header .prize-list { font-size: 0.65rem; gap: 4px; }
+
+      .disney-modal .disney-hero { flex-direction: column; align-items: flex-start; }
+      .disney-modal .hero-graphic { width: 100%; aspect-ratio: 16 / 6; }
+      .disney-modal .hero-title { font-size: 0.95rem; }
+      .disney-modal .hero-sub { font-size: 0.8rem; }
 
       .disney-modal .disney-details {
         padding: 12px;
