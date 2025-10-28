@@ -864,6 +864,24 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                     className="disney-layout"
                     aria-label="VIAGEM PARA DISNEY"
                   >
+                    <section
+                      className="prize-distribution extras"
+                      aria-label="Banner Halloween"
+                      style={{ margin: 0, padding: 0, width: '100%' }}
+                    >
+                      <img 
+                        src="https://casa.example.com/CRM/Banners+-+Promos/31.10/CRM_BANNER_HALLOWEEN.webp" 
+                        alt="Banner Halloween" 
+                        style={{ 
+                          width: '100%', 
+                          height: 'auto', 
+                          borderRadius: '8px', 
+                          paddingBottom: '10px',
+                          display: 'block',
+                          margin: 0
+                        }}
+                      />
+                    </section>
                     <section className="disney-details">
                       <dl className="details">
                         <div className="row">
@@ -880,19 +898,6 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                           <dd>{modalConfig.content.description}</dd>
                         </div>
                       </dl>
-                    </section>
-                    <section
-                      className="prize-distribution extras"
-                      aria-label="Giros Extras"
-                    >
-                      <h3>Premiação</h3>
-                      <ol className="extras-list">
-                        {modalConfig.content.prizes.map((prize, index) => (
-                          <li key={index} className="extra">
-                            {prize}
-                          </li>
-                        ))}
-                      </ol>
                     </section>
                     <div className="modal-actions">
                       {(() => {
