@@ -807,7 +807,9 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
             <div className="custom-modal-content">
               <div className="modal-header">
                 {modalConfig.title === "VIAGEM PARA DISNEY" ? (
-                  <div className="disney-header">
+                  <>
+                    <h2 className="modal-title disney-mobile-title">{modalConfig.title}</h2>
+                    <div className="disney-header">
                     <img
                       className="disney-header-img"
                       src="https://casa.example.com/CRM/Banners+-+Promos/31.10/CRM_BANNER_HALLOWEEN.webp"
@@ -845,6 +847,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                       </div>
                     </div>
                   </div>
+                  </>
                 ) : (
                   <h2 className="modal-title">{modalConfig.title}</h2>
                 )}
