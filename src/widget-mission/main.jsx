@@ -401,21 +401,17 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
               ref={missionRefs.current[index]}
               className={`mission ${activeMission === mission.id ? "active" : ""}`}
               onClick={() => {
-                const deepLink = `dp:gf_missions&id=${mission?.id}`;
+                // Usar exclusivamente os anchors definidos no index.html
                 const anchorIds = ["dl-missions", "dl-missions-2"]; // prioriza anchors do index.html
                 for (const aid of anchorIds) {
                   const a = document.getElementById(aid);
                   if (a) {
-                    a.setAttribute("href", deepLink);
                     a.click();
                     return;
                   }
                 }
-                // fallback: usar dp direto se não houver anchors
-                const dp = window?._smartico?.dp;
-                if (typeof dp === "function") {
-                  dp(deepLink);
-                }
+                // Se nenhum anchor estiver presente, não tenta fallback dp aqui
+                console.warn("[Missions] Anchor de missão não encontrado (dl-missions / dl-missions-2).");
               }}
               key={mission.id}
             >

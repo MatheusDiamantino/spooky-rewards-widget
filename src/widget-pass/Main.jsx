@@ -637,21 +637,16 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
   }, [level, levelIndex, maxItems, smarticoApi]);
 
   const handleMissionClick = (mission) => {
-    const deepLink = `dp:gf_missions&id=${mission?.id}`;
+    // Usar exclusivamente os anchors definidos no index.html
     const anchorIds = ["dl-missions", "dl-missions-2"]; // prioriza anchors do index.html
     for (const aid of anchorIds) {
       const a = document.getElementById(aid);
       if (a) {
-        a.setAttribute("href", deepLink);
         a.click();
         return;
       }
     }
-    // fallback: usar dp direto se não houver anchors
-    const dp = window?._smartico?.dp;
-    if (typeof dp === "function") {
-      dp(deepLink);
-    }
+    console.warn("[MissionOverlayButtons] Anchor de missão não encontrado (dl-missions / dl-missions-2).");
   };
 
   if (loading || !missions.length) {
@@ -1062,10 +1057,22 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                       {(() => {
                         const actionKey =
                           level?.custom_data?.action || "JOGUE_E_CONCORRA";
+                         const url = "https://casa.example.com";
                         return (
                           <a
                             className="cta-btn"
-                            href="https://casa.example.com"
+                            href={url}
+                            target="_self"
+                            onClick={(e) => {
+                              try {
+                                e.preventDefault();
+                                // Navega na mesma aba, sem abrir nova janela e sem usar dp
+                                window.location.assign(url);
+                              } catch (_) {
+                                // Fallback simples caso assign falhe
+                                window.open(url, "_self");
+                              }
+                            }}
                           >
                             Jogue e Concorra
                           </a>
