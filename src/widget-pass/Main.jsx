@@ -6,6 +6,14 @@ import FishBoatOrange from "./animations/Halloween Spider.json";
 import OneFish from "./animations/Halloween Spooky Ghost Floating.json";
 import GhostAnimation from "./animations/Ghost Green.json";
 import Missions from "../widget-mission/main.jsx";
+import {
+  HALLOWEEN_TOURNAMENT_ID,
+  HALLOWEEN_TOURNAMENT_NAME,
+  HALLOWEEN_DAILY_GIFT_ID,
+  HALLOWEEN_MISSION_IDS,
+} from "../config/halloween.js";
+// IDs centralizados (importados do config)
+const MISSION_IDS = HALLOWEEN_MISSION_IDS;
 import Mickey from "./animations/Mickey.json";
 import DisneyHostar from "./animations/Disney Hostar.json";
 
@@ -41,7 +49,7 @@ const animations = [
   {
     key: "FishBoatBlue",
     src: FishBoatBlue,
-    style: { bottom: "140px", left: "26px", "pointer-events": "none" },
+    style: { bottom: "140px", left: "26px", pointerEvents: "none" },
   },
   {
     key: "FishBoatOrange",
@@ -560,14 +568,61 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
     const fetchMissions = async () => {
       try {
         setLoading(true);
-        const missionsList = await smarticoApi.getMissionsList();
+        // Fallback local imediato quando API não estiver disponível
+        const ids = MISSION_IDS.map(Number);
+        if (!smarticoApi || typeof smarticoApi.getMissions !== "function") {
+          console.warn("[MissionOverlayButtons] API indisponível; usando fallback local por IDs:", ids.join(", "));
+          setMissions(ids.map((id) => ({ id, name: `Missão ${id}` })));
+          return;
+        }
+        const missionsList = await smarticoApi.getMissions({
+          onUpdate: (ms) => {
+            try {
+              console.groupCollapsed("[MissionOverlayButtons] Lista de missões (onUpdate)");
+              console.table(
+                (Array.isArray(ms) ? ms : []).map((m) => ({ id: m.id, name: m.name, in_progress: !!m.is_in_progress }))
+              );
+              console.groupEnd();
+            } catch (_) {}
+            const asMap = new Map((Array.isArray(ms) ? ms : []).map((m) => [Number(m.id), m]));
+            const orderedByIds = ids.map((id) => asMap.get(id)).filter(Boolean);
+            const byId = orderedByIds;
+            const byLevel = (Array.isArray(ms) ? ms : []).filter((mission) => matchesLevel(mission, level));
+            let selected = (byId.length ? byId : byLevel).slice(0, maxItems);
+            if (!selected.length && ids.length) {
+              // Fallback mínimo: criar botões clicáveis para os IDs configurados
+              selected = ids.map((id) => ({ id, name: `Missão ${id}` }));
+              console.warn("[MissionOverlayButtons] Fallback mínimo por IDs configurados:", ids.join(", "));
+            }
+            setMissions(selected);
+          },
+        });
 
         if (missionsList && Array.isArray(missionsList)) {
-          const filteredMissions = missionsList
-            .filter((mission) => matchesLevel(mission, level))
-            .slice(0, maxItems);
-
-          setMissions(filteredMissions);
+          const asMap = new Map(missionsList.map((m) => [Number(m.id), m]));
+          const orderedByIds = ids.map((id) => asMap.get(id)).filter(Boolean);
+          const byId = orderedByIds;
+          const byLevel = missionsList.filter((mission) =>
+            matchesLevel(mission, level)
+          );
+          let selected = (byId.length ? byId : byLevel).slice(0, maxItems);
+          try {
+            console.groupCollapsed("[MissionOverlayButtons] Lista de missões");
+            console.table(
+              missionsList.map((m) => ({ id: m.id, name: m.name, in_progress: !!m.is_in_progress }))
+            );
+            console.groupEnd();
+            if (byId.length) {
+              console.info("[MissionOverlayButtons] Selecionadas por IDs:", byId.map((m) => m.id).join(", "));
+            } else {
+              console.warn("[MissionOverlayButtons] IDs não encontrados, usando match por nível.");
+            }
+          } catch (_) {}
+          if (!selected.length && ids.length) {
+            selected = ids.map((id) => ({ id, name: `Missão ${id}` }));
+            console.warn("[MissionOverlayButtons] Fallback mínimo por IDs configurados:", ids.join(", "));
+          }
+          setMissions(selected);
         }
       } catch (error) {
         console.error("Erro ao buscar missões:", error);
@@ -575,15 +630,28 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
         setLoading(false);
       }
     };
-
-    if (level && smarticoApi) {
-      fetchMissions();
+    if (!level) {
+      console.warn("[MissionOverlayButtons] level indefinido; buscando missões mesmo assim.");
     }
-  }, [level, levelIndex, maxItems]);
+    fetchMissions();
+  }, [level, levelIndex, maxItems, smarticoApi]);
 
   const handleMissionClick = (mission) => {
-    const a = document.getElementById("dl-missions");
-    if (a) a.click();
+    const deepLink = `dp:gf_missions&id=${mission?.id}`;
+    const anchorIds = ["dl-missions", "dl-missions-2"]; // prioriza anchors do index.html
+    for (const aid of anchorIds) {
+      const a = document.getElementById(aid);
+      if (a) {
+        a.setAttribute("href", deepLink);
+        a.click();
+        return;
+      }
+    }
+    // fallback: usar dp direto se não houver anchors
+    const dp = window?._smartico?.dp;
+    if (typeof dp === "function") {
+      dp(deepLink);
+    }
   };
 
   if (loading || !missions.length) {
@@ -621,24 +689,63 @@ function TournamentDynamicBlock() {
         setLoading(false);
         return;
       }
+      try {
+        console.info(
+          "[TournamentDynamicBlock] ID configurado:",
+          HALLOWEEN_TOURNAMENT_ID
+        );
+        const nameCfg = String(HALLOWEEN_TOURNAMENT_NAME || "").trim();
+        if (nameCfg) {
+          console.info("[TournamentDynamicBlock] Nome configurado:", nameCfg);
+        }
+      } catch (_) {}
       const onUpdate = (list) => {
         const arr = Array.isArray(list) ? list : [];
-        const active = arr.find((t) => t.is_in_progress);
-        if (active) {
-          setTournament(active);
+        try {
+          console.groupCollapsed("[TournamentDynamicBlock] Lista de torneios");
+          console.table(
+            arr.map((t) => ({
+              id: t.id,
+              name: t.name,
+              in_progress: !!t.is_in_progress,
+              upcoming: !!t.is_upcoming,
+              prize_pool_short: t.prize_pool_short,
+              registration_count: t.registration_count,
+              players_max_count: t.players_max_count,
+            }))
+          );
+          console.groupEnd();
+        } catch (_) {}
+        // 1) Seleciona por ID configurado
+        const byId = arr.find((t) => Number(t.id) === Number(HALLOWEEN_TOURNAMENT_ID));
+        if (byId) {
+          console.info("[TournamentDynamicBlock] Selecionado por ID:", byId.id, byId.name);
+          setTournament(byId);
           return;
         }
-        const upcoming = arr
-          .filter((t) => t.is_upcoming)
-          .sort((a, b) => new Date(a.start_time) - new Date(b.start_time))[0];
-        setTournament(upcoming || null);
+        // 2) Fallback opcional por nome configurado (case-insensitive, substring)
+        const nameQuery = String(HALLOWEEN_TOURNAMENT_NAME || "").trim().toLowerCase();
+        if (nameQuery) {
+          const byName = arr.find((t) => String(t?.name || "").toLowerCase().includes(nameQuery));
+          if (byName) {
+            console.info("[TournamentDynamicBlock] Selecionado por nome:", byName.id, byName.name);
+            setTournament(byName);
+            return;
+          }
+          console.warn("[TournamentDynamicBlock] Nome configurado não encontrado:", HALLOWEEN_TOURNAMENT_NAME);
+        }
+        console.warn(
+          "[TournamentDynamicBlock] Torneio com ID",
+          HALLOWEEN_TOURNAMENT_ID,
+          "não encontrado na lista retornada e fallback por nome desativado ou sem match.")
+        setTournament(null);
       };
       const res = await smarticoApi.getTournamentsList({ onUpdate });
       onUpdate(res);
       setLoading(false);
     };
     load();
-  }, [smarticoApi]);
+  }, [smarticoApi, HALLOWEEN_TOURNAMENT_ID, HALLOWEEN_TOURNAMENT_NAME]);
 
   if (loading) return null;
   if (!tournament) {
@@ -650,36 +757,50 @@ function TournamentDynamicBlock() {
   }
 
   const openTournament = () => {
+    // Prioriza o href já configurado no index.html
     const a = document.getElementById("dl-tournaments");
-    if (a) a.click();
+    if (a) {
+      a.click();
+      return;
+    }
+    // Fallback: usa dp com o ID selecionado (se existir)
+    const dp = window?._smartico?.dp;
+    const selectedId = tournament?.id ?? HALLOWEEN_TOURNAMENT_ID;
+    const deepLink = `dp:gf_tournaments&id=${selectedId}`;
+    if (typeof dp === "function") {
+      dp(deepLink);
+      return;
+    }
   };
 
   return (
     <div className="tournament-layout" role="region" aria-label="Torneio ativo">
       <section className="tournament-image">
         <img
-          src="https://d3l7suk1kl9rwh.cloudfront.net/94d586fe197310fb1e0974-920x20029.webp"
-          alt="Torneio de Halloween"
+          src="https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/banner-torneio.webp"
+          alt={tournament?.name || "Torneio"}
           className="tournament-banner"
-          // onError={(e) => {
-          // 	// Fallback para imagem padrão se a imagem falhar
-          // 	e.target.src = "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/sweet-rush-bonanza-tournament.webp";
-          // }}
         />
       </section>
       <div className="tournament-info">
+        <h3 className="tournament-title">{tournament?.name || "Torneio"}</h3>
         <div className="tournament-stats-grid">
           <div className="stat-card">
             <div className="stat-label">Premiação</div>
             <div className="stat-value">
-              {tournament.prize_pool_short || "R$30.000,00"}
+              {tournament?.prize_pool_short ?? tournament?.prize_pool ?? "—"}
             </div>
           </div>
           <div className="stat-card">
             <div className="stat-label">Registro</div>
             <div className="stat-value">
-              {tournament.registration_count || "14350"}/
-              {tournament.players_max_count || "200000"}
+              {Number.isFinite(Number(tournament?.registration_count))
+                ? tournament.registration_count
+                : "—"}
+              /
+              {Number.isFinite(Number(tournament?.players_max_count))
+                ? tournament.players_max_count
+                : "—"}
             </div>
           </div>
         </div>
@@ -869,9 +990,21 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                     <div className="modal-actions">
                       <button
                         className="cta-btn"
-                        onClick={() =>
-                          document.getElementById("dl-missions")?.click()
-                        }
+                        onClick={() => {
+                          // Prioriza o href já configurado no index.html
+                          const giftAnchor = document.getElementById("dl-daily-gift");
+                          if (giftAnchor) {
+                            giftAnchor.click();
+                            return;
+                          }
+                          // Fallback: deep link via dp com ID local
+                          const dp = window?._smartico?.dp;
+                          const deepLink = `dp:gf_section&id=${HALLOWEEN_DAILY_GIFT_ID}`;
+                          if (typeof dp === "function") {
+                            dp(deepLink);
+                            return;
+                          }
+                        }}
                       >
                         Abrir Presente Diário
                       </button>
@@ -930,14 +1063,12 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                         const actionKey =
                           level?.custom_data?.action || "JOGUE_E_CONCORRA";
                         return (
-                          <button
+                          <a
                             className="cta-btn"
-                            onClick={() =>
-                              (window.location.href = "https://casa.example.com")
-                            }
+                            href="https://casa.example.com"
                           >
                             Jogue e Concorra
-                          </button>
+                          </a>
                         );
                       })()}
                     </div>

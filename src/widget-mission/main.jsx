@@ -1,4 +1,5 @@
 import React, { createRef, useEffect, useRef, useState } from "react";
+import { HALLOWEEN_MISSION_IDS } from "../config/halloween.js";
 
 const missionStatus = (m) => {
   if (!m) return "";
@@ -77,6 +78,32 @@ const getLevelHints = (level, levelIndex) => {
     .map(normalizeText)
     .filter(Boolean);
   return { id, name, index, tags };
+};
+
+// Extrai meta de exibição de forma resiliente, considerando diferentes estruturas da API
+const getMissionDisplayName = (mission) => {
+  const candidates = [
+    mission?.name,
+    mission?.public_meta?.name,
+    mission?.achievement_public_meta?.name,
+    mission?.meta?.name,
+  ];
+  const found = candidates.find((v) => v && String(v).trim().length);
+  return found || `Missão ${mission?.id ?? ""}`;
+};
+
+const getMissionImageUrl = (mission) => {
+  const candidates = [
+    mission?.image,
+    mission?.public_meta?.image_url,
+    mission?.public_meta?.image_url_small,
+    mission?.achievement_public_meta?.image_url,
+    mission?.image_url,
+    mission?.image_url_small,
+    mission?.custom_data?.image,
+  ];
+  const found = candidates.find((v) => typeof v === "string" && v.trim().length);
+  return found || "";
 };
 
 // Extrai um possível número da missão (1,2,3...) baseado em várias chaves e no nome
@@ -202,11 +229,13 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
     }, 0);
   };
 
-  // Seleciona missões com base no nível/insígnia, respeitando maxItems
+  // Seleciona missões, priorizando estritamente os IDs configurados
   const pickSingleMission = (list) => {
     const arr = Array.isArray(list) ? list : [];
-    const hints = getLevelHints(level, levelIndex);
-    const byLevel = level ? arr.filter((m) => matchesLevel(m, level, levelIndex)) : arr;
+    const ids = HALLOWEEN_MISSION_IDS.map(Number);
+    const asMap = new Map(arr.map((m) => [Number(m.id), m]));
+    const orderedByIds = ids.map((id) => asMap.get(id)).filter(Boolean);
+    const source = orderedByIds;
 
     // Ordenar por número conhecido quando possível para previsibilidade
     const sortByNumber = (xs) =>
@@ -218,45 +247,130 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
 
     // Quando queremos mais de 1 missão, devolvemos as primeiras correspondentes
     if (maxItems > 1) {
-      const src = byLevel.length ? sortByNumber(byLevel) : sortByNumber(arr);
-      return src.slice(0, maxItems);
+      return source.slice(0, maxItems);
     }
 
     // Preferir missão cujo número bata com o índice da insígnia (index + 1)
+    const hints = getLevelHints(level, levelIndex);
     const preferNumber = typeof hints.index === 'number' ? hints.index + 1 : undefined;
-    const candidateByNumber = byLevel.find((m) => getMissionNumber(m) === preferNumber) || arr.find((m) => getMissionNumber(m) === preferNumber);
+    const candidateByNumber = source.find((m) => getMissionNumber(m) === preferNumber);
     if (candidateByNumber) return [candidateByNumber];
 
     // Caso não tenha candidato por número, usar pela posição do índice
-    if (byLevel.length > 0) {
-      const pos = hints.index != null ? hints.index % byLevel.length : 0;
-      return [byLevel[pos]];
+    if (source.length > 0) {
+      const pos = hints.index != null ? hints.index % source.length : 0;
+      return [source[pos]];
     }
 
-    // Sem correspondência: escolher uma missão geral pelo índice
-    if (arr.length > 0) {
-      const pos = hints.index != null ? hints.index % arr.length : 0;
-      return [arr[pos]];
+    // Sem correspondência: quando não encontramos nenhuma missão pelos IDs configurados,
+    // criar um fallback mínimo para garantir renderização sem quebrar.
+    if (ids.length) {
+      const fallback = ids.map((id) => ({
+        id,
+        name: `Missão ${id}`,
+        image: "",
+        reward: "",
+        progress: 0,
+        tasks: [],
+        dt_start: Date.now(),
+        time_limit_ms: 0,
+        is_locked: false,
+        is_completed: false,
+        is_in_progress: false,
+        is_opted_in: false,
+        is_requires_optin: false,
+      }));
+      return fallback.slice(0, maxItems);
     }
-
     return [];
   };
 
   useEffect(() => {
     const load = async () => {
-      if (!smarticoApi) {
-        setMissions([]);
+      // Fallback local imediato quando API não estiver disponível
+      if (!smarticoApi || typeof smarticoApi.getMissions !== "function") {
+        const ids = HALLOWEEN_MISSION_IDS.map(Number);
+        const fallback = ids.map((id) => ({
+          id,
+          name: `Missão ${id}`,
+          image: "",
+          reward: "",
+          progress: 0,
+          tasks: [],
+          dt_start: Date.now(),
+          time_limit_ms: 0,
+          is_locked: false,
+          is_completed: false,
+          is_in_progress: false,
+          is_opted_in: false,
+          is_requires_optin: false,
+        }));
+        setMissions(fallback.slice(0, maxItems));
         setLoading(false);
         return;
       }
-      const hints = getLevelHints(level, levelIndex);
       const res = await smarticoApi.getMissions({
-        ...hints,
         onUpdate: (ms) => {
-          setMissions(pickSingleMission(ms));
+          try {
+            console.groupCollapsed("[Missions] Lista de missões");
+            console.table(
+              (Array.isArray(ms) ? ms : []).map((m) => ({
+                id: m.id,
+                name: getMissionDisplayName(m),
+                in_progress: !!m.is_in_progress,
+                requires_optin: !!m.is_requires_optin,
+              }))
+            );
+            console.groupEnd();
+          } catch (_) {}
+          const next = pickSingleMission(ms);
+          if (!next.length) {
+            console.warn("[Missions] Nenhuma missão encontrada pelos IDs:", HALLOWEEN_MISSION_IDS);
+            const ids = HALLOWEEN_MISSION_IDS.map(Number);
+            const fallback = ids.map((id) => ({
+              id,
+              name: `Missão ${id}`,
+              image: "",
+              reward: "",
+              progress: 0,
+              tasks: [],
+              dt_start: Date.now(),
+              time_limit_ms: 0,
+              is_locked: false,
+              is_completed: false,
+              is_in_progress: false,
+              is_opted_in: false,
+              is_requires_optin: false,
+            }));
+            setMissions(fallback.slice(0, maxItems));
+          } else {
+            console.info("[Missions] Selecionadas por IDs:", next.map((m) => m.id).join(", "));
+            setMissions(next);
+          }
         },
       });
-      setMissions(pickSingleMission(res));
+      const initial = pickSingleMission(res);
+      if (!initial.length) {
+        const ids = HALLOWEEN_MISSION_IDS.map(Number);
+        const fallback = ids.map((id) => ({
+          id,
+          name: `Missão ${id}`,
+          image: "",
+          reward: "",
+          progress: 0,
+          tasks: [],
+          dt_start: Date.now(),
+          time_limit_ms: 0,
+          is_locked: false,
+          is_completed: false,
+          is_in_progress: false,
+          is_opted_in: false,
+          is_requires_optin: false,
+        }));
+        setMissions(fallback.slice(0, maxItems));
+      } else {
+        setMissions(initial);
+      }
       setLoading(false);
     };
     load();
@@ -287,19 +401,32 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
               ref={missionRefs.current[index]}
               className={`mission ${activeMission === mission.id ? "active" : ""}`}
               onClick={() => {
-                const a = document.getElementById('dl-missions');
-                if (a) a.click();
+                const deepLink = `dp:gf_missions&id=${mission?.id}`;
+                const anchorIds = ["dl-missions", "dl-missions-2"]; // prioriza anchors do index.html
+                for (const aid of anchorIds) {
+                  const a = document.getElementById(aid);
+                  if (a) {
+                    a.setAttribute("href", deepLink);
+                    a.click();
+                    return;
+                  }
+                }
+                // fallback: usar dp direto se não houver anchors
+                const dp = window?._smartico?.dp;
+                if (typeof dp === "function") {
+                  dp(deepLink);
+                }
               }}
               key={mission.id}
             >
               <div className="mission-block">
                 <div className="mission-left">
-                  <div className="image" style={{ backgroundImage: `url('${mission.image}')` }} />
+                  <div className="image" style={{ backgroundImage: `url('${getMissionImageUrl(mission)}')` }} />
                 </div>
 
                 <div className="mission-right">
                   <div className="mission-info">
-                    <div className="name" dangerouslySetInnerHTML={{ __html: mission.name }} />
+                    <div className="name" dangerouslySetInnerHTML={{ __html: getMissionDisplayName(mission) }} />
                     {/* <div className={`status ${getStatusClassName(mission)}`}>{missionStatus(mission)}</div> */}
                   </div>
 
@@ -323,15 +450,7 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
                 </div>
               )}
 
-              <div className="tasks">
-                {mission.tasks.map((t) => (
-                  <div className={`task ${t.is_completed ? "completed" : ""}`} key={t.id}>
-                    <div className="task-icon">✔</div>
-                    <div className="task-name" dangerouslySetInnerHTML={{ __html: t.name }} />
-                    {t.points_reward > 0 && <div className="task-reward">{t.points_reward} pts</div>}
-                  </div>
-                ))}
-              </div>
+              
 
               {timeLeft && (
                 <div className="time">

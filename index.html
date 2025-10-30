@@ -11,9 +11,10 @@
 <body>
   <div id="root"></div>
   <!-- Deep link anchors centralizados: apenas dp no index.html -->
-  <a id="dl-tournaments" href="dp:gf_tournaments" style="display:none" rel="noopener">Tournaments</a>
-  <a id="dl-missions" href="dp:gf_missions" style="display:none" rel="noopener">Missions</a>
-  <!-- <button onclick="localStorage.clear(); document.cookie.split(';').forEach(function(c) { document.cookie = c.replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/'); }); location.reload();" style="position:fixed;top:10px;right:10px;z-index:9999;">Limpar localStorage/cookies</button> -->
+  <a id="dl-tournaments" href="dp:gf_tournaments&id=2741" style="display:none" rel="noopener">Tournaments</a>
+  <a id="dl-missions" href="dp:gf_missions&id=35083" style="display:none" rel="noopener">Missions</a>
+  <a id="dl-missions-2" href="dp:gf_missions&id=35093" style="display:none" rel="noopener">Missions (alt)</a>
+  <a id="dl-daily-gift" href="dp:gf_section&id=6037" style="display:none" rel="noopener">Abrir Presente Diário</a> <!-- Anchor único para presente diário -->
   <script type="module" src="index.jsx"></script>
   <script>
     if (window.location.hostname === "localhost") {
@@ -23,7 +24,6 @@
     // defina o usuário ANTES do init
     window._smartico_user_id = "REMOVIDO";
     window._smartico_user_hash = "REMOVIDO";
-    window._smartico_env_info_current = { tournament_id: 556 };
 
     (function (d, r, b, h, s) {
       h = d.getElementsByTagName("head")[0];
