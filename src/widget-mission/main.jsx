@@ -401,17 +401,20 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
               ref={missionRefs.current[index]}
               className={`mission ${activeMission === mission.id ? "active" : ""}`}
               onClick={() => {
-                // Usar exclusivamente os anchors definidos no index.html
-                const anchorIds = ["dl-missions", "dl-missions-2"]; // prioriza anchors do index.html
-                for (const aid of anchorIds) {
-                  const a = document.getElementById(aid);
-                  if (a) {
-                    a.click();
-                    return;
-                  }
+                // 1º item abre dl-missions; 2º item abre dl-missions-2
+                const preferred = index === 0 ? "dl-missions" : "dl-missions-2";
+                const aPreferred = document.getElementById(preferred);
+                if (aPreferred) {
+                  aPreferred.click();
+                  return;
                 }
-                // Se nenhum anchor estiver presente, não tenta fallback dp aqui
-                console.warn("[Missions] Anchor de missão não encontrado (dl-missions / dl-missions-2).");
+                const fallback = index === 0 ? "dl-missions-2" : "dl-missions";
+                const aFallback = document.getElementById(fallback);
+                if (aFallback) {
+                  aFallback.click();
+                  return;
+                }
+                console.warn("[Missions] Anchors de missão não encontrados (dl-missions / dl-missions-2).");
               }}
               key={mission.id}
             >

@@ -15,7 +15,7 @@ import {
 // IDs centralizados (importados do config)
 const MISSION_IDS = HALLOWEEN_MISSION_IDS;
 import Mickey from "./animations/Mickey.json";
-import DisneyHostar from "./animations/Disney Hostar.json";
+import DisneyHostar from "./animations/Disney Logo.json";
 
 // Desativa todas as animações temporariamente
 const DISABLE_ANIMATIONS = false;
@@ -636,17 +636,22 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
     fetchMissions();
   }, [level, levelIndex, maxItems, smarticoApi]);
 
-  const handleMissionClick = (mission) => {
-    // Usar exclusivamente os anchors definidos no index.html
-    const anchorIds = ["dl-missions", "dl-missions-2"]; // prioriza anchors do index.html
-    for (const aid of anchorIds) {
-      const a = document.getElementById(aid);
-      if (a) {
-        a.click();
-        return;
-      }
+  const handleMissionClick = (mission, index) => {
+    // Direciona especificamente o 1º botão para dl-missions e o 2º para dl-missions-2
+    const preferred = index === 0 ? "dl-missions" : "dl-missions-2";
+    const aPreferred = document.getElementById(preferred);
+    if (aPreferred) {
+      aPreferred.click();
+      return;
     }
-    console.warn("[MissionOverlayButtons] Anchor de missão não encontrado (dl-missions / dl-missions-2).");
+    // Fallback: tenta o outro anchor, depois avisa
+    const fallback = index === 0 ? "dl-missions-2" : "dl-missions";
+    const aFallback = document.getElementById(fallback);
+    if (aFallback) {
+      aFallback.click();
+      return;
+    }
+    console.warn("[MissionOverlayButtons] Anchors de missão não encontrados (dl-missions / dl-missions-2).");
   };
 
   if (loading || !missions.length) {
@@ -659,7 +664,7 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
         <button
           key={mission.id}
           className="mission-overlay-btn"
-          onClick={() => handleMissionClick(mission)}
+          onClick={() => handleMissionClick(mission, index)}
           aria-label={`Executar missão: ${mission.name}`}
         >
           {/* Botão transparente sobreposto */}
