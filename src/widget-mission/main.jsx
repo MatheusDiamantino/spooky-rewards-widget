@@ -1,23 +1,5 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
-import { HALLOWEEN_MISSION_IDS } from "../config/halloween.js";
-
-const missionStatus = (m) => {
-  if (!m) return "";
-  if (m.is_locked) return "Bloqueada";
-  if (m.is_completed) return "Concluída";
-  if (m.is_in_progress || m.is_opted_in) return "Em andamento";
-  if (m.is_requires_optin) return "Requer opt-in";
-  return "Disponível";
-};
-
-const getStatusClassName = (m) => {
-  if (!m) return "";
-  if (m.is_locked) return "locked";
-  if (m.is_completed) return "completed";
-  if (m.is_in_progress || m.is_opted_in) return "in-progress";
-  if (m.is_requires_optin) return "requires-optin";
-  return "available";
-};
+import React, { createRef, useCallback, useEffect, useRef, useState } from "react";
+import { CAMPAIGN_MISSION_IDS } from "../config/christmas.js";
 
 const ScrollItems = ({ className, children }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -127,66 +109,6 @@ const getMissionNumber = (mission) => {
   return undefined;
 };
 
-// Helper para verificar se uma missão pertence ao nível/insígnia atual
-const matchesLevel = (mission, level, levelIndex) => {
-  if (!level || !mission) return false;
-  const { id: lvlId, name: lvlName, index: idx, tags: lvlTags } = getLevelHints(level, levelIndex);
-
-  const cd = mission?.custom_data || {};
-
-  const idCandidates = [
-    mission.level_id,
-    mission.levelId,
-    mission.level,
-    mission.segment_id,
-    mission.group_id,
-    cd.level_id,
-    cd.levelId,
-    cd.level,
-    cd.segment_id,
-    cd.group_id,
-    ...toArray(mission.level_ids),
-    ...toArray(cd.level_ids),
-  ];
-
-  const indexCandidates = [mission.level_index, mission.levelIndex, cd.level_index, cd.levelIndex];
-
-  const nameCandidates = [mission.level_name, mission.group_name, mission.segment, cd.level_name, cd.group_name, cd.segment];
-
-  const tagCandidates = [
-    ...toArray(mission.tags),
-    ...toArray(cd.tags),
-  ].map(normalizeText);
-
-  // Match por id
-  if (lvlId != null && idCandidates.some((v) => Number(v) === Number(lvlId))) {
-    return true;
-  }
-
-  // Match por índice
-  if (idx != null && indexCandidates.some((v) => Number(v) === Number(idx))) {
-    return true;
-  }
-
-  // Match por nome exato
-  if (lvlName && nameCandidates.some((n) => normalizeText(n) === lvlName)) {
-    return true;
-  }
-
-  // Match por tags
-  if (lvlTags.length && tagCandidates.length) {
-    const overlap = lvlTags.some((t) => tagCandidates.includes(t));
-    if (overlap) return true;
-  }
-
-  // Fallback: nome do nível presente no nome da missão
-  if (lvlName && normalizeText(mission.name).includes(lvlName)) {
-    return true;
-  }
-
-  return false;
-};
-
 const Missions = ({ level, levelIndex, maxItems = 1 }) => {
   const [loading, setLoading] = useState(true);
   const [missions, setMissions] = useState([]);
@@ -197,7 +119,6 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
   const missionRefs = useRef([]);
 
   const smarticoApi = window?._smartico?.api;
-  const smarticoDP = window?._smartico?.dp;
 
   missionRefs.current = missions.map((_, i) => missionRefs.current[i] ?? createRef());
 
@@ -230,20 +151,12 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
   };
 
   // Seleciona missões, priorizando estritamente os IDs configurados
-  const pickSingleMission = (list) => {
+  const pickSingleMission = useCallback((list) => {
     const arr = Array.isArray(list) ? list : [];
-    const ids = HALLOWEEN_MISSION_IDS.map(Number);
+    const ids = CAMPAIGN_MISSION_IDS.map(Number);
     const asMap = new Map(arr.map((m) => [Number(m.id), m]));
     const orderedByIds = ids.map((id) => asMap.get(id)).filter(Boolean);
     const source = orderedByIds;
-
-    // Ordenar por número conhecido quando possível para previsibilidade
-    const sortByNumber = (xs) =>
-      xs.slice().sort((a, b) => {
-        const na = getMissionNumber(a) ?? Number.MAX_SAFE_INTEGER;
-        const nb = getMissionNumber(b) ?? Number.MAX_SAFE_INTEGER;
-        return na - nb;
-      });
 
     // Quando queremos mais de 1 missão, devolvemos as primeiras correspondentes
     if (maxItems > 1) {
@@ -283,13 +196,13 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
       return fallback.slice(0, maxItems);
     }
     return [];
-  };
+  }, [level, levelIndex, maxItems]);
 
   useEffect(() => {
     const load = async () => {
       // Fallback local imediato quando API não estiver disponível
       if (!smarticoApi || typeof smarticoApi.getMissions !== "function") {
-        const ids = HALLOWEEN_MISSION_IDS.map(Number);
+        const ids = CAMPAIGN_MISSION_IDS.map(Number);
         const fallback = ids.map((id) => ({
           id,
           name: `Missão ${id}`,
@@ -305,28 +218,15 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
           is_opted_in: false,
           is_requires_optin: false,
         }));
-        setMissions(fallback.slice(0, maxItems));
+        setMissions(ids.length ? fallback.slice(0, maxItems) : []);
         setLoading(false);
         return;
       }
       const res = await smarticoApi.getMissions({
         onUpdate: (ms) => {
-          try {
-            console.groupCollapsed("[Missions] Lista de missões");
-            console.table(
-              (Array.isArray(ms) ? ms : []).map((m) => ({
-                id: m.id,
-                name: getMissionDisplayName(m),
-                in_progress: !!m.is_in_progress,
-                requires_optin: !!m.is_requires_optin,
-              }))
-            );
-            console.groupEnd();
-          } catch (_) {}
           const next = pickSingleMission(ms);
           if (!next.length) {
-            console.warn("[Missions] Nenhuma missão encontrada pelos IDs:", HALLOWEEN_MISSION_IDS);
-            const ids = HALLOWEEN_MISSION_IDS.map(Number);
+            const ids = CAMPAIGN_MISSION_IDS.map(Number);
             const fallback = ids.map((id) => ({
               id,
               name: `Missão ${id}`,
@@ -342,16 +242,15 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
               is_opted_in: false,
               is_requires_optin: false,
             }));
-            setMissions(fallback.slice(0, maxItems));
+            setMissions(ids.length ? fallback.slice(0, maxItems) : []);
           } else {
-            console.info("[Missions] Selecionadas por IDs:", next.map((m) => m.id).join(", "));
             setMissions(next);
           }
         },
       });
       const initial = pickSingleMission(res);
       if (!initial.length) {
-        const ids = HALLOWEEN_MISSION_IDS.map(Number);
+        const ids = CAMPAIGN_MISSION_IDS.map(Number);
         const fallback = ids.map((id) => ({
           id,
           name: `Missão ${id}`,
@@ -367,14 +266,14 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
           is_opted_in: false,
           is_requires_optin: false,
         }));
-        setMissions(fallback.slice(0, maxItems));
+        setMissions(ids.length ? fallback.slice(0, maxItems) : []);
       } else {
         setMissions(initial);
       }
       setLoading(false);
     };
     load();
-  }, [smarticoApi, level, levelIndex]);
+  }, [smarticoApi, pickSingleMission, maxItems]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -401,6 +300,7 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
               ref={missionRefs.current[index]}
               className={`mission ${activeMission === mission.id ? "active" : ""}`}
               onClick={() => {
+                handleExpand(mission.id);
                 // 1º item abre dl-missions; 2º item abre dl-missions-2
                 const preferred = index === 0 ? "dl-missions" : "dl-missions-2";
                 const aPreferred = document.getElementById(preferred);
@@ -414,7 +314,6 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
                   aFallback.click();
                   return;
                 }
-                console.warn("[Missions] Anchors de missão não encontrados (dl-missions / dl-missions-2).");
               }}
               key={mission.id}
             >

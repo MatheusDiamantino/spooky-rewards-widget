@@ -5,41 +5,16 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vite + React</title>
+  <title>Spooky Rewards Widget</title>
 </head>
 
 <body>
   <div id="root"></div>
-  <!-- Deep link anchors centralizados: apenas dp no index.html -->
-  <a id="dl-tournaments" href="dp:gf_tournaments&id=2741" style="display:none" rel="noopener">Tournaments</a>
-  <a id="dl-missions" href="dp:gf_missions&id=35083" style="display:none" rel="noopener">Missions</a>
-  <a id="dl-missions-2" href="dp:gf_missions&id=35093" style="display:none" rel="noopener">Missions (alt)</a>
-  <a id="dl-daily-gift" href="dp:gf_section&id=6037" style="display:none" rel="noopener">Abrir Presente Diário</a> <!-- Anchor único para presente diário -->
+  <a id="dl-tournaments" href="dp:gf_tournaments&id=0" style="display:none" rel="noopener">Tournaments</a>
+  <a id="dl-missions" href="dp:gf_missions&id=0" style="display:none" rel="noopener">Missions</a>
+  <a id="dl-missions-2" href="dp:gf_missions&id=0" style="display:none" rel="noopener">Missions (alt)</a>
+  <a id="dl-daily-gift" href="dp:gf_section&id=0" style="display:none" rel="noopener">Abrir Presente Diário</a>
   <script type="module" src="index.jsx"></script>
-  <script>
-    if (window.location.hostname === "localhost") {
-      window._smartico_allow_localhost = true;
-    }
-
-    // defina o usuário ANTES do init
-    window._smartico_user_id = "REMOVIDO";
-    window._smartico_user_hash = "REMOVIDO";
-
-    (function (d, r, b, h, s) {
-      h = d.getElementsByTagName("head")[0];
-      s = d.createElement("script");
-      s.onload = b;
-      s.src = r;
-      h.appendChild(s);
-    })(document, "https://libs.smartico.ai/smartico.js", function () {
-      _smartico.init("REMOVIDO", {
-        brand_key: "REMOVIDO",
-        // (opcional) muitas integrações aceitam passar o user aqui também:
-        // user_id: window._smartico_user_id,
-        // user_hash: window._smartico_user_hash,
-      });
-    });
-  </script>
 
 </body>
 

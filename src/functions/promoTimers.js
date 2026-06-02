@@ -1,16 +1,16 @@
 export function runPromoTimers({ selectorCard = '.promo-card', selectorTimer = '.promo-timer', schedule = [] }) {
-    var cards = document.querySelectorAll(selectorCard)
-    var timers = document.querySelectorAll(selectorTimer)
-    var overlays = []
-    for (var i = 0; i < cards.length; i++) overlays.push(cards[i].querySelector('.promo-overlay-dyn'))
+    const cards = document.querySelectorAll(selectorCard)
+    const timers = document.querySelectorAll(selectorTimer)
+    const overlays = []
+    for (let idx = 0; idx < cards.length; idx++) overlays.push(cards[idx].querySelector('.promo-overlay-dyn'))
 
     // Complete datas a partir do schedule (mesma ordem dos cards)
-    var startDates = [], endDates = []
-    for (var i = 0; i < timers.length; i++) {
-        if (schedule[i]) { startDates.push(schedule[i].start); endDates.push(schedule[i].end) }
+    const startDates = [], endDates = []
+    for (let idx = 0; idx < timers.length; idx++) {
+        if (schedule[idx]) { startDates.push(schedule[idx].start); endDates.push(schedule[idx].end) }
         else {
             // fallback (meio-dia até 00:00)
-            var today = new Date(); today.setHours(0, 0, 0, 0)
+            const today = new Date(); today.setHours(0, 0, 0, 0)
             startDates.push(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0))
             endDates.push(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 0, 0))
         }
@@ -31,9 +31,9 @@ export function runPromoTimers({ selectorCard = '.promo-card', selectorTimer = '
         upd(); return setInterval(upd, 1000)
     }
 
-    var countdownIntervals = [], prev = []
+    const countdownIntervals = [], prev = []
     function setState(i, state) {
-        var el = timers[i], card = cards[i], overlay = overlays[i], promoId = card.getAttribute('data-smartico')
+        const el = timers[i], card = cards[i], overlay = overlays[i], promoId = card.getAttribute('data-smartico')
         checkParticipation(promoId, function (participated) {
             if (state === 'active') {
                 card.disabled = false; card.style.pointerEvents = ''; card.style.display = 'flex'
@@ -55,16 +55,17 @@ export function runPromoTimers({ selectorCard = '.promo-card', selectorTimer = '
     }
 
     function loop() {
-        var now = new Date()
-        for (var i = 0; i < startDates.length; i++) {
-            var st = startDates[i], en = endDates[i], stt = ''
+        const now = new Date()
+        for (let idx = 0; idx < startDates.length; idx++) {
+            const st = startDates[idx], en = endDates[idx]
+            let stt = ''
             if (now >= st && now <= en) stt = 'active'
             else if (now > en) stt = 'ended'
             else stt = 'future'
-            if (prev[i] !== stt) {
-                prev[i] = stt; setState(i, stt)
-                if (stt === 'active' && !countdownIntervals[i]) countdownIntervals[i] = startCountdown(timers[i], en)
-                if (stt === 'ended') clearInterval(countdownIntervals[i])
+            if (prev[idx] !== stt) {
+                prev[idx] = stt; setState(idx, stt)
+                if (stt === 'active' && !countdownIntervals[idx]) countdownIntervals[idx] = startCountdown(timers[idx], en)
+                if (stt === 'ended') clearInterval(countdownIntervals[idx])
             }
         }
     }

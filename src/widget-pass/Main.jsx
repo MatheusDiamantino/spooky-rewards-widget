@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./styles.scss";
 import { Player } from "@lottiefiles/react-lottie-player";
 import FishBoatBlue from "./animations/Halloween Bat Floating.json";
@@ -7,37 +7,18 @@ import OneFish from "./animations/Halloween Spooky Ghost Floating.json";
 import GhostAnimation from "./animations/Ghost Green.json";
 import Missions from "../widget-mission/main.jsx";
 import {
-  HALLOWEEN_TOURNAMENT_ID,
-  HALLOWEEN_TOURNAMENT_NAME,
-  HALLOWEEN_DAILY_GIFT_ID,
-  HALLOWEEN_MISSION_IDS,
-} from "../config/halloween.js";
+  CAMPAIGN_DAILY_GIFT_ID,
+  CAMPAIGN_MISSION_IDS,
+  CAMPAIGN_TOURNAMENT_ID,
+  CAMPAIGN_TOURNAMENT_NAME,
+} from "../config/christmas.js";
 // IDs centralizados (importados do config)
-const MISSION_IDS = HALLOWEEN_MISSION_IDS;
+const MISSION_IDS = CAMPAIGN_MISSION_IDS;
 import Mickey from "./animations/Mickey.json";
 import DisneyHostar from "./animations/Disney Logo.json";
 
 // Desativa todas as animações temporariamente
 const DISABLE_ANIMATIONS = false;
-
-export const calculatePointsProgress = (ach_points, required_points) => {
-  return required_points > 0
-    ? Math.min(
-        parseInt(((ach_points * 100) / required_points).toFixed(0), 0),
-        100
-      )
-    : 100;
-};
-
-const dataValueConfig = (dataValue) => {
-  if (typeof dataValue === "number") {
-    return `${dataValue}%`;
-  }
-  if (typeof dataValue === "boolean") {
-    return dataValue ? "Yes" : "No";
-  }
-  return dataValue;
-};
 
 const SCROLL_OFFSET = 200;
 
@@ -97,22 +78,26 @@ const LevelMap = () => {
   const [pendingDisneyLevel, setPendingDisneyLevel] = useState(null);
   const [mickeyMessage, setMickeyMessage] = useState("Ei!");
   const hostarTimerRef = useRef(null);
-  const bgAudioRef = useRef(null);
-  const smarticoApi = window._smartico.api;
+  const smarticoApi = window?._smartico?.api;
 
-  const mickeyMessages = [
-    "Viagem para Disney\n com R$0,10",
-    "Ei, vai perder\n essa chance?",
-  ];
+  const mickeyMessages = useMemo(
+    () => ["Viagem para Disney\n com R$0,10", "Ei, vai perder\n essa chance?"],
+    []
+  );
 
   // Posições predefinidas para o Mickey surgir (cantos e áreas próximas às construções)
-  const mickeyPositions = [
-    { bottom: "220px", left: "22px" },
-    { bottom: "120px", right: "26px" },
-  ];
+  const mickeyPositions = useMemo(
+    () => [
+      { bottom: "220px", left: "22px" },
+      { bottom: "120px", right: "26px" },
+    ],
+    []
+  );
 
-  const getRandomMickeyPosition = () =>
-    mickeyPositions[Math.floor(Math.random() * mickeyPositions.length)];
+  const getRandomMickeyPosition = useCallback(
+    () => mickeyPositions[Math.floor(Math.random() * mickeyPositions.length)],
+    [mickeyPositions]
+  );
 
 
 
@@ -151,7 +136,7 @@ const LevelMap = () => {
       clearTimeout(secondShowTO);
       clearTimeout(secondHideTO);
     };
-  }, []);
+  }, [getRandomMickeyPosition, mickeyMessages]);
 
   // Finaliza Hostar: fecha overlay e abre modal Disney (com fallback de 3s)
   const finalizeHostar = () => {
@@ -187,14 +172,28 @@ const LevelMap = () => {
   };
 
   useEffect(() => {
+    let active = true;
     const loadData = async () => {
-      const levelsResponse = await smarticoApi.getLevels();
+      if (!smarticoApi || typeof smarticoApi.getLevels !== "function") {
+        if (active) {
+          setLevels([]);
+          setLoading(false);
+        }
+        return;
+      }
 
-      setLevels(levelsResponse);
-      setLoading(false);
+      try {
+        const levelsResponse = await smarticoApi.getLevels();
+        if (active) setLevels(Array.isArray(levelsResponse) ? levelsResponse : []);
+      } finally {
+        if (active) setLoading(false);
+      }
     };
 
     loadData();
+    return () => {
+      active = false;
+    };
   }, [smarticoApi]);
 
   useEffect(() => {
@@ -211,7 +210,7 @@ const LevelMap = () => {
 
   const handleOnClick = (key) => {
     if (animationRef.current && key === "OneFish") {
-      window._smartico.action("FISH");
+      window?._smartico?.action?.("FISH");
     }
   };
 
@@ -568,31 +567,20 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
     const fetchMissions = async () => {
       try {
         setLoading(true);
-        // Fallback local imediato quando API não estiver disponível
         const ids = MISSION_IDS.map(Number);
         if (!smarticoApi || typeof smarticoApi.getMissions !== "function") {
-          console.warn("[MissionOverlayButtons] API indisponível; usando fallback local por IDs:", ids.join(", "));
-          setMissions(ids.map((id) => ({ id, name: `Missão ${id}` })));
+          setMissions(ids.length ? ids.map((id) => ({ id, name: `Missão ${id}` })) : []);
           return;
         }
         const missionsList = await smarticoApi.getMissions({
           onUpdate: (ms) => {
-            try {
-              console.groupCollapsed("[MissionOverlayButtons] Lista de missões (onUpdate)");
-              console.table(
-                (Array.isArray(ms) ? ms : []).map((m) => ({ id: m.id, name: m.name, in_progress: !!m.is_in_progress }))
-              );
-              console.groupEnd();
-            } catch (_) {}
             const asMap = new Map((Array.isArray(ms) ? ms : []).map((m) => [Number(m.id), m]));
             const orderedByIds = ids.map((id) => asMap.get(id)).filter(Boolean);
             const byId = orderedByIds;
             const byLevel = (Array.isArray(ms) ? ms : []).filter((mission) => matchesLevel(mission, level));
             let selected = (byId.length ? byId : byLevel).slice(0, maxItems);
             if (!selected.length && ids.length) {
-              // Fallback mínimo: criar botões clicáveis para os IDs configurados
               selected = ids.map((id) => ({ id, name: `Missão ${id}` }));
-              console.warn("[MissionOverlayButtons] Fallback mínimo por IDs configurados:", ids.join(", "));
             }
             setMissions(selected);
           },
@@ -606,33 +594,17 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
             matchesLevel(mission, level)
           );
           let selected = (byId.length ? byId : byLevel).slice(0, maxItems);
-          try {
-            console.groupCollapsed("[MissionOverlayButtons] Lista de missões");
-            console.table(
-              missionsList.map((m) => ({ id: m.id, name: m.name, in_progress: !!m.is_in_progress }))
-            );
-            console.groupEnd();
-            if (byId.length) {
-              console.info("[MissionOverlayButtons] Selecionadas por IDs:", byId.map((m) => m.id).join(", "));
-            } else {
-              console.warn("[MissionOverlayButtons] IDs não encontrados, usando match por nível.");
-            }
-          } catch (_) {}
           if (!selected.length && ids.length) {
             selected = ids.map((id) => ({ id, name: `Missão ${id}` }));
-            console.warn("[MissionOverlayButtons] Fallback mínimo por IDs configurados:", ids.join(", "));
           }
           setMissions(selected);
         }
-      } catch (error) {
-        console.error("Erro ao buscar missões:", error);
+      } catch (err) {
+        void err;
       } finally {
         setLoading(false);
       }
     };
-    if (!level) {
-      console.warn("[MissionOverlayButtons] level indefinido; buscando missões mesmo assim.");
-    }
     fetchMissions();
   }, [level, levelIndex, maxItems, smarticoApi]);
 
@@ -651,7 +623,6 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
       aFallback.click();
       return;
     }
-    console.warn("[MissionOverlayButtons] Anchors de missão não encontrados (dl-missions / dl-missions-2).");
   };
 
   if (loading || !missions.length) {
@@ -681,63 +652,29 @@ function TournamentDynamicBlock() {
   const [loading, setLoading] = useState(true);
   const [tournament, setTournament] = useState(null);
   const smarticoApi = window?._smartico?.api;
-  const smarticoDP = window?._smartico?.dp;
 
   useEffect(() => {
     const load = async () => {
-      if (!smarticoApi) {
+      if (!smarticoApi || typeof smarticoApi.getTournamentsList !== "function") {
         setLoading(false);
+        setTournament(null);
         return;
       }
-      try {
-        console.info(
-          "[TournamentDynamicBlock] ID configurado:",
-          HALLOWEEN_TOURNAMENT_ID
-        );
-        const nameCfg = String(HALLOWEEN_TOURNAMENT_NAME || "").trim();
-        if (nameCfg) {
-          console.info("[TournamentDynamicBlock] Nome configurado:", nameCfg);
-        }
-      } catch (_) {}
       const onUpdate = (list) => {
         const arr = Array.isArray(list) ? list : [];
-        try {
-          console.groupCollapsed("[TournamentDynamicBlock] Lista de torneios");
-          console.table(
-            arr.map((t) => ({
-              id: t.id,
-              name: t.name,
-              in_progress: !!t.is_in_progress,
-              upcoming: !!t.is_upcoming,
-              prize_pool_short: t.prize_pool_short,
-              registration_count: t.registration_count,
-              players_max_count: t.players_max_count,
-            }))
-          );
-          console.groupEnd();
-        } catch (_) {}
-        // 1) Seleciona por ID configurado
-        const byId = arr.find((t) => Number(t.id) === Number(HALLOWEEN_TOURNAMENT_ID));
+        const byId = arr.find((t) => Number(t.id) === Number(CAMPAIGN_TOURNAMENT_ID));
         if (byId) {
-          console.info("[TournamentDynamicBlock] Selecionado por ID:", byId.id, byId.name);
           setTournament(byId);
           return;
         }
-        // 2) Fallback opcional por nome configurado (case-insensitive, substring)
-        const nameQuery = String(HALLOWEEN_TOURNAMENT_NAME || "").trim().toLowerCase();
+        const nameQuery = String(CAMPAIGN_TOURNAMENT_NAME || "").trim().toLowerCase();
         if (nameQuery) {
           const byName = arr.find((t) => String(t?.name || "").toLowerCase().includes(nameQuery));
           if (byName) {
-            console.info("[TournamentDynamicBlock] Selecionado por nome:", byName.id, byName.name);
             setTournament(byName);
             return;
           }
-          console.warn("[TournamentDynamicBlock] Nome configurado não encontrado:", HALLOWEEN_TOURNAMENT_NAME);
         }
-        console.warn(
-          "[TournamentDynamicBlock] Torneio com ID",
-          HALLOWEEN_TOURNAMENT_ID,
-          "não encontrado na lista retornada e fallback por nome desativado ou sem match.")
         setTournament(null);
       };
       const res = await smarticoApi.getTournamentsList({ onUpdate });
@@ -745,7 +682,7 @@ function TournamentDynamicBlock() {
       setLoading(false);
     };
     load();
-  }, [smarticoApi, HALLOWEEN_TOURNAMENT_ID, HALLOWEEN_TOURNAMENT_NAME]);
+  }, [smarticoApi]);
 
   if (loading) return null;
   if (!tournament) {
@@ -765,7 +702,7 @@ function TournamentDynamicBlock() {
     }
     // Fallback: usa dp com o ID selecionado (se existir)
     const dp = window?._smartico?.dp;
-    const selectedId = tournament?.id ?? HALLOWEEN_TOURNAMENT_ID;
+    const selectedId = tournament?.id ?? CAMPAIGN_TOURNAMENT_ID;
     const deepLink = `dp:gf_tournaments&id=${selectedId}`;
     if (typeof dp === "function") {
       dp(deepLink);
@@ -819,11 +756,6 @@ const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
     return null;
   }
 
-  const ach_points = 150;
-  const pointsProgress = calculatePointsProgress(
-    ach_points,
-    level.required_points
-  );
   // Todos desbloqueados
   const disabled = false;
 
@@ -836,14 +768,6 @@ const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
   const imageUrl = getLevelImageUrl(level, disabled, index);
   // Fallback para garantir visibilidade enquanto validamos URLs remotas
   const safeImageUrl = imageUrl;
-  if (!imageUrl) {
-    console.warn(
-      "Level image not found for level:",
-      level?.id,
-      level?.name,
-      level?.custom_data
-    );
-  }
 
   return (
     <>
@@ -999,7 +923,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                           }
                           // Fallback: deep link via dp com ID local
                           const dp = window?._smartico?.dp;
-                          const deepLink = `dp:gf_section&id=${HALLOWEEN_DAILY_GIFT_ID}`;
+                          const deepLink = `dp:gf_section&id=${CAMPAIGN_DAILY_GIFT_ID}`;
                           if (typeof dp === "function") {
                             dp(deepLink);
                             return;
@@ -1060,9 +984,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                     </section>
                     <div className="modal-actions">
                       {(() => {
-                        const actionKey =
-                          level?.custom_data?.action || "JOGUE_E_CONCORRA";
-                         const url = "https://casa.example.com";
+                        const url = "https://casa.example.com";
                         return (
                           <a
                             className="cta-btn"
@@ -1073,7 +995,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                                 e.preventDefault();
                                 // Navega na mesma aba, sem abrir nova janela e sem usar dp
                                 window.location.assign(url);
-                              } catch (_) {
+                              } catch {
                                 // Fallback simples caso assign falhe
                                 window.open(url, "_self");
                               }

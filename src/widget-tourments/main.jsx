@@ -19,8 +19,7 @@ const Tournaments = () => {
   const [timeLeftForTournaments, setTimeLeftForTournaments] = useState({});
   const carouselRef = useRef(null);
 
-  const smarticoApi = window._smartico.api;
-  const smarticoDP = window._smartico.dp;
+  const smarticoApi = window?._smartico?.api;
 
   const enableSmoothScrolling = () => {
     if (carouselRef.current) {
@@ -76,16 +75,30 @@ const Tournaments = () => {
   };
 
   useEffect(() => {
+    let active = true;
     const loadData = async () => {
-      const tournamentsResponse = await smarticoApi.getTournamentsList({
-        onUpdate: tournamentsUpdates,
-      });
+      if (!smarticoApi || typeof smarticoApi.getTournamentsList !== "function") {
+        if (active) {
+          setTournaments([]);
+          setLoading(false);
+        }
+        return;
+      }
 
-      setTournaments(tournamentsResponse);
-      setLoading(false);
+      try {
+        const tournamentsResponse = await smarticoApi.getTournamentsList({
+          onUpdate: tournamentsUpdates,
+        });
+        if (active) setTournaments(Array.isArray(tournamentsResponse) ? tournamentsResponse : []);
+      } finally {
+        if (active) setLoading(false);
+      }
     };
 
     loadData();
+    return () => {
+      active = false;
+    };
   }, [smarticoApi]);
 
   useEffect(() => {
@@ -122,25 +135,8 @@ const Tournaments = () => {
     return () => clearInterval(interval);
   }, [tournaments]);
 
-  const getBuyInText = (tournament) => {
-    if (tournament.registration_cost_points) {
-      return `${tournament.registration_cost_points} points`;
-    }
-
-    if (tournament.registration_cost_gems) {
-      return `${tournament.registration_cost_gems} gems`;
-    }
-
-    if (tournament.registration_cost_diamonds) {
-      return `${tournament.registration_cost_diamonds} diamonds`;
-    }
-
-    return "Free";
-  };
-
-  if (loading) {
-    return null;
-  }
+  if (loading) return null;
+  if (!tournaments || tournaments.length === 0) return null;
 
   return (
     <div className="tournament-container">
