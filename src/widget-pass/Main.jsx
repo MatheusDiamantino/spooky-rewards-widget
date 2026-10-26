@@ -11,13 +11,12 @@ import {
   CAMPAIGN_MISSION_IDS,
   CAMPAIGN_TOURNAMENT_ID,
   CAMPAIGN_TOURNAMENT_NAME,
+  CAMPAIGN_PLAY_URL,
 } from "../config/christmas.js";
-// IDs centralizados (importados do config)
 const MISSION_IDS = CAMPAIGN_MISSION_IDS;
 import Mickey from "./animations/Mickey.json";
 import DisneyHostar from "./animations/Disney Logo.json";
 
-// Desativa todas as animações temporariamente
 const DISABLE_ANIMATIONS = false;
 
 const SCROLL_OFFSET = 200;
@@ -37,7 +36,6 @@ const animations = [
     src: FishBoatOrange,
     style: { bottom: "90%", right: "112px", transform: "rotateY(180deg)" },
   },
-  // { key: "OneFish", src: OneFish, style: fishPositions[0] },
 ];
 
 const getRandomPosition = () => {
@@ -45,15 +43,13 @@ const getRandomPosition = () => {
   return fishPositions[randomIndex];
 };
 
-// Helper para resolver a imagem da ilha por nível/índice
 const getLevelImageUrl = (level, disabled, index) => {
   if (!level) return "";
-  // Conjunto de imagens ativas disponíveis (inclui as que faltavam)
   const activeImages = [
-    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/presentesdiarios3.0.webp",
-    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/torneio.webp",
-    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/caldeirao3.0+(2).webp",
-    "https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/teste8.webp",
+    "/img/presente.svg",
+    "/img/torneio.png",
+    "/img/caldeirao.svg",
+    "/img/bilhete.svg",
   ];
   const i = Number.isFinite(index) ? index % activeImages.length : 0;
   const activeUrl = activeImages[i];
@@ -68,7 +64,6 @@ const LevelMap = () => {
   const [currentLevel, setCurrentLevel] = useState(null);
   const animationRef = useRef(null);
   const [fishPosition, setFishPosition] = useState(fishPositions[0]);
-  // Mickey easter egg + Hostar overlay
   const [mickeyVisible, setMickeyVisible] = useState(false);
   const [mickeyPosition, setMickeyPosition] = useState({
     top: "24px",
@@ -85,7 +80,6 @@ const LevelMap = () => {
     []
   );
 
-  // Posições predefinidas para o Mickey surgir (cantos e áreas próximas às construções)
   const mickeyPositions = useMemo(
     () => [
       { bottom: "220px", left: "22px" },
@@ -101,7 +95,6 @@ const LevelMap = () => {
 
 
 
-  // Ciclo de spawn do Mickey (aparece 2x, 5s cada e intervalo de 3s)
   useEffect(() => {
     let firstShowTO;
     let firstHideTO;
@@ -115,12 +108,10 @@ const LevelMap = () => {
       setMickeyVisible(true);
     };
 
-    // 1ª aparição
     firstShowTO = setTimeout(() => {
       appear();
       firstHideTO = setTimeout(() => {
         setMickeyVisible(false);
-        // 2ª aparição 3s depois de sumir
         secondShowTO = setTimeout(() => {
           appear();
           secondHideTO = setTimeout(() => {
@@ -138,7 +129,6 @@ const LevelMap = () => {
     };
   }, [getRandomMickeyPosition, mickeyMessages]);
 
-  // Finaliza Hostar: fecha overlay e abre modal Disney (com fallback de 3s)
   const finalizeHostar = () => {
     if (hostarTimerRef.current) {
       clearTimeout(hostarTimerRef.current);
@@ -152,7 +142,6 @@ const LevelMap = () => {
     setHostarActive(false);
   };
 
-  // Clique no Mickey: ativa Hostar, rola para o topo e só depois abre modal
   const handleMickeyClick = () => {
     setHostarActive(true);
 
@@ -166,7 +155,6 @@ const LevelMap = () => {
     const disneyLevel = sorted[3] || sorted[sorted.length - 1];
     setPendingDisneyLevel(disneyLevel || null);
 
-    // Fallback: garante máximo de 3s
     if (hostarTimerRef.current) clearTimeout(hostarTimerRef.current);
     hostarTimerRef.current = setTimeout(finalizeHostar, 3000);
   };
@@ -263,7 +251,6 @@ const LevelMap = () => {
     }
   };
 
-  // Limpeza do timer do Hostar ao desmontar
   useEffect(() => {
     return () => {
       if (hostarTimerRef.current) {
@@ -340,7 +327,6 @@ const LevelMap = () => {
                 </div>
               ))}
 
-              {/* Mickey Easter Egg */}
               {mickeyVisible && (
                 <div
                   className="animation-container mickey"
@@ -353,7 +339,6 @@ const LevelMap = () => {
                   }}
                   onClick={handleMickeyClick}
                 >
-                  {/* Balão de conversa */}
                   <div
                     className="mickey-bubble"
                     style={{
@@ -413,7 +398,6 @@ const LevelMap = () => {
         </div>
       </div>
 
-      {/* Overlay do Hostar girando */}
       {hostarActive && (
         <div
           className="hostar-overlay"
@@ -474,7 +458,6 @@ const LevelMap = () => {
   );
 };
 
-// Configurações personalizadas para cada modal
 const modalConfigs = [
   {
     title: "PRESENTE DE ARREPIAR",
@@ -535,7 +518,6 @@ const modalConfigs = [
   },
 ];
 
-// Funções auxiliares para filtrar missões
 const toArray = (value) => (Array.isArray(value) ? value : [value]);
 
 const normalizeText = (text) => {
@@ -557,7 +539,6 @@ const matchesLevel = (mission, level) => {
   return levelHints.some((hint) => missionName.includes(hint));
 };
 
-// Componente para botões sobrepostos às missões
 const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
   const [loading, setLoading] = useState(true);
   const [missions, setMissions] = useState([]);
@@ -609,14 +590,12 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
   }, [level, levelIndex, maxItems, smarticoApi]);
 
   const handleMissionClick = (mission, index) => {
-    // Direciona especificamente o 1º botão para dl-missions e o 2º para dl-missions-2
     const preferred = index === 0 ? "dl-missions" : "dl-missions-2";
     const aPreferred = document.getElementById(preferred);
     if (aPreferred) {
       aPreferred.click();
       return;
     }
-    // Fallback: tenta o outro anchor, depois avisa
     const fallback = index === 0 ? "dl-missions-2" : "dl-missions";
     const aFallback = document.getElementById(fallback);
     if (aFallback) {
@@ -638,7 +617,6 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
           onClick={() => handleMissionClick(mission, index)}
           aria-label={`Executar missão: ${mission.name}`}
         >
-          {/* Botão transparente sobreposto */}
         </button>
       ))}
     </div>
@@ -647,7 +625,6 @@ const MissionOverlayButtons = ({ level, levelIndex, maxItems = 2 }) => {
 
 export default LevelMap;
 
-// Bloco dinâmico de Torneio: busca e exibe o torneio ativo/mais próximo
 function TournamentDynamicBlock() {
   const [loading, setLoading] = useState(true);
   const [tournament, setTournament] = useState(null);
@@ -694,13 +671,11 @@ function TournamentDynamicBlock() {
   }
 
   const openTournament = () => {
-    // Prioriza o href já configurado no index.html
     const a = document.getElementById("dl-tournaments");
     if (a) {
       a.click();
       return;
     }
-    // Fallback: usa dp com o ID selecionado (se existir)
     const dp = window?._smartico?.dp;
     const selectedId = tournament?.id ?? CAMPAIGN_TOURNAMENT_ID;
     const deepLink = `dp:gf_tournaments&id=${selectedId}`;
@@ -714,7 +689,7 @@ function TournamentDynamicBlock() {
     <div className="tournament-layout" role="region" aria-label="Torneio ativo">
       <section className="tournament-image">
         <img
-          src="https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/banner-torneio.webp"
+          src="/img/banner-torneio.svg"
           alt={tournament?.name || "Torneio"}
           className="tournament-banner"
         />
@@ -756,17 +731,15 @@ const LevelItem = ({ level, index, setShowCard, setCurrentLevel }) => {
     return null;
   }
 
-  // Todos desbloqueados
   const disabled = false;
 
   const handleClick = () => {
-    if (disabled) return; // bloqueado: não abre modal
+    if (disabled) return;
     setCurrentLevel(level);
     setShowCard(true);
   };
 
   const imageUrl = getLevelImageUrl(level, disabled, index);
-  // Fallback para garantir visibilidade enquanto validamos URLs remotas
   const safeImageUrl = imageUrl;
 
   return (
@@ -808,10 +781,8 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
     return null;
   }
 
-  // Obtém a configuração do modal baseada no levelIndex
   const modalConfig = modalConfigs[levelIndex] || null;
 
-  // Gera classe específica para cada modal
   const getModalClass = () => {
     if (!modalConfig) return "";
 
@@ -857,7 +828,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                     <div className="disney-header">
                     <img
                       className="disney-header-img"
-                      src="https://casa.example.com/CRM/Banners+-+Promos/31.10/CRM_BANNER_HALLOWEEN.webp"
+                      src="/img/banner-promo.svg"
                       alt="Banner da promoção"
                       loading="lazy"
                     />
@@ -878,7 +849,6 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                             <li className="prize major ps5">PS5</li>
                             <li className="prize major trip">Bilhete Premiado valendo uma Viagem Disney</li>
                           </ul>
-                          {/* clone para efeito contínuo */}
                           <ul className="prize-list clone">
                             <li className="prize giros bandito">Wild Bandito - Giros Extras</li>
                             <li className="prize giros hallowwin">Mr. Hallow-Win - Giros Extras</li>
@@ -898,12 +868,10 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                 )}
               </div>
               <div className="modal-body">
-                {/* Torneio de Halloween */}
                 {modalConfig.title === "TORNEIO DE HALLOWEEN" && (
                   <TournamentDynamicBlock />
                 )}
 
-                {/* Presente de Arrepiar */}
                 {modalConfig.title === "PRESENTE DE ARREPIAR" && (
                   <section
                     className="present-layout"
@@ -915,13 +883,11 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                       <button
                         className="cta-btn"
                         onClick={() => {
-                          // Prioriza o href já configurado no index.html
                           const giftAnchor = document.getElementById("dl-daily-gift");
                           if (giftAnchor) {
                             giftAnchor.click();
                             return;
                           }
-                          // Fallback: deep link via dp com ID local
                           const dp = window?._smartico?.dp;
                           const deepLink = `dp:gf_section&id=${CAMPAIGN_DAILY_GIFT_ID}`;
                           if (typeof dp === "function") {
@@ -936,20 +902,17 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                   </section>
                 )}
 
-                {/* Gift Box Halloween */}
                 {modalConfig.title === "CALDEIRÃO - HALLOWEEN" && (
                   <section
                     className="giftbox-layout"
                     aria-label="Gift Box Halloween"
                   >
                     <div className="missions-wrapper">
-                      {/* Missões do Caldeirão: duas empilhadas */}
                       <Missions
                         level={level}
                         levelIndex={levelIndex}
                         maxItems={2}
                       />
-                      {/* Botões sobrepostos clicáveis */}
                       <MissionOverlayButtons
                         level={level}
                         levelIndex={levelIndex}
@@ -959,7 +922,6 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                   </section>
                 )}
 
-                {/* Viagem para Disney */}
                 {modalConfig.title === "VIAGEM PARA DISNEY" && (
                   <section
                     className="disney-layout"
@@ -984,7 +946,7 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                     </section>
                     <div className="modal-actions">
                       {(() => {
-                        const url = "https://casa.example.com";
+                        const url = CAMPAIGN_PLAY_URL;
                         return (
                           <a
                             className="cta-btn"
@@ -993,10 +955,8 @@ const LevelCardModal = ({ level, showCard, setShowCard, levelIndex }) => {
                             onClick={(e) => {
                               try {
                                 e.preventDefault();
-                                // Navega na mesma aba, sem abrir nova janela e sem usar dp
                                 window.location.assign(url);
                               } catch {
-                                // Fallback simples caso assign falhe
                                 window.open(url, "_self");
                               }
                             }}

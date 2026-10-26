@@ -62,7 +62,6 @@ const getLevelHints = (level, levelIndex) => {
   return { id, name, index, tags };
 };
 
-// Extrai meta de exibição de forma resiliente, considerando diferentes estruturas da API
 const getMissionDisplayName = (mission) => {
   const candidates = [
     mission?.name,
@@ -88,7 +87,6 @@ const getMissionImageUrl = (mission) => {
   return found || "";
 };
 
-// Extrai um possível número da missão (1,2,3...) baseado em várias chaves e no nome
 const getMissionNumber = (mission) => {
   if (!mission) return undefined;
   const cd = mission.custom_data || {};
@@ -150,7 +148,6 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
     }, 0);
   };
 
-  // Seleciona missões, priorizando estritamente os IDs configurados
   const pickSingleMission = useCallback((list) => {
     const arr = Array.isArray(list) ? list : [];
     const ids = CAMPAIGN_MISSION_IDS.map(Number);
@@ -158,25 +155,20 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
     const orderedByIds = ids.map((id) => asMap.get(id)).filter(Boolean);
     const source = orderedByIds;
 
-    // Quando queremos mais de 1 missão, devolvemos as primeiras correspondentes
     if (maxItems > 1) {
       return source.slice(0, maxItems);
     }
 
-    // Preferir missão cujo número bata com o índice da insígnia (index + 1)
     const hints = getLevelHints(level, levelIndex);
     const preferNumber = typeof hints.index === 'number' ? hints.index + 1 : undefined;
     const candidateByNumber = source.find((m) => getMissionNumber(m) === preferNumber);
     if (candidateByNumber) return [candidateByNumber];
 
-    // Caso não tenha candidato por número, usar pela posição do índice
     if (source.length > 0) {
       const pos = hints.index != null ? hints.index % source.length : 0;
       return [source[pos]];
     }
 
-    // Sem correspondência: quando não encontramos nenhuma missão pelos IDs configurados,
-    // criar um fallback mínimo para garantir renderização sem quebrar.
     if (ids.length) {
       const fallback = ids.map((id) => ({
         id,
@@ -200,7 +192,6 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
 
   useEffect(() => {
     const load = async () => {
-      // Fallback local imediato quando API não estiver disponível
       if (!smarticoApi || typeof smarticoApi.getMissions !== "function") {
         const ids = CAMPAIGN_MISSION_IDS.map(Number);
         const fallback = ids.map((id) => ({
@@ -301,7 +292,6 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
               className={`mission ${activeMission === mission.id ? "active" : ""}`}
               onClick={() => {
                 handleExpand(mission.id);
-                // 1º item abre dl-missions; 2º item abre dl-missions-2
                 const preferred = index === 0 ? "dl-missions" : "dl-missions-2";
                 const aPreferred = document.getElementById(preferred);
                 if (aPreferred) {
@@ -325,7 +315,6 @@ const Missions = ({ level, levelIndex, maxItems = 1 }) => {
                 <div className="mission-right">
                   <div className="mission-info">
                     <div className="name" dangerouslySetInnerHTML={{ __html: getMissionDisplayName(mission) }} />
-                    {/* <div className={`status ${getStatusClassName(mission)}`}>{missionStatus(mission)}</div> */}
                   </div>
 
                   {mission.reward && (

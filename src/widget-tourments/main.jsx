@@ -55,7 +55,6 @@ const Tournaments = () => {
   const handleLeftArrowClick = () => {
     enableSmoothScrolling();
     if (carouselRef.current) {
-      // Subtract the scroll amount
       carouselRef.current.scrollLeft -= 250;
     }
   };
@@ -63,7 +62,6 @@ const Tournaments = () => {
   const handleRightArrowClick = () => {
     enableSmoothScrolling();
     if (carouselRef.current) {
-      // Add the scroll amount
       carouselRef.current.scrollLeft += 250;
     }
   };
@@ -186,7 +184,6 @@ const Tournaments = () => {
                   className="tournament-title"
                   dangerouslySetInnerHTML={{ __html: tournament.name }}
                 ></div>
-                {/* <div className="tournament-description" dangerouslySetInnerHTML={{ __html: tournament.description }}></div> */}
               </div>
               <div className="tournament-info">
                 <div className="info-section">
@@ -197,10 +194,6 @@ const Tournaments = () => {
                       : "No prize"}
                   </div>
                 </div>
-                {/* <div className="info-section">
-                  <div className="info-title">Buy in</div>
-                  <div className="info-value">{getBuyInText(tournament)}</div>
-                </div> */}
                 <div className="info-section">
                   <div className="info-title">Registro</div>
                   <div className="info-value">
@@ -211,12 +204,6 @@ const Tournaments = () => {
               </div>
               <div className="tournament-bottom">
                 <div className="tournament-timer">
-                  {/* <div className="timer-title">
-                    {tournament.is_upcoming && "Starts in"}
-                    {tournament.is_in_progress && "Termina em"}
-                    {tournament.is_finished && "Finished"}
-                    {tournament.is_cancelled && "Cancelled"}
-                  </div> */}
                   <div className="timer-value">
                     <span className="time-section">
                       {String(timeLeft.days).padStart(2, "0")}

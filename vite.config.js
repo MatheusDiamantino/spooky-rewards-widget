@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     legacy({
-      targets: ['defaults', 'IE 11'], // Para navegadores padrão e IE11 (ES5)
+      targets: ['defaults', 'IE 11'],
     })
   ]
 });

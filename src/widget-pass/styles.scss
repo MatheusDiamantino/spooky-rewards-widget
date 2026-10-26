@@ -56,7 +56,7 @@
       position: relative;
 
       .levels-main-background {
-        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/mapa2.0.webp");
+        background-image: url("/img/mapa.svg");
         width: 100%;
         height: 1141px;
         background-position: TOP;
@@ -68,7 +68,6 @@
         .levels-map-road {
           position: absolute;
           z-index: 1;
-          // background-image: url('https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/levels-map-road.webp');
           width: 100%;
           height: 1141px;
           background-position: bottom;
@@ -94,7 +93,7 @@
             flex-direction: column;
 
             &.disabled {
-              pointer-events: none; /* impede clique quando bloqueado */
+              pointer-events: none;
               cursor: default;
 
               .level-name {
@@ -118,9 +117,6 @@
               padding: 0;
               background-color: transparent;
 
-              //   &:hover {
-              //     transform: scale(1.1);
-              //   }
             }
 
             .ghost-animation {
@@ -135,7 +131,7 @@
             }
 
             .lock-icon {
-              background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Maphttps://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/lock.webp");
+              background-image: url("/img/icons/lock.svg");
               height: 27px;
               width: 27px;
               background-repeat: no-repeat;
@@ -210,13 +206,10 @@
                 padding: 0;
                 background-color: transparent;
 
-                //   &:hover {
-                //     transform: scale(1.1);
-                //   }
               }
 
               .levels-main-background {
-                background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/mapa2.0.webp");
+                background-image: url("/img/mapa.svg");
                 width: 100%;
                 height: 1141px;
                 background-position: bottom;
@@ -280,9 +273,6 @@
                 padding: 0;
                 background-color: transparent;
 
-                //   &:hover {
-                //     transform: scale(1.1);
-                //   }
               }
 
               .ghost-animation {
@@ -379,9 +369,7 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
     }
 
-    /* Estilos temáticos de Halloween para todos os modais */
 
-    /* Estilos base para todos os modais com tema Halloween */
     .disney-modal .level-card,
     .giftbox-modal .level-card,
     .presente-modal .level-card,
@@ -394,7 +382,6 @@
       overflow: hidden;
     }
 
-    /* Dimensões padrão para modals não-torneio */
     .disney-modal .level-card,
     .giftbox-modal .level-card,
     .presente-modal .level-card {
@@ -406,7 +393,6 @@
       box-sizing: border-box;
     }
 
-    /* Efeito de brilho fantasmagórico */
     .disney-modal .level-card::before,
     .giftbox-modal .level-card::before,
     .presente-modal .level-card::before,
@@ -437,7 +423,6 @@
       }
     }
 
-    /* Títulos com tema Halloween */
     .disney-modal .modal-title,
     .giftbox-modal .modal-title,
     .presente-modal .modal-title,
@@ -453,7 +438,6 @@
       z-index: 2;
     }
 
-    /* Subtítulos */
     .disney-modal .modal-subtitle,
     .giftbox-modal .modal-subtitle,
     .presente-modal .modal-subtitle,
@@ -467,7 +451,6 @@
       z-index: 2;
     }
 
-    /* Corpo do modal */
     .disney-modal .modal-body,
     .giftbox-modal .modal-body,
     .presente-modal .modal-body {
@@ -492,7 +475,6 @@
       z-index: 2;
     }
 
-    /* Itens de informação */
     .disney-modal .info-item,
     .giftbox-modal .info-item,
     .presente-modal .info-item,
@@ -515,7 +497,6 @@
       font-size: 0.9rem;
     }
 
-    /* Efeito de brilho nos itens */
     .disney-modal .info-item::before,
     .giftbox-modal .info-item::before,
     .presente-modal .info-item::before,
@@ -544,7 +525,6 @@
       }
     }
 
-    /* Seção de distribuição de prêmios */
     .disney-modal .prize-distribution h3,
     .giftbox-modal .prize-distribution h3,
     .presente-modal .prize-distribution h3,
@@ -559,7 +539,6 @@
       position: relative;
     }
 
-    /* Decoração para títulos de prêmios */
     .disney-modal .prize-distribution h3::before,
     .giftbox-modal .prize-distribution h3::before,
     .presente-modal .prize-distribution h3::before,
@@ -576,7 +555,6 @@
       margin-left: 10px;
     }
 
-    /* Itens de distribuição */
     .disney-modal .distribution-item,
     .giftbox-modal .distribution-item,
     .presente-modal .distribution-item,
@@ -605,7 +583,6 @@
       box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
     }
 
-    /* Posições especiais */
     .disney-modal .distribution-item .position,
     .giftbox-modal .distribution-item .position,
     .presente-modal .distribution-item .position,
@@ -622,9 +599,7 @@
       color: #1a1a2e;
     }
 
-    /* Estilos específicos para cada modal mantendo o tema Halloween */
 
-    /* Modal Disney - Tons mais quentes */
     .disney-modal .info-item {
       border-left-color: #ff8f65;
     }
@@ -633,7 +608,6 @@
       background: linear-gradient(90deg, #ff8f65, #ffb347);
     }
 
-    /* Modal Gift Box - Tons roxos místicos */
     .giftbox-modal .info-item {
       border-left-color: #9c27b0;
       background: linear-gradient(
@@ -653,7 +627,6 @@
       color: white;
     }
 
-    /* Modal Presente - Tons verdes assombrados */
     .presente-modal .info-item {
       border-left-color: #4caf50;
       background: linear-gradient(
@@ -667,7 +640,6 @@
       background: linear-gradient(90deg, #4caf50, #81c784);
     }
 
-    /* Modal Torneio - Usando mesma paleta do Disney (tons mais quentes) */
     .torneio-modal .info-item {
       border-left-color: #ff8f65;
       background: linear-gradient(
@@ -686,7 +658,6 @@
       line-height: 1.2;
     }
 
-    /* Animação de entrada dos modais */
     .disney-modal .level-card,
     .giftbox-modal .level-card,
     .presente-modal .level-card,
@@ -694,7 +665,6 @@
       animation: spookyEntrance 0.5s ease-out;
     }
 
-    /* Ajustes específicos para compactar o modal de Torneio */
     .torneio-modal .level-card-wrapper {
       position: fixed;
       inset: 0;
@@ -710,7 +680,7 @@
       overflow-x: hidden;
       box-sizing: border-box;
       padding: 10px;
-      background: #1a1a2e; /* visual mais limpo */
+      background: #1a1a2e;
       border: 2px solid #ff6b35;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
@@ -723,16 +693,16 @@
     }
     .torneio-modal .level-card::before,
     .torneio-modal .level-card::after {
-      content: none; /* remove brilhos/partículas para um look mais clean */
+      content: none;
       animation: none;
     }
     .torneio-modal .info-item::before {
-      content: none; /* desativa shimmer */
+      content: none;
       animation: none;
     }
     .torneio-modal .prize-distribution h3::before,
     .torneio-modal .prize-distribution h3::after {
-      content: none; /* remove emojis para ficar menos carregado */
+      content: none;
     }
     .torneio-modal .modal-header {
       display: flex;
@@ -741,7 +711,6 @@
       gap: 8px;
       margin-bottom: 0px;
     }
-    /* Layout de torneio: imagem ocupando 50% do modal, centralizada */
     .torneio-modal .tournament-layout {
       display: flex;
       flex-direction: column;
@@ -835,7 +804,6 @@
       filter: brightness(1.05);
     }
 
-    /* Estilos para botões sobrepostos às missões */
     .missions-wrapper {
       position: relative;
       display: flex;
@@ -992,12 +960,11 @@
       font-weight: 700;
     }
     .torneio-modal .prize-distribution .distribution-list {
-      max-height: 20vh; /* leaderboard ainda mais compacto */
+      max-height: 20vh;
       overflow-y: auto;
       overflow-x: hidden;
     }
 
-    /* Itens do ranking mais enxutos */
     .torneio-modal .distribution-item {
       padding: 6px 8px;
       margin: 4px 0;
@@ -1005,7 +972,6 @@
       line-height: 1.2;
     }
 
-    /* Header do modal mais contido */
     .torneio-modal .modal-header {
       display: flex;
       flex-wrap: wrap;
@@ -1018,7 +984,6 @@
       text-overflow: ellipsis;
       text-align: center;
     }
-    /* Scrollbar mais fino para lista de distribuição */
     .torneio-modal .prize-distribution .distribution-list::-webkit-scrollbar {
       width: 6px;
     }
@@ -1067,14 +1032,12 @@
       }
     }
 
-    /* Usa viewport dinâmico quando suportado (mobile) */
     @supports (height: 1svh) {
       .torneio-modal .level-card {
         max-height: 70svh;
       }
     }
 
-    /* Usa viewport dinâmico para modals não-torneio (mobile) */
     @supports (height: 1svh) {
       .disney-modal .level-card,
       .giftbox-modal .level-card,
@@ -1083,7 +1046,6 @@
       }
     }
 
-    /* Limita o texto de pontuação para no máx. 2 linhas */
     .torneio-modal .stat-card.span2 .stat-value {
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -1091,7 +1053,6 @@
       overflow: hidden;
     }
 
-    /* Itens da distribuição com visual simplificado */
     .torneio-modal .distribution-item {
       background: linear-gradient(90deg, #ff864f, #ffb37a);
       padding: 6px 10px;
@@ -1101,7 +1062,7 @@
       line-height: 1.25;
       box-shadow: none;
       display: grid;
-      grid-template-columns: 1fr auto; /* texto à esquerda, valor à direita */
+      grid-template-columns: 1fr auto;
       align-items: center;
     }
 
@@ -1120,7 +1081,6 @@
       }
     }
 
-    /* Efeito de partículas fantasmagóricas */
     .disney-modal .level-card::after,
     .giftbox-modal .level-card::after,
     .presente-modal .level-card::after,
@@ -1167,7 +1127,6 @@
       }
     }
 
-    /* Layouts próprios para Disney, Gift Box e Presente */
     .giftbox-modal {
       .modal-body {
         display: block;
@@ -1322,7 +1281,6 @@
         margin: 0;
         color: #bfe5ff;
       }
-      /* Remove emojis para um título mais limpo */
       .prize-distribution h3::before,
       .prize-distribution h3::after {
         content: none;
@@ -1347,18 +1305,16 @@
       }
     }
 
-    /* Melhorias de legibilidade e limpeza para Disney/Gift/Presente */
     .disney-modal .level-card,
     .giftbox-modal .level-card,
     .presente-modal .level-card {
-      text-align: left; /* evita centralização de parágrafos */
-      padding: 10px; /* menos espaço interno */
-      background: #1a1a2e; /* remove gradiente forte */
-      border: 2px solid #ff6b35; /* borda mais fina */
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); /* sombra mais sutil */
+      text-align: left;
+      padding: 10px;
+      background: #1a1a2e;
+      border: 2px solid #ff6b35;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
 
-    /* Remove brilhos e partículas para um visual mais clean */
     .disney-modal .level-card::before,
     .giftbox-modal .level-card::before,
     .presente-modal .level-card::before,
@@ -1369,7 +1325,6 @@
       animation: none;
     }
 
-    /* Modal-body mais contido e alinhado à esquerda */
     .disney-modal .modal-body,
     .giftbox-modal .modal-body,
     .presente-modal .modal-body {
@@ -1377,14 +1332,12 @@
       text-align: left;
     }
 
-    /* Modal-body do Disney mais clean (sem caixas internas pesadas) */
     .disney-modal .modal-body {
       background: transparent;
       border: 0;
       box-shadow: none;
     }
 
-    /* Estilos específicos para o modal Disney - Layout organizado */
     .disney-modal .disney-layout {
       display: grid;
       grid-template-columns: 1fr;
@@ -1392,7 +1345,6 @@
       padding: 8px;
     }
 
-    /* Hero compacto para a Disney */
     .disney-modal .disney-hero {
       display: flex;
       align-items: center;
@@ -1403,9 +1355,7 @@
       border: 1px solid rgba(255, 107, 53, 0.25);
       box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
     }
-    /* Header com banner integrado para o Disney */
     .disney-modal .modal-header { padding: 0; margin-bottom: 8px; }
-    /* Título exclusivo para mobile (acima do banner) */
     .disney-modal .disney-mobile-title { display: none; }
     .disney-modal .disney-header {
       position: relative;
@@ -1415,7 +1365,6 @@
       background: #0f1a2e;
       border: 2px solid #ff6b35;
       box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
-      /* Sombra no rodapé do banner para transição suave ao conteúdo */
       &::after {
         content: "";
         position: absolute;
@@ -1439,7 +1388,6 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      /* Overlay de cima para baixo mais forte para garantir leitura do título */
       background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0.35) 0%,
@@ -1500,7 +1448,6 @@
       filter: brightness(1.06);
     }
 
-    /* Giros: menos chamativos, cada um com uma cor própria sutil */
     .disney-modal .disney-header .prize-list li.giros { font-weight: 600; text-shadow: 0 0 6px rgba(0, 0, 0, 0.3); }
     .disney-modal .disney-header .prize-list li.giros.bandito { color: #a8e6ff; border-color: rgba(168, 230, 255, 0.25); }
     .disney-modal .disney-header .prize-list li.giros.hallowwin { color: #d7b3ff; border-color: rgba(215, 179, 255, 0.25); }
@@ -1508,7 +1455,6 @@
     .disney-modal .disney-header .prize-list li.giros.werewolf { color: #b7c9ff; border-color: rgba(183, 201, 255, 0.2); }
     .disney-modal .disney-header .prize-list li.giros.mystic { color: #ffb3e6; border-color: rgba(255, 179, 230, 0.25); }
 
-    /* Prêmios principais: cores mais chamativas e glow leve */
     .disney-modal .disney-header .prize-list li.major { font-weight: 800; }
     .disney-modal .disney-header .prize-list li.major.ps5 {
       color: #ffffff;
@@ -1528,9 +1474,8 @@
       margin-top: 4px;
       overflow: hidden;
       width: 100%;
-      position: relative; /* necessário para posicionar os fades nas bordas */
+      position: relative;
     }
-    /* Fades nas bordas para dar sensação de que o texto entra em área escura */
     .disney-modal .disney-header .prize-carousel::before,
     .disney-modal .disney-header .prize-carousel::after {
       content: "";
@@ -1589,7 +1534,6 @@
       line-height: 1.35;
     }
 
-    /* Banner Disney: visual limpo e sem cortes */
     .disney-modal .disney-banner-wrap {
       margin: 0;
       padding: 0;
@@ -1664,7 +1608,6 @@
       margin-top: 12px;
     }
 
-    /* Wrapper do modal Disney ocupando a viewport para evitar cortes */
     .disney-modal .level-card-wrapper {
       position: fixed;
       inset: 0;
@@ -1673,7 +1616,6 @@
       place-items: center;
     }
 
-    /* Título mais sutil e compacto para o Disney */
     .disney-modal .modal-title {
       text-shadow: 1px 1px 6px rgba(255, 107, 53, 0.35),
         0 0 12px rgba(255, 107, 53, 0.25);
@@ -1681,7 +1623,6 @@
       margin-bottom: 6px;
     }
 
-    /* Responsividade para o modal Disney */
     @media (max-width: 768px) {
       .disney-modal .disney-layout {
         grid-template-columns: 1fr;
@@ -1707,7 +1648,6 @@
       }
     }
 
-    /* Desktop: garantir que o banner não seja cortado e o modal comporte melhor */
     @media (min-width: 992px) {
       .disney-modal .level-card {
         max-width: 640px;
@@ -1726,7 +1666,6 @@
       }
       .disney-modal .disney-header { height: auto; }
       .disney-modal .disney-header-img { height: 150px; }
-      /* Mostrar título acima do banner e esconder o interno */
       .disney-modal .disney-mobile-title {
         display: block;
         margin: 8px 6px 4px;
@@ -1735,12 +1674,9 @@
         text-shadow: 1px 1px 6px rgba(255, 107, 53, 0.35);
       }
       .disney-modal .disney-header .modal-title { display: none; }
-      /* Remover overlay no mobile para banner ficar à frente */
       .disney-modal .disney-header-overlay { display: none; }
       .disney-modal .disney-header .prize-list { font-size: 0.65rem; gap: 4px; }
-      /* Sombra do rodapé do banner mais compacta no mobile */
       .disney-modal .disney-header::after { height: 18px; }
-      /* Fades mais estreitos no mobile para não cobrir muito as palavras */
       .disney-modal .disney-header .prize-carousel::before,
       .disney-modal .disney-header .prize-carousel::after { width: 24px; }
 
@@ -1775,17 +1711,15 @@
       }
     }
 
-    /* Responsividade melhorada para dispositivos móveis */
     @media (max-width: 768px) {
-      /* Garantir que o modal ocupe toda a tela disponível */
       .disney-modal .level-card-wrapper,
       .giftbox-modal .level-card-wrapper,
       .presente-modal .level-card-wrapper,
       .torneio-modal .level-card-wrapper {
-        padding: 15px 8px 8px 8px; /* Reduzido padding */
+        padding: 15px 8px 8px 8px;
         box-sizing: border-box;
         display: flex;
-        align-items: flex-start; /* Alinha no topo */
+        align-items: flex-start;
         justify-content: center;
         min-height: 100vh;
         overflow-y: auto;
@@ -1794,14 +1728,13 @@
       .disney-modal .level-card,
       .giftbox-modal .level-card,
       .presente-modal .level-card {
-        max-width: 95%; /* Reduzido para dar mais espaço */
-        max-height: 80vh; /* Limita para evitar overflow vertical */
+        max-width: 95%;
+        max-height: 80vh;
         margin: 0 auto;
         position: relative;
         width: 100%;
       }
 
-      /* Torneio mantém limite de altura no mobile para não estourar a viewport */
       .torneio-modal .level-card {
         max-width: 95%;
         max-height: 70vh;
@@ -1810,7 +1743,6 @@
         width: 100%;
       }
 
-      /* Garantir que o botão X seja sempre visível */
       .disney-modal .level-card-close,
       .giftbox-modal .level-card-close,
       .presente-modal .level-card-close,
@@ -1876,7 +1808,7 @@
       .presente-modal .modal-title,
       .torneio-modal .modal-title {
         font-size: 1.2rem;
-        padding: 10px 50px 10px 12px; /* Reduzido padding */
+        padding: 10px 50px 10px 12px;
         margin-top: 0;
         margin-bottom: 8px;
       }
@@ -1885,15 +1817,15 @@
       .giftbox-modal .modal-body,
       .presente-modal .modal-body,
       .torneio-modal .modal-body {
-        padding: 12px; /* Reduzido padding */
-        margin-top: 8px; /* Reduzido para evitar corte */
+        padding: 12px;
+        margin-top: 8px;
       }
 
       .disney-modal .info-item,
       .giftbox-modal .info-item,
       .presente-modal .info-item,
       .torneio-modal .info-item {
-        padding: 6px 10px; /* Reduzido padding */
+        padding: 6px 10px;
         font-size: 0.85rem;
       }
 
@@ -1901,26 +1833,25 @@
       .giftbox-modal .distribution-item,
       .presente-modal .distribution-item,
       .torneio-modal .distribution-item {
-        padding: 6px 12px; /* Reduzido padding */
+        padding: 6px 12px;
         font-size: 0.85rem;
       }
     }
 
-    /* Responsividade para telas muito pequenas */
     @media (max-width: 480px) {
       .disney-modal .level-card-wrapper,
       .giftbox-modal .level-card-wrapper,
       .presente-modal .level-card-wrapper,
       .torneio-modal .level-card-wrapper {
-        padding: 10px 5px 5px 5px; /* Padding ainda menor */
+        padding: 10px 5px 5px 5px;
       }
 
       .disney-modal .level-card,
       .giftbox-modal .level-card,
       .presente-modal .level-card,
       .torneio-modal .level-card {
-        max-height: none; /* Remove limitação de altura */
-        max-width: 98%; /* Quase toda a largura disponível */
+        max-height: none;
+        max-width: 98%;
       }
 
       .disney-modal .modal-title,
@@ -1928,7 +1859,7 @@
       .presente-modal .modal-title,
       .torneio-modal .modal-title {
         font-size: 1.1rem;
-        padding: 8px 45px 8px 10px; /* Padding ainda menor */
+        padding: 8px 45px 8px 10px;
       }
 
       .disney-modal .info-item,
@@ -1936,7 +1867,7 @@
       .presente-modal .info-item,
       .torneio-modal .info-item {
         font-size: 0.8rem;
-        padding: 5px 8px; /* Padding mínimo */
+        padding: 5px 8px;
       }
 
       .disney-modal .distribution-item,
@@ -1944,14 +1875,14 @@
       .presente-modal .distribution-item,
       .torneio-modal .distribution-item {
         font-size: 0.8rem;
-        padding: 5px 10px; /* Padding mínimo */
+        padding: 5px 10px;
       }
     }
 
     .level-card-close {
       position: absolute;
-      width: 44px; /* área maior para toque/click */
-      height: 44px; /* área maior para toque/click */
+      width: 44px;
+      height: 44px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1979,9 +1910,9 @@
       }
 
       .level-card-close-btn {
-        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/close.webp");
-        width: 20px; /* ícone maior para melhor visibilidade */
-        height: 20px; /* ícone maior para melhor visibilidade */
+        background-image: url("/img/icons/close.svg");
+        width: 20px;
+        height: 20px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
@@ -2030,7 +1961,7 @@
         }
 
         .lock-icon {
-          background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/lock.webp");
+          background-image: url("/img/icons/lock.svg");
           width: 20px;
           height: 20px;
           background-repeat: no-repeat;
@@ -2099,11 +2030,11 @@
               background-size: contain;
 
               &.lock {
-                background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/lock.webp");
+                background-image: url("/img/icons/lock.svg");
               }
 
               &.check {
-                background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/check-icon.webp");
+                background-image: url("/img/icons/check.svg");
               }
             }
           }
@@ -2170,11 +2101,11 @@
       justify-content: center;
 
       &.up {
-        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/navigation-arrow.webp");
+        background-image: url("/img/icons/navigation-arrow.svg");
       }
 
       &.down {
-        background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/navigation-arrow.webp");
+        background-image: url("/img/icons/navigation-arrow.svg");
         transform: rotate(180deg);
       }
     }
@@ -2201,7 +2132,7 @@
     gap: 14px;
 
     .hint-icon {
-      background-image: url("https://casa.example.com/CRM/Widgets+CRM/Halloween+Map/img/hint-icon.webp");
+      background-image: url("/img/icons/hint-icon.svg");
       width: 30px;
       height: 30px;
       background-repeat: no-repeat;
@@ -2242,7 +2173,6 @@
   }
 }
 
-// Estilos modernos para o conteúdo de missões
 .missions-container {
   width: 100%;
   color: #fff;
@@ -2468,12 +2398,10 @@
   padding: 12px;
 }
 
-/* Override: ilhas bloqueadas totalmente cinzas */
 .level-item.disabled .level-image {
   filter: grayscale(1);
 }
 
-/* Ações em modais (CTAs) */
 .modal-actions {
   margin-top: 12px;
   display: flex;
@@ -2497,7 +2425,6 @@
   filter: brightness(1.05);
 }
 
-/* Desativar todas as animações e transições quando marcado */
 .disable-animations,
 .disable-animations * {
   animation: none !important;

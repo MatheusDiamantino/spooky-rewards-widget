@@ -27,3 +27,4 @@ export const CAMPAIGN_TOURNAMENT_NAME = String(env.VITE_CAMPAIGN_TOURNAMENT_NAME
 export const CAMPAIGN_DAILY_GIFT_ID = toNumber(env.VITE_CAMPAIGN_DAILY_GIFT_ID);
 export const CAMPAIGN_DAILY_GIFT_ACTION = String(env.VITE_CAMPAIGN_DAILY_GIFT_ACTION || "daily_gift").trim();
 
+export const CAMPAIGN_PLAY_URL = String(env.VITE_CAMPAIGN_PLAY_URL || "/").trim();

@@ -1,48 +1,61 @@
 # Spooky Rewards Widget
 
-Widget mobile-first em React/Vite com integração opcional com Smartico. O app renderiza normalmente mesmo sem Smartico configurado; quando configurado, carrega o SDK e habilita deep links `dp:` para abrir seções (torneios, missões, daily gift).
+Mapa de recompensas com tema de Halloween, com missões, torneio, presente diário e uma promoção com sorteio de prêmios, feito em React e Vite.
 
-## Rodar localmente
+Desenvolvido profissionalmente para a **UX Group**, empresa dona das marcas de apostas **Reals, Bingo e BetGo**. É um widget de gamificação integrado à plataforma **Smartico**. Este repositório é uma versão sem as marcas: chaves, IDs de campanha, domínios e imagens das marcas foram trocados por variáveis de ambiente e imagens genéricas.
+
+## Funcionalidades
+
+- **Mapa de níveis** com rolagem por arraste e botões, usando os níveis de `window._smartico.api.getLevels()`
+- **Animações Lottie** (morcego, aranha e fantasma) e um personagem que aparece no mapa com mensagens e leva direto ao modal da promoção
+- **Modais por nível**:
+  - **Presente diário**: explica a regra e abre o presente por deep link
+  - **Torneio**: escolhe o torneio pelo ID (ou pelo nome) em `getTournamentsList()` e mostra o prêmio total, as inscrições e o botão de participar
+  - **Caldeirão**: missões de `getMissions()`, com prioridade para os IDs configurados e atualização pelo `onUpdate`
+  - **Promoção**: banner com um carrossel infinito de prêmios e um botão para a URL da campanha
+- **Deep links `dp:`** da Smartico (`gf_tournaments`, `gf_missions`, `gf_section`) em links ocultos, com os IDs preenchidos ao carregar a página
+- **Funciona sem a Smartico**: sem as chaves configuradas, o layout aparece normalmente
+- **Moldura de celular** no desktop, já que o layout é pensado primeiro para mobile
+
+## Stack
+
+- React 19
+- Vite 7, com `@vitejs/plugin-react` e `@vitejs/plugin-legacy`
+- Sass (SCSS)
+- `@lottiefiles/react-lottie-player`
+- ESLint 9
+
+## Como rodar
 
 ```bash
 npm install
+cp .env.example .env
 npm run dev
 ```
 
-## Build/Lint
+| Variável | Uso |
+| --- | --- |
+| `VITE_SMARTICO_PROJECT_KEY` / `VITE_SMARTICO_BRAND_KEY` | Quando preenchidas, carregam `libs.smartico.ai/smartico.js` e chamam `init` |
+| `VITE_SMARTICO_PUBLIC_DEMO_USER` | `true` para usar o usuário `public-demo` |
+| `VITE_CAMPAIGN_MISSION_IDS` | IDs das missões, separados por vírgula |
+| `VITE_CAMPAIGN_TOURNAMENT_ID` / `VITE_CAMPAIGN_TOURNAMENT_NAME` | Torneio da campanha |
+| `VITE_CAMPAIGN_DAILY_GIFT_ID` / `VITE_CAMPAIGN_DAILY_GIFT_ACTION` | Presente diário |
+| `VITE_CAMPAIGN_PLAY_URL` | Destino do botão "Jogue e Concorra" |
+
+Build de produção e lint:
 
 ```bash
-npm run lint
 npm run build
+npm run lint
 ```
-
-## Variáveis de ambiente
-
-Copie o arquivo de exemplo e preencha as variáveis:
-
-```bash
-copy .env.example .env
-```
-
-- `VITE_SMARTICO_PROJECT_KEY` e `VITE_SMARTICO_BRAND_KEY`: quando definidos, o app carrega `https://libs.smartico.ai/smartico.js` e executa `init`.
-- `VITE_SMARTICO_PUBLIC_DEMO_USER`: `true|false` (ou `1|0`). Quando habilitado, define `window._smartico_user_id = "public-demo"` antes do `init`.
-- `VITE_CAMPAIGN_MISSION_IDS`: lista separada por vírgula (ex.: `35083,35093`).
-- `VITE_CAMPAIGN_TOURNAMENT_ID`: id numérico do torneio.
-- `VITE_CAMPAIGN_TOURNAMENT_NAME`: nome opcional para fallback/lookup.
-- `VITE_CAMPAIGN_DAILY_GIFT_ID`: id numérico do daily gift.
-- `VITE_CAMPAIGN_DAILY_GIFT_ACTION`: action string (default `daily_gift`).
-
-## Deep links
-
-O `index.html` mantém anchors ocultos com `href` “neutro” (`id=0`). Em runtime o `index.jsx` atualiza esses anchors com os IDs vindos do `.env`:
-
-- `#dl-tournaments` → `dp:gf_tournaments&id=...`
-- `#dl-missions` / `#dl-missions-2` → `dp:gf_missions&id=...`
-- `#dl-daily-gift` → `dp:gf_section&id=...`
 
 ## Estrutura
 
-- `index.jsx`: bootstrapping (render do React + loader do Smartico + atualização dos deep links)
-- `src/config/christmas.js`: leitura de env e configuração da campanha
-- `src/widget-pass/`: layout principal do widget
-- `src/widget-mission/` e `src/widget-tourments/`: widgets de missões e torneios
+```
+index.jsx               ponto de entrada: renderização, carregamento da Smartico e deep links
+src/config/             leitura das variáveis da campanha
+src/widget-pass/        mapa de níveis, modais, animações e estilos
+src/widget-mission/     lista e carrossel de missões
+src/widget-tourments/   lista de torneios
+public/img/             ilustrações do mapa e ícones
+```
